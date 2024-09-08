@@ -1,0 +1,25 @@
+---
+title: "Working with Tabular Data"
+author: "Shubha, Adithya"
+date: "`r Sys.Date()`" 
+#https://stackoverflow.com/questions/26043807/multiple-authors-and-subtitles-in-rmarkdown-yaml
+#https://www.programiz.com/r/date
+output:
+  html_document:
+    df_print: paged
+subtitle: Analysis of Wines
+---
+
+### Analysis of Wines
+```{r echo=FALSE}
+df.wines <- read.csv(file = "whitewines.csv", header = TRUE, stringsAsFactors = FALSE)
+total.wines <- nrow(df.wines)
+alc.content.over.eleven <- round((length(which(df.wines$alcohol > 11))/total.wines) *100,1) #https://www.statology.org/round-in-r/
+highest.alc.content <- max(df.wines$alcohol)
+```
+There are a total of **`r total.wines`** wines in this data set. **`r alc.content.over.eleven`**% of the wines have an alcohol content over 11%. The highest alcohol content of any wine is **`r highest.alc.content`**%.
+
+The scatter plot below illustrates the correlation between alcohol and sugar content. 
+
+ 
+
