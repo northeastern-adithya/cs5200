@@ -21,5 +21,10 @@ There are a total of **`r total.wines`** wines in this data set. **`r alc.conten
 
 The scatter plot below illustrates the correlation between alcohol and sugar content. 
 
+```{r echo=FALSE}
+plot(x=df.wines$residual.sugar,y=df.wines$alcohol,main = "Sugar vs Alcohol Content",col.main = "darkblue",xlab = "Sugar", ylab = "Alcohol")
+# http://www.sthda.com/english/wiki/add-titles-to-a-plot-in-r-software#change-main-title-and-axis-labels
+```
+
  
 
