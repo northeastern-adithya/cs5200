@@ -1,20 +1,26 @@
 ---
 title: "Working with Tabular Data"
+subtitle: "Analysis of Wines"
 author: "Shubha, Adithya"
-date: "`r Sys.Date()`" 
-#https://stackoverflow.com/questions/26043807/multiple-authors-and-subtitles-in-rmarkdown-yaml
-#https://www.programiz.com/r/date
-output:
-  html_document:
-    df_print: paged
-subtitle: Analysis of Wines
+# Getting current date in R was referred from: https://www.programiz.com/r/date
+date: "`r Sys.Date()`"
+output: html_notebook
 ---
 
 ### Analysis of Wines
 ```{r echo=FALSE}
-df.wines <- read.csv(file = "whitewines.csv", header = TRUE, stringsAsFactors = FALSE)
-total.wines <- nrow(df.wines)
-alc.content.over.eleven <- round((length(which(df.wines$alcohol > 11))/total.wines) *100,1) #https://www.statology.org/round-in-r/
+
+# reading the csv file from the same directory as the Rmd file
+df.wines <- read.csv(file = "whitewines.csv", header = TRUE, stringsAsFactors = FALSE) 
+
+# total count of wines will be equal to number of rows in csv. 
+total.wines <- nrow(df.wines) 
+
+# percentage of wines having alcohol above 11% = (count of alcohol have value greater than 11)/total number of wines.
+# rounding off to 1 decimal place was referred from: https://www.statology.org/round-in-r/
+alc.content.over.eleven <- round((length(which(df.wines$alcohol > 11))/total.wines) *100,1)  #
+
+#highest alcohol content = max of alcohol content of wines present. 
 highest.alc.content <- max(df.wines$alcohol)
 ```
 There are a total of **`r total.wines`** wines in this data set. **`r alc.content.over.eleven`**% of the wines have an alcohol content over 11%. The highest alcohol content of any wine is **`r highest.alc.content`**%.
@@ -22,8 +28,8 @@ There are a total of **`r total.wines`** wines in this data set. **`r alc.conten
 The scatter plot below illustrates the correlation between alcohol and sugar content. 
 
 ```{r echo=FALSE}
+# Main title, color of main title, x and y axis labels were referred from: http://www.sthda.com/english/wiki/add-titles-to-a-plot-in-r-software#change-main-title-and-axis-labels
 plot(x=df.wines$residual.sugar,y=df.wines$alcohol,main = "Sugar vs Alcohol Content",col.main = "darkblue",xlab = "Sugar", ylab = "Alcohol")
-# http://www.sthda.com/english/wiki/add-titles-to-a-plot-in-r-software#change-main-title-and-axis-labels
 ```
 
  
