@@ -10,8 +10,8 @@ output: html_notebook
 ### Analysis of Wines
 ```{r echo=FALSE}
 
-# reading the csv file from the same directory as the Rmd file
-df.wines <- read.csv(file = "whitewines.csv", header = TRUE, stringsAsFactors = FALSE) 
+# reading the csv file from s3 bucket.
+df.wines <- read.csv(file = "https://s3.us-east-2.amazonaws.com/artificium.us/datasets/whitewines.csv", header = TRUE, stringsAsFactors = FALSE) 
 
 # total count of wines will be equal to number of rows in csv. 
 total.wines <- nrow(df.wines) 
