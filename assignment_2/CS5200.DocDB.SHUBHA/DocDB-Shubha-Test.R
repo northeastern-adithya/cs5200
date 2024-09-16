@@ -1,18 +1,3 @@
-installRequiredPackages <- function(){
-  packages <- c("testthat")
-  
-  # Install packages that are not installed
-  installed_packages <- packages %in% rownames(installed.packages())
-  if (any(installed_packages == FALSE)) {
-    install.packages(packages[!installed_packages])
-  }
-  
-  
-  # Load all packages
-  invisible(lapply(packages, library, character.only = TRUE))
-  source("DocDB-Shubha.R")
-}
-
 testSplitFileName <- function(){
   test_that("Splitting File Name Works", {
     expect_equal(splitFileName("MA3324-SF-0712.Morgan.2024.pptx"), c("MA3324-SF-0712","Morgan","2024","pptx"))
