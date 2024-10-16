@@ -1,10 +1,11 @@
 ---
-title: "Query a Database with SQL"
+title: "ASSIGNMENT 06.1"
 author: "Shubha, Adithya"
 date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
+subtitle: Query a Database with SQL
 ---
 
 ```{r echo = FALSE}
@@ -60,7 +61,8 @@ LIMIT 10;
 SELECT C.CustomerID, C.CustomerName, COUNT(O.OrderID) AS OrderCount
 FROM Customers C
          JOIN Orders O ON C.CustomerID = O.CustomerID
-GROUP BY C.CustomerID, C.CustomerName
+GROUP BY C.CustomerID
+-- Order count should atleast be 1
 HAVING OrderCount > 0
 ORDER BY OrderCount DESC
 LIMIT 10;
@@ -68,6 +70,8 @@ LIMIT 10;
 
 **4. What is the last name and first name of the youngest employee?**
 ```{sql youngestEmployee, connection = conn}
+-- Possible multiple employees can have the same birthdate
+-- Finding the youngest birthdate and finding employees matching this value
 WITH YoungestBirthdate AS (
     SELECT STRFTIME('%Y-%m', Employees.BirthDate) AS BirthDateFormatted
     FROM Employees
@@ -94,7 +98,8 @@ LIMIT 10;
 SELECT COUNT(*) AS EmployeesWithoutOrder
 FROM Employees E
          LEFT JOIN Orders O ON E.EmployeeID = O.EmployeeID
-WHERE O.EmployeeID IS NULL
+-- IS NULL implies they do not have any order.
+WHERE O.EmployeeID IS NULL;
 ```
 
 **7. How many products contain either "Caviar" or "Kaviar" in the name of the product? **
@@ -109,7 +114,7 @@ WHERE P.ProductName LIKE '%Caviar%'
 ```{sql countriesWithOrders, connection = conn}
 SELECT COUNT(DISTINCT C.Country) AS CountriesWithOrder
 FROM Customers C
-         JOIN ORDERS O ON C.CustomerID = O.CustomerID
+         JOIN ORDERS O ON C.CustomerID = O.CustomerID;
 ```
 
 **9. What is the total for each order, i.e., the amount that the customers is required to pay for the products at the ordered quantity in the order. List the order ID, the order date, the name of the customer, and the total cost.**
@@ -120,7 +125,7 @@ FROM Customers C
      Orders O ON C.CustomerID = O.CustomerID
          JOIN OrderDetails OD ON O.OrderID = OD.OrderID
          JOIN Products P ON OD.ProductID = P.ProductID
-GROUP BY O.OrderID, O.OrderDate, C.CustomerName 
+GROUP BY O.OrderID
 LIMIT 10;
 ```
 
@@ -130,8 +135,9 @@ WITH SupplierProductCounts AS (
     SELECT S.SupplierName, COUNT(P.ProductID) AS ProductCount
     FROM Suppliers S
     JOIN Products P ON S.SupplierID = P.SupplierID
-    GROUP BY S.SupplierID
+    GROUP BY S.SupplierName
 )
+-- Multiple suppliers could have sold max products.
 SELECT SupplierName AS SupplierWithMostProducts
 FROM SupplierProductCounts
 WHERE ProductCount = (SELECT MAX(ProductCount) FROM SupplierProductCounts);
@@ -143,10 +149,10 @@ WITH ProductOrderedCount AS (SELECT P.ProductName, COUNT(DISTINCT O.CustomerID) 
                              FROM Orders O
                                       JOIN OrderDetails OD ON O.OrderID = OD.OrderID
                                       JOIN Products P ON OD.ProductID = P.ProductID
-                             GROUP BY P.ProductID)
+                             GROUP BY P.ProductName)
 SELECT ProductName AS ProductOrderByDifferentCustomers
 FROM ProductOrderedCount
-WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrderedCount)
+WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrderedCount);
 ```
 
 **12. Which product has the most quantity sold?**
@@ -154,13 +160,13 @@ WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrd
 WITH TotalQuantitiesOfProduct AS (SELECT P.ProductName, SUM(OD.Quantity) AS TotalQuantitySold
                                   FROM OrderDetails OD
                                            JOIN Products P ON OD.ProductID = P.ProductID
-                                  GROUP BY P.ProductID)
+                                  GROUP BY P.ProductName)
 
 SELECT ProductName AS ProductWithMostQuantity
 FROM TotalQuantitiesOfProduct
 WHERE TotalQuantitySold =
       (Select max(TotalQuantitySold)
-       FROM TotalQuantitiesOfProduct)
+       FROM TotalQuantitiesOfProduct);
 ```
 
 **13. What is the total amount spent by all customers who do live in Germany?**
@@ -176,7 +182,7 @@ WHERE C.Country = 'Germany';
 **14. What is the difference in spending between the country to which the most was sold versus the country to which the least was sold?**
 ```{sql differenceInSpending, connection = conn}
 WITH TotalSpending AS (
-    SELECT SUM(OD.Quantity * P.Price) AS TotalAmountSpent
+    SELECT C.Country,SUM(OD.Quantity * P.Price) AS TotalAmountSpent
 FROM Customers C
 JOIN Orders O ON C.CustomerID = O.CustomerID
 JOIN OrderDetails OD ON O.OrderID = OD.OrderID
@@ -200,7 +206,7 @@ WHERE NumberOfCustomers = (SELECT MAX(NumberOfCustomers) FROM CustomerCount);
 
 **16. Which employee sold the most in terms of "dollar amount" sold?**
 ```{sql employeeWithMostAmountSold,  connection= conn}
-WITH EmployeeSales AS (SELECT E.FirstName, E.LastName, SUM(OD.Quantity * P.Price) AS TotalSales
+WITH EmployeeSales AS (SELECT E.EmployeeID,E.FirstName, E.LastName, SUM(OD.Quantity * P.Price) AS TotalSales
                        FROM Employees E
                                 JOIN Orders O ON E.EmployeeID = O.EmployeeID
                                 JOIN OrderDetails OD ON O.OrderID = OD.OrderID
@@ -209,7 +215,7 @@ WITH EmployeeSales AS (SELECT E.FirstName, E.LastName, SUM(OD.Quantity * P.Price
 
 SELECT FirstName, LastName
 FROM EmployeeSales
-where TotalSales = (SELECT max(TotalSales) FROM EmployeeSales)
+where TotalSales = (SELECT max(TotalSales) FROM EmployeeSales);
 ```
 **17. Which customers (name and ID) have never bought anything?**
 ```{sql customerWithourPurchase,  connection= conn}
@@ -243,3 +249,7 @@ SELECT COUNT(DISTINCT S.Country) AS UniqueCountries
 FROM Suppliers S;
 ```
 
+```{r echo = FALSE}
+# Closing connection to database
+# referredFrom: http://artificium.us/lessons/06.r/l-6-300-create-sqlitedb-in-r/l-6-300.html
+dbDisconnect(conn)

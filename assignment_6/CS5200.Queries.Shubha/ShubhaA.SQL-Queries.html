@@ -13,7 +13,7 @@
 
 <meta name="date" content="2024-10-15" />
 
-<title>Query a Database with SQL</title>
+<title>ASSIGNMENT 06.1</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1621,7 +1621,8 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Query a Database with SQL</h1>
+<h1 class="title toc-ignore">ASSIGNMENT 06.1</h1>
+<h3 class="subtitle">Query a Database with SQL</h3>
 <h4 class="author">Shubha, Adithya</h4>
 <h4 class="date">2024-10-15</h4>
 
@@ -1756,7 +1757,8 @@ least one order.</strong></p>
 <pre class="sql"><code>SELECT C.CustomerID, C.CustomerName, COUNT(O.OrderID) AS OrderCount
 FROM Customers C
          JOIN Orders O ON C.CustomerID = O.CustomerID
-GROUP BY C.CustomerID, C.CustomerName
+GROUP BY C.CustomerID
+-- Order count should atleast be 1
 HAVING OrderCount &gt; 0
 ORDER BY OrderCount DESC
 LIMIT 10;</code></pre>
@@ -1777,8 +1779,8 @@ LIMIT 10;</code></pre>
 <td align="right">10</td>
 </tr>
 <tr class="even">
-<td align="right">63</td>
-<td align="left">QUICK-Stop</td>
+<td align="right">87</td>
+<td align="left">Wartian Herkku</td>
 <td align="right">7</td>
 </tr>
 <tr class="odd">
@@ -1787,23 +1789,23 @@ LIMIT 10;</code></pre>
 <td align="right">7</td>
 </tr>
 <tr class="even">
-<td align="right">87</td>
-<td align="left">Wartian Herkku</td>
+<td align="right">63</td>
+<td align="left">QUICK-Stop</td>
 <td align="right">7</td>
 </tr>
 <tr class="odd">
-<td align="right">37</td>
-<td align="left">Hungry Owl All-Night Grocers</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
 <td align="right">75</td>
 <td align="left">Split Rail Beer &amp; Ale</td>
 <td align="right">6</td>
 </tr>
+<tr class="even">
+<td align="right">37</td>
+<td align="left">Hungry Owl All-Night Grocers</td>
+<td align="right">6</td>
+</tr>
 <tr class="odd">
-<td align="right">41</td>
-<td align="left">La maison d’’Asie</td>
+<td align="right">51</td>
+<td align="left">Mère Paillarde</td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
@@ -1812,13 +1814,13 @@ LIMIT 10;</code></pre>
 <td align="right">5</td>
 </tr>
 <tr class="odd">
-<td align="right">51</td>
-<td align="left">Mère Paillarde</td>
+<td align="right">41</td>
+<td align="left">La maison d’’Asie</td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
-<td align="right">7</td>
-<td align="left">Blondel père et fils</td>
+<td align="right">86</td>
+<td align="left">Die Wandernde Kuh</td>
 <td align="right">4</td>
 </tr>
 </tbody>
@@ -1826,7 +1828,9 @@ LIMIT 10;</code></pre>
 </div>
 <p><strong>4. What is the last name and first name of the youngest
 employee?</strong></p>
-<pre class="sql"><code>WITH YoungestBirthdate AS (
+<pre class="sql"><code>-- Possible multiple employees can have the same birthdate
+-- Finiding the youngest birthdate and finding employees matching this value
+WITH YoungestBirthdate AS (
     SELECT STRFTIME(&#39;%Y-%m&#39;, Employees.BirthDate) AS BirthDateFormatted
     FROM Employees
     ORDER BY BirthDateFormatted DESC
@@ -1919,7 +1923,8 @@ table?</strong></p>
 <pre class="sql"><code>SELECT COUNT(*) AS EmployeesWithoutOrder
 FROM Employees E
          LEFT JOIN Orders O ON E.EmployeeID = O.EmployeeID
-WHERE O.EmployeeID IS NULL</code></pre>
+-- IS NULL implies they do not have any order.
+WHERE O.EmployeeID IS NULL;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -1960,7 +1965,7 @@ WHERE P.ProductName LIKE &#39;%Caviar%&#39;
 least one order was shipped?</strong></p>
 <pre class="sql"><code>SELECT COUNT(DISTINCT C.Country) AS CountriesWithOrder
 FROM Customers C
-         JOIN ORDERS O ON C.CustomerID = O.CustomerID</code></pre>
+         JOIN ORDERS O ON C.CustomerID = O.CustomerID;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -1986,7 +1991,7 @@ FROM Customers C
      Orders O ON C.CustomerID = O.CustomerID
          JOIN OrderDetails OD ON O.OrderID = OD.OrderID
          JOIN Products P ON OD.ProductID = P.ProductID
-GROUP BY O.OrderID, O.OrderDate, C.CustomerName 
+GROUP BY O.OrderID
 LIMIT 10;</code></pre>
 <div class="knitsql-table">
 <table>
@@ -2068,8 +2073,9 @@ LIMIT 10;</code></pre>
     SELECT S.SupplierName, COUNT(P.ProductID) AS ProductCount
     FROM Suppliers S
     JOIN Products P ON S.SupplierID = P.SupplierID
-    GROUP BY S.SupplierID
+    GROUP BY S.SupplierName
 )
+-- Multiple suppliers could have sold max products.
 SELECT SupplierName AS SupplierWithMostProducts
 FROM SupplierProductCounts
 WHERE ProductCount = (SELECT MAX(ProductCount) FROM SupplierProductCounts);</code></pre>
@@ -2097,10 +2103,10 @@ customers?</strong></p>
                              FROM Orders O
                                       JOIN OrderDetails OD ON O.OrderID = OD.OrderID
                                       JOIN Products P ON OD.ProductID = P.ProductID
-                             GROUP BY P.ProductID)
+                             GROUP BY P.ProductName)
 SELECT ProductName AS ProductOrderByDifferentCustomers
 FROM ProductOrderedCount
-WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrderedCount)</code></pre>
+WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrderedCount);</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -2120,13 +2126,13 @@ WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrd
 <pre class="sql"><code>WITH TotalQuantitiesOfProduct AS (SELECT P.ProductName, SUM(OD.Quantity) AS TotalQuantitySold
                                   FROM OrderDetails OD
                                            JOIN Products P ON OD.ProductID = P.ProductID
-                                  GROUP BY P.ProductID)
+                                  GROUP BY P.ProductName)
 
 SELECT ProductName AS ProductWithMostQuantity
 FROM TotalQuantitiesOfProduct
 WHERE TotalQuantitySold =
       (Select max(TotalQuantitySold)
-       FROM TotalQuantitiesOfProduct)</code></pre>
+       FROM TotalQuantitiesOfProduct);</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -2169,7 +2175,7 @@ WHERE C.Country = &#39;Germany&#39;;</code></pre>
 which the most was sold versus the country to which the least was
 sold?</strong></p>
 <pre class="sql"><code>WITH TotalSpending AS (
-    SELECT SUM(OD.Quantity * P.Price) AS TotalAmountSpent
+    SELECT C.Country,SUM(OD.Quantity * P.Price) AS TotalAmountSpent
 FROM Customers C
 JOIN Orders O ON C.CustomerID = O.CustomerID
 JOIN OrderDetails OD ON O.OrderID = OD.OrderID
@@ -2218,7 +2224,7 @@ WHERE NumberOfCustomers = (SELECT MAX(NumberOfCustomers) FROM CustomerCount);</c
 </div>
 <p><strong>16. Which employee sold the most in terms of “dollar amount”
 sold?</strong></p>
-<pre class="sql"><code>WITH EmployeeSales AS (SELECT E.FirstName, E.LastName, SUM(OD.Quantity * P.Price) AS TotalSales
+<pre class="sql"><code>WITH EmployeeSales AS (SELECT E.EmployeeID,E.FirstName, E.LastName, SUM(OD.Quantity * P.Price) AS TotalSales
                        FROM Employees E
                                 JOIN Orders O ON E.EmployeeID = O.EmployeeID
                                 JOIN OrderDetails OD ON O.OrderID = OD.OrderID
@@ -2227,7 +2233,7 @@ sold?</strong></p>
 
 SELECT FirstName, LastName
 FROM EmployeeSales
-where TotalSales = (SELECT max(TotalSales) FROM EmployeeSales)</code></pre>
+where TotalSales = (SELECT max(TotalSales) FROM EmployeeSales);</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>

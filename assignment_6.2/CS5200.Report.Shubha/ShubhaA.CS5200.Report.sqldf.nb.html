@@ -9,11 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Shubha, Adithya" />
 
-<meta name="date" content="2024-10-15" />
 
-<title>ASSIGNMENT 06.1</title>
+<title>R Notebook</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1748,310 +1746,37 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">ASSIGNMENT 06.1</h1>
-<h3 class="subtitle">Query a Database with SQL</h3>
-<h4 class="author">Shubha, Adithya</h4>
-<h4 class="date">2024-10-15</h4>
+<h1 class="title toc-ignore">R Notebook</h1>
 
 </div>
 
 
 <!-- rnb-text-begin -->
+<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+Notebook. When you execute code within the notebook, the results appear
+beneath the code.</p>
+<p>Try executing this chunk by clicking the <em>Run</em> button within
+the chunk or by placing your cursor inside it and pressing
+<em>Cmd+Shift+Enter</em>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>1. What are the last name, first name, and birth date of all
-employees, sorted by last name?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgRS5MYXN0TmFtZSwgRS5GaXJzdE5hbWUsIEUuQmlydGhEYXRlXG5GUk9NIEVtcGxveWVlcyBFXG5PUkRFUiBCWSBFLkxhc3ROYW1lXG5MSU1JVCAxMDtcbmBgYCJ9 -->
-<pre class="sql"><code>SELECT E.LastName, E.FirstName, E.BirthDate
-FROM Employees E
-ORDER BY E.LastName
-LIMIT 10;</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjYXJzKVxuYGBgIn0= -->
+<pre class="r"><code>plot(cars)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p><strong>2. What are the names of each category and the number of
-distinct products in that category?</strong></p>
+<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the
+toolbar or by pressing <em>Cmd+Option+I</em>.</p>
+<p>When you save the notebook, an HTML file containing the code and
+output will be saved alongside it (click the <em>Preview</em> button or
+press <em>Cmd+Shift+K</em> to preview the HTML file).</p>
+<p>The preview shows you a rendered HTML copy of the contents of the
+editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not
+run any R code chunks. Instead, the output of the chunk when it was last
+run in the editor is displayed.</p>
 <!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQy5DYXRlZ29yeU5hbWUsIENPVU5UKERJU1RJTkNUIFAuUHJvZHVjdElEKSBBUyBEaXN0aW5jdFByb2R1Y3RDb3VudFxuRlJPTSBQcm9kdWN0cyBQXG5KT0lOIENhdGVnb3JpZXMgQyBPTiBQLkNhdGVnb3J5SUQgPSBDLkNhdGVnb3J5SURcbkdST1VQIEJZIEMuQ2F0ZWdvcnlOYW1lXG5MSU1JVCAxMDtcbmBgYCJ9 -->
-<pre class="sql"><code>SELECT C.CategoryName, COUNT(DISTINCT P.ProductID) AS DistinctProductCount
-FROM Products P
-JOIN Categories C ON P.CategoryID = C.CategoryID
-GROUP BY C.CategoryName
-LIMIT 10;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>3. List the number of orders by customer ID and name, ordered
-from most to least, restricted to those customers who have placed at
-least one order.</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQy5DdXN0b21lcklELCBDLkN1c3RvbWVyTmFtZSwgQ09VTlQoTy5PcmRlcklEKSBBUyBPcmRlckNvdW50XG5GUk9NIEN1c3RvbWVycyBDXG4gICAgICAgICBKT0lOIE9yZGVycyBPIE9OIEMuQ3VzdG9tZXJJRCA9IE8uQ3VzdG9tZXJJRFxuR1JPVVAgQlkgQy5DdXN0b21lcklEXG4tLSBPcmRlciBjb3VudCBzaG91bGQgYXRsZWFzdCBiZSAxXG5IQVZJTkcgT3JkZXJDb3VudCA+IDBcbk9SREVSIEJZIE9yZGVyQ291bnQgREVTQ1xuTElNSVQgMTA7XG5gYGAifQ== -->
-<pre class="sql"><code>SELECT C.CustomerID, C.CustomerName, COUNT(O.OrderID) AS OrderCount
-FROM Customers C
-         JOIN Orders O ON C.CustomerID = O.CustomerID
-GROUP BY C.CustomerID
--- Order count should atleast be 1
-HAVING OrderCount &gt; 0
-ORDER BY OrderCount DESC
-LIMIT 10;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>4. What is the last name and first name of the youngest
-employee?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG4tLSBQb3NzaWJsZSBtdWx0aXBsZSBlbXBsb3llZXMgY2FuIGhhdmUgdGhlIHNhbWUgYmlydGhkYXRlXG4tLSBGaW5pZGluZyB0aGUgeW91bmdlc3QgYmlydGhkYXRlIGFuZCBmaW5kaW5nIGVtcGxveWVlcyBtYXRjaGluZyB0aGlzIHZhbHVlXG5XSVRIIFlvdW5nZXN0QmlydGhkYXRlIEFTIChcbiAgICBTRUxFQ1QgU1RSRlRJTUUoJyVZLSVtJywgRW1wbG95ZWVzLkJpcnRoRGF0ZSkgQVMgQmlydGhEYXRlRm9ybWF0dGVkXG4gICAgRlJPTSBFbXBsb3llZXNcbiAgICBPUkRFUiBCWSBCaXJ0aERhdGVGb3JtYXR0ZWQgREVTQ1xuICAgIExJTUlUIDFcbilcblNFTEVDVCBFLkxhc3ROYW1lLCBFLkZpcnN0TmFtZVxuRlJPTSBFbXBsb3llZXMgRVxuV0hFUkUgU1RSRlRJTUUoJyVZLSVtJywgRS5CaXJ0aERhdGUpID0gKFNFTEVDVCBCaXJ0aERhdGVGb3JtYXR0ZWQgRlJPTSBZb3VuZ2VzdEJpcnRoZGF0ZSk7XG5gYGAifQ== -->
-<pre class="sql"><code>-- Possible multiple employees can have the same birthdate
--- Finiding the youngest birthdate and finding employees matching this value
-WITH YoungestBirthdate AS (
-    SELECT STRFTIME(&#39;%Y-%m&#39;, Employees.BirthDate) AS BirthDateFormatted
-    FROM Employees
-    ORDER BY BirthDateFormatted DESC
-    LIMIT 1
-)
-SELECT E.LastName, E.FirstName
-FROM Employees E
-WHERE STRFTIME(&#39;%Y-%m&#39;, E.BirthDate) = (SELECT BirthDateFormatted FROM YoungestBirthdate);</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>5. What are the total number of unique purchases for each
-country, ordered alphabetically by country?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQy5Db3VudHJ5LCBjb3VudChESVNUSU5DVCBPLk9yZGVySUQpIEFTIFRvdGFsUHVyY2hhc2VzXG5GUk9NIEN1c3RvbWVycyBDXG4gICAgICAgICBKT0lOIE9SREVSUyBPIE9OIEMuQ3VzdG9tZXJJRCA9IE8uQ3VzdG9tZXJJRFxuR1JPVVAgQlkgQy5Db3VudHJ5XG5PUkRFUiBCWSBDLkNvdW50cnlcbkxJTUlUIDEwO1xuYGBgIn0= -->
-<pre class="sql"><code>SELECT C.Country, count(DISTINCT O.OrderID) AS TotalPurchases
-FROM Customers C
-         JOIN ORDERS O ON C.CustomerID = O.CustomerID
-GROUP BY C.Country
-ORDER BY C.Country
-LIMIT 10;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>6. How many employees never worked with a single customer,
-i.e., they appear in the Employees table but not in the Orders
-table?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQ09VTlQoKikgQVMgRW1wbG95ZWVzV2l0aG91dE9yZGVyXG5GUk9NIEVtcGxveWVlcyBFXG4gICAgICAgICBMRUZUIEpPSU4gT3JkZXJzIE8gT04gRS5FbXBsb3llZUlEID0gTy5FbXBsb3llZUlEXG4tLSBJUyBOVUxMIGltcGxpZXMgdGhleSBkbyBub3QgaGF2ZSBhbnkgb3JkZXIuXG5XSEVSRSBPLkVtcGxveWVlSUQgSVMgTlVMTDtcbmBgYCJ9 -->
-<pre class="sql"><code>SELECT COUNT(*) AS EmployeesWithoutOrder
-FROM Employees E
-         LEFT JOIN Orders O ON E.EmployeeID = O.EmployeeID
--- IS NULL implies they do not have any order.
-WHERE O.EmployeeID IS NULL;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>7. How many products contain either “Caviar” or “Kaviar” in
-the name of the product? </strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQ09VTlQoKikgQVMgQ2F2aWVyUHJvZHVjdHNcbkZST00gUHJvZHVjdHMgUFxuV0hFUkUgUC5Qcm9kdWN0TmFtZSBMSUtFICclQ2F2aWFyJSdcbiAgIE9SIFAuUHJvZHVjdE5hbWUgTElLRSAnJUthdmlhciUnO1xuYGBgIn0= -->
-<pre class="sql"><code>SELECT COUNT(*) AS CavierProducts
-FROM Products P
-WHERE P.ProductName LIKE &#39;%Caviar%&#39;
-   OR P.ProductName LIKE &#39;%Kaviar%&#39;;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>8. What is the total number of distinct countries to which at
-least one order was shipped?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQ09VTlQoRElTVElOQ1QgQy5Db3VudHJ5KSBBUyBDb3VudHJpZXNXaXRoT3JkZXJcbkZST00gQ3VzdG9tZXJzIENcbiAgICAgICAgIEpPSU4gT1JERVJTIE8gT04gQy5DdXN0b21lcklEID0gTy5DdXN0b21lcklEO1xuYGBgIn0= -->
-<pre class="sql"><code>SELECT COUNT(DISTINCT C.Country) AS CountriesWithOrder
-FROM Customers C
-         JOIN ORDERS O ON C.CustomerID = O.CustomerID;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>9. What is the total for each order, i.e., the amount that
-the customers is required to pay for the products at the ordered
-quantity in the order. List the order ID, the order date, the name of
-the customer, and the total cost.</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgTy5PcmRlcklELCBPLk9yZGVyRGF0ZSwgQy5DdXN0b21lck5hbWUsIFNVTShQLlByaWNlICogT0QuUXVhbnRpdHkpIEFTIFRvdGFsQ29zdFxuRlJPTSBDdXN0b21lcnMgQ1xuICAgICAgICAgSk9JTlxuICAgICBPcmRlcnMgTyBPTiBDLkN1c3RvbWVySUQgPSBPLkN1c3RvbWVySURcbiAgICAgICAgIEpPSU4gT3JkZXJEZXRhaWxzIE9EIE9OIE8uT3JkZXJJRCA9IE9ELk9yZGVySURcbiAgICAgICAgIEpPSU4gUHJvZHVjdHMgUCBPTiBPRC5Qcm9kdWN0SUQgPSBQLlByb2R1Y3RJRFxuR1JPVVAgQlkgTy5PcmRlcklEXG5MSU1JVCAxMDtcbmBgYCJ9 -->
-<pre class="sql"><code>SELECT O.OrderID, O.OrderDate, C.CustomerName, SUM(P.Price * OD.Quantity) AS TotalCost
-FROM Customers C
-         JOIN
-     Orders O ON C.CustomerID = O.CustomerID
-         JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-         JOIN Products P ON OD.ProductID = P.ProductID
-GROUP BY O.OrderID
-LIMIT 10;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>10. Which supplier sells the most products?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5XSVRIIFN1cHBsaWVyUHJvZHVjdENvdW50cyBBUyAoXG4gICAgU0VMRUNUIFMuU3VwcGxpZXJOYW1lLCBDT1VOVChQLlByb2R1Y3RJRCkgQVMgUHJvZHVjdENvdW50XG4gICAgRlJPTSBTdXBwbGllcnMgU1xuICAgIEpPSU4gUHJvZHVjdHMgUCBPTiBTLlN1cHBsaWVySUQgPSBQLlN1cHBsaWVySURcbiAgICBHUk9VUCBCWSBTLlN1cHBsaWVyTmFtZVxuKVxuLS0gTXVsdGlwbGUgc3VwcGxpZXJzIGNvdWxkIGhhdmUgc29sZCBtYXggcHJvZHVjdHMuXG5TRUxFQ1QgU3VwcGxpZXJOYW1lIEFTIFN1cHBsaWVyV2l0aE1vc3RQcm9kdWN0c1xuRlJPTSBTdXBwbGllclByb2R1Y3RDb3VudHNcbldIRVJFIFByb2R1Y3RDb3VudCA9IChTRUxFQ1QgTUFYKFByb2R1Y3RDb3VudCkgRlJPTSBTdXBwbGllclByb2R1Y3RDb3VudHMpO1xuYGBgIn0= -->
-<pre class="sql"><code>WITH SupplierProductCounts AS (
-    SELECT S.SupplierName, COUNT(P.ProductID) AS ProductCount
-    FROM Suppliers S
-    JOIN Products P ON S.SupplierID = P.SupplierID
-    GROUP BY S.SupplierName
-)
--- Multiple suppliers could have sold max products.
-SELECT SupplierName AS SupplierWithMostProducts
-FROM SupplierProductCounts
-WHERE ProductCount = (SELECT MAX(ProductCount) FROM SupplierProductCounts);</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>11. Which product was ordered most often by different
-customers?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>12. Which product has the most quantity sold?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5XSVRIIFRvdGFsUXVhbnRpdGllc09mUHJvZHVjdCBBUyAoU0VMRUNUIFAuUHJvZHVjdE5hbWUsIFNVTShPRC5RdWFudGl0eSkgQVMgVG90YWxRdWFudGl0eVNvbGRcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBGUk9NIE9yZGVyRGV0YWlscyBPRFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEpPSU4gUHJvZHVjdHMgUCBPTiBPRC5Qcm9kdWN0SUQgPSBQLlByb2R1Y3RJRFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEdST1VQIEJZIFAuUHJvZHVjdE5hbWUpXG5cblNFTEVDVCBQcm9kdWN0TmFtZSBBUyBQcm9kdWN0V2l0aE1vc3RRdWFudGl0eVxuRlJPTSBUb3RhbFF1YW50aXRpZXNPZlByb2R1Y3RcbldIRVJFIFRvdGFsUXVhbnRpdHlTb2xkID1cbiAgICAgIChTZWxlY3QgbWF4KFRvdGFsUXVhbnRpdHlTb2xkKVxuICAgICAgIEZST00gVG90YWxRdWFudGl0aWVzT2ZQcm9kdWN0KTtcbmBgYCJ9 -->
-<pre class="sql"><code>WITH TotalQuantitiesOfProduct AS (SELECT P.ProductName, SUM(OD.Quantity) AS TotalQuantitySold
-                                  FROM OrderDetails OD
-                                           JOIN Products P ON OD.ProductID = P.ProductID
-                                  GROUP BY P.ProductName)
 
-SELECT ProductName AS ProductWithMostQuantity
-FROM TotalQuantitiesOfProduct
-WHERE TotalQuantitySold =
-      (Select max(TotalQuantitySold)
-       FROM TotalQuantitiesOfProduct);</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>13. What is the total amount spent by all customers who do
-live in Germany?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgU1VNKE9ELlF1YW50aXR5ICogUC5QcmljZSkgQVMgVG90YWxBbW91bnRTcGVudEluR2VybWFueVxuRlJPTSBDdXN0b21lcnMgQ1xuSk9JTiBPcmRlcnMgTyBPTiBDLkN1c3RvbWVySUQgPSBPLkN1c3RvbWVySURcbkpPSU4gT3JkZXJEZXRhaWxzIE9EIE9OIE8uT3JkZXJJRCA9IE9ELk9yZGVySURcbkpPSU4gUHJvZHVjdHMgUCBPTiBPRC5Qcm9kdWN0SUQgPSBQLlByb2R1Y3RJRFxuV0hFUkUgQy5Db3VudHJ5ID0gJ0dlcm1hbnknO1xuYGBgIn0= -->
-<pre class="sql"><code>SELECT SUM(OD.Quantity * P.Price) AS TotalAmountSpentInGermany
-FROM Customers C
-JOIN Orders O ON C.CustomerID = O.CustomerID
-JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-JOIN Products P ON OD.ProductID = P.ProductID
-WHERE C.Country = &#39;Germany&#39;;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>14. What is the difference in spending between the country to
-which the most was sold versus the country to which the least was
-sold?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5XSVRIIFRvdGFsU3BlbmRpbmcgQVMgKFxuICAgIFNFTEVDVCBDLkNvdW50cnksU1VNKE9ELlF1YW50aXR5ICogUC5QcmljZSkgQVMgVG90YWxBbW91bnRTcGVudFxuRlJPTSBDdXN0b21lcnMgQ1xuSk9JTiBPcmRlcnMgTyBPTiBDLkN1c3RvbWVySUQgPSBPLkN1c3RvbWVySURcbkpPSU4gT3JkZXJEZXRhaWxzIE9EIE9OIE8uT3JkZXJJRCA9IE9ELk9yZGVySURcbkpPSU4gUHJvZHVjdHMgUCBPTiBPRC5Qcm9kdWN0SUQgPSBQLlByb2R1Y3RJRFxuR1JPVVAgQlkgQy5Db3VudHJ5XG4pXG5TRUxFQ1RcbiAgICBNQVgoVG90YWxBbW91bnRTcGVudCkgLSBNSU4oVG90YWxBbW91bnRTcGVudCkgQVMgU3BlbmRpbmdEaWZmZXJlbmNlXG5GUk9NIFRvdGFsU3BlbmRpbmc7XG5gYGAifQ== -->
-<pre class="sql"><code>WITH TotalSpending AS (
-    SELECT C.Country,SUM(OD.Quantity * P.Price) AS TotalAmountSpent
-FROM Customers C
-JOIN Orders O ON C.CustomerID = O.CustomerID
-JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-JOIN Products P ON OD.ProductID = P.ProductID
-GROUP BY C.Country
-)
-SELECT
-    MAX(TotalAmountSpent) - MIN(TotalAmountSpent) AS SpendingDifference
-FROM TotalSpending;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>15. Which country has the most customers?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5XSVRIIEN1c3RvbWVyQ291bnQgQVMgKFNFTEVDVCBDLkNvdW50cnksIENPVU5UKCopIEFTIE51bWJlck9mQ3VzdG9tZXJzXG4gICAgICAgICAgICAgICAgICAgICAgIEZST00gQ3VzdG9tZXJzIENcbiAgICAgICAgICAgICAgICAgICAgICAgR1JPVVAgQlkgQy5Db3VudHJ5KVxuU0VMRUNUIENvdW50cnkgQVMgQ291bnRyeVdpdGhNb3N0Q3VzdG9tZXJcbkZST00gQ3VzdG9tZXJDb3VudFxuV0hFUkUgTnVtYmVyT2ZDdXN0b21lcnMgPSAoU0VMRUNUIE1BWChOdW1iZXJPZkN1c3RvbWVycykgRlJPTSBDdXN0b21lckNvdW50KTtcbmBgYCJ9 -->
-<pre class="sql"><code>WITH CustomerCount AS (SELECT C.Country, COUNT(*) AS NumberOfCustomers
-                       FROM Customers C
-                       GROUP BY C.Country)
-SELECT Country AS CountryWithMostCustomer
-FROM CustomerCount
-WHERE NumberOfCustomers = (SELECT MAX(NumberOfCustomers) FROM CustomerCount);</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>16. Which employee sold the most in terms of “dollar amount”
-sold?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5XSVRIIEVtcGxveWVlU2FsZXMgQVMgKFNFTEVDVCBFLkVtcGxveWVlSUQsRS5GaXJzdE5hbWUsIEUuTGFzdE5hbWUsIFNVTShPRC5RdWFudGl0eSAqIFAuUHJpY2UpIEFTIFRvdGFsU2FsZXNcbiAgICAgICAgICAgICAgICAgICAgICAgRlJPTSBFbXBsb3llZXMgRVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBKT0lOIE9yZGVycyBPIE9OIEUuRW1wbG95ZWVJRCA9IE8uRW1wbG95ZWVJRFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBKT0lOIE9yZGVyRGV0YWlscyBPRCBPTiBPLk9yZGVySUQgPSBPRC5PcmRlcklEXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEpPSU4gUHJvZHVjdHMgUCBPTiBPRC5Qcm9kdWN0SUQgPSBQLlByb2R1Y3RJRFxuICAgICAgICAgICAgICAgICAgICAgICBHUk9VUCBCWSBFLkVtcGxveWVlSUQpXG5cblNFTEVDVCBGaXJzdE5hbWUsIExhc3ROYW1lXG5GUk9NIEVtcGxveWVlU2FsZXNcbndoZXJlIFRvdGFsU2FsZXMgPSAoU0VMRUNUIG1heChUb3RhbFNhbGVzKSBGUk9NIEVtcGxveWVlU2FsZXMpO1xuYGBgIn0= -->
-<pre class="sql"><code>WITH EmployeeSales AS (SELECT E.EmployeeID,E.FirstName, E.LastName, SUM(OD.Quantity * P.Price) AS TotalSales
-                       FROM Employees E
-                                JOIN Orders O ON E.EmployeeID = O.EmployeeID
-                                JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-                                JOIN Products P ON OD.ProductID = P.ProductID
-                       GROUP BY E.EmployeeID)
-
-SELECT FirstName, LastName
-FROM EmployeeSales
-where TotalSales = (SELECT max(TotalSales) FROM EmployeeSales);</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>17. Which customers (name and ID) have never bought
-anything?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQy5DdXN0b21lcklELCBDLkN1c3RvbWVyTmFtZSBBUyBDdXN0b21lcldpdGhvdXRQdXJjaGFzZVxuRlJPTSBDdXN0b21lcnMgQ1xuTEVGVCBKT0lOIE9yZGVycyBPIE9OIEMuQ3VzdG9tZXJJRCA9IE8uQ3VzdG9tZXJJRFxuV0hFUkUgTy5PcmRlcklEIElTIE5VTEwgTElNSVQgMTA7XG5gYGAifQ== -->
-<pre class="sql"><code>SELECT C.CustomerID, C.CustomerName AS CustomerWithoutPurchase
-FROM Customers C
-LEFT JOIN Orders O ON C.CustomerID = O.CustomerID
-WHERE O.OrderID IS NULL LIMIT 10;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>18. What is the average cost of the products in each
-category? List the category name and the average cost.</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQy5DYXRlZ29yeU5hbWUsIEFWRyhQLlByaWNlKSBBUyBBdmVyYWdlQ29zdFxuRlJPTSBQcm9kdWN0cyBQXG4gICAgICAgICBKT0lOIENhdGVnb3JpZXMgQyBPTiBQLkNhdGVnb3J5SUQgPSBDLkNhdGVnb3J5SURcbkdST1VQIEJZIEMuQ2F0ZWdvcnlOYW1lXG5MSU1JVCAxMDtcblxuYGBgIn0= -->
-<pre class="sql"><code>SELECT C.CategoryName, AVG(P.Price) AS AverageCost
-FROM Products P
-         JOIN Categories C ON P.CategoryID = C.CategoryID
-GROUP BY C.CategoryName
-LIMIT 10;
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>19. What is the most recent order? List the order ID and the
-name, city, and country of the customer who placed it.</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgTy5PcmRlcklELCBDLkN1c3RvbWVyTmFtZSwgQy5DaXR5LCBDLkNvdW50cnlcbkZST00gQ3VzdG9tZXJzIENcbkpPSU4gT3JkZXJzIE8gT04gQy5DdXN0b21lcklEID0gTy5DdXN0b21lcklEXG5XSEVSRSBPLk9yZGVyRGF0ZSA9IChcbiAgICBTRUxFQ1QgTUFYKE9yZGVyRGF0ZSlcbiAgICBGUk9NIE9yZGVyc1xuKTtcbmBgYCJ9 -->
-<pre class="sql"><code>SELECT O.OrderID, C.CustomerName, C.City, C.Country
-FROM Customers C
-JOIN Orders O ON C.CustomerID = O.CustomerID
-WHERE O.OrderDate = (
-    SELECT MAX(OrderDate)
-    FROM Orders
-);</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><strong>20. From how many different (unique) countries do the
-products come from?</strong></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgc3FsXG5TRUxFQ1QgQ09VTlQoRElTVElOQ1QgUy5Db3VudHJ5KSBBUyBVbmlxdWVDb3VudHJpZXNcbkZST00gU3VwcGxpZXJzIFM7XG5gYGAifQ== -->
-<pre class="sql"><code>SELECT COUNT(DISTINCT S.Country) AS UniqueCountries
-FROM Suppliers S;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQVNTSUdOTUVOVCAwNi4xIgpzdWJ0aXRsZTogIlF1ZXJ5IGEgRGF0YWJhc2Ugd2l0aCBTUUwiCmF1dGhvcjogIlNodWJoYSwgQWRpdGh5YSIKZGF0ZTogImByIFN5cy5EYXRlKClgIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7ciBlY2hvID0gRkFMU0V9CmRiTmFtZSA9ICdPcmRlcnNEQi5zcWxpdGVkYi5kYicKCiMgSW5zdGFsbCBwcm9ncmFtIHJlcXVpcmVkIHBhY2thZ2VzID09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiMgSW5zdGFsbHMgUlNRTGl0ZSB0byBjb25uZWN0IHRvIFNxbExpdGUuCiMgUmVmZXJyZWQgZnJvbTogaHR0cDovL2FydGlmaWNpdW0udXMvbGVzc29ucy8wNi5yL2wtNi0xMDQtcjRwcm9ncy9sLTYtMTA0Lmh0bWwjSW5zdGFsbF9QYWNrYWdlc19vbl9EZW1hbmQKaW5zdGFsbFJlcXVpcmVkUGFja2FnZXMgPC0gZnVuY3Rpb24oKSB7CiAgcGFja2FnZXMgPC0gYygiUlNRTGl0ZSIpCiAgIyBJbnN0YWxsIHBhY2thZ2VzIHRoYXQgYXJlIG5vdCBpbnN0YWxsZWQKICBpbnN0YWxsZWRfcGFja2FnZXMgPC0gcGFja2FnZXMgJWluJSByb3duYW1lcyhpbnN0YWxsZWQucGFja2FnZXMoKSkKICBpZiAoYW55KGluc3RhbGxlZF9wYWNrYWdlcyA9PSBGQUxTRSkpIHsKICAgIGluc3RhbGwucGFja2FnZXMocGFja2FnZXNbIWluc3RhbGxlZF9wYWNrYWdlc10pCiAgfQogIAogIAogICMgTG9hZCBhbGwgcGFja2FnZXMKICBpbnZpc2libGUobGFwcGx5KHBhY2thZ2VzLCBsaWJyYXJ5LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpKQp9CiMgQ3JlYXRlIGEgREIgQ29ubmVjdGlvbiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09CiMgQ3JlYXRlcyBhIERCIGNvbm5lY3Rpb24gd2l0aCB0aGUgZ2l2ZW4gZGJOYW1lCiMgQHBhcmFtOiBkYk5hbWUgLSBOYW1lIG9mIHRoZSBkYiB0byBjb25uZWN0IHRvCiMgcmVmZXJyZWRGcm9tOiBodHRwOi8vYXJ0aWZpY2l1bS51cy9sZXNzb25zLzA2LnIvbC02LTMwMS1zcWxpdGUtZnJvbS1yL2wtNi0zMDEuaHRtbCNDb25uZWN0X3RvX0RhdGFiYXNlCmNyZWF0ZURCQ29ubmVjdGlvbiA8LSBmdW5jdGlvbihkYk5hbWUpIHsKICByZXR1cm4gKGRiQ29ubmVjdChSU1FMaXRlOjpTUUxpdGUoKSwgZGJOYW1lKSkKfQoKaW5zdGFsbFJlcXVpcmVkUGFja2FnZXMoKQpjb25uID0gIGNyZWF0ZURCQ29ubmVjdGlvbihkYk5hbWUpCmBgYAoKCioqMS4gV2hhdCBhcmUgdGhlIGxhc3QgbmFtZSwgZmlyc3QgbmFtZSwgYW5kIGJpcnRoIGRhdGUgb2YgYWxsIGVtcGxveWVlcywgc29ydGVkIGJ5IGxhc3QgbmFtZT8qKgpgYGB7c3FsIGVtcGxveWVlRGV0YWlscywgY29ubmVjdGlvbiA9IGNvbm59ClNFTEVDVCBFLkxhc3ROYW1lLCBFLkZpcnN0TmFtZSwgRS5CaXJ0aERhdGUKRlJPTSBFbXBsb3llZXMgRQpPUkRFUiBCWSBFLkxhc3ROYW1lCkxJTUlUIDEwOwpgYGAKCioqMi4gV2hhdCBhcmUgdGhlIG5hbWVzIG9mIGVhY2ggY2F0ZWdvcnkgYW5kIHRoZSBudW1iZXIgb2YgZGlzdGluY3QgcHJvZHVjdHMgaW4gdGhhdCBjYXRlZ29yeT8qKiAKYGBge3NxbCBkaXN0aW5jdFByb2R1Y3RzSW5DYXRlZ29yeSwgY29ubmVjdGlvbiA9IGNvbm59ClNFTEVDVCBDLkNhdGVnb3J5TmFtZSwgQ09VTlQoRElTVElOQ1QgUC5Qcm9kdWN0SUQpIEFTIERpc3RpbmN0UHJvZHVjdENvdW50CkZST00gUHJvZHVjdHMgUApKT0lOIENhdGVnb3JpZXMgQyBPTiBQLkNhdGVnb3J5SUQgPSBDLkNhdGVnb3J5SUQKR1JPVVAgQlkgQy5DYXRlZ29yeU5hbWUKTElNSVQgMTA7CmBgYAoKKiozLiBMaXN0IHRoZSBudW1iZXIgb2Ygb3JkZXJzIGJ5IGN1c3RvbWVyIElEIGFuZCBuYW1lLCBvcmRlcmVkIGZyb20gbW9zdCB0byBsZWFzdCwgcmVzdHJpY3RlZCB0byB0aG9zZSBjdXN0b21lcnMgd2hvIGhhdmUgcGxhY2VkIGF0IGxlYXN0IG9uZSBvcmRlci4qKgpgYGB7c3FsIG9yZGVyQ291bnRPZkVhY2hDdXN0b21lciwgY29ubmVjdGlvbiA9IGNvbm59ClNFTEVDVCBDLkN1c3RvbWVySUQsIEMuQ3VzdG9tZXJOYW1lLCBDT1VOVChPLk9yZGVySUQpIEFTIE9yZGVyQ291bnQKRlJPTSBDdXN0b21lcnMgQwogICAgICAgICBKT0lOIE9yZGVycyBPIE9OIEMuQ3VzdG9tZXJJRCA9IE8uQ3VzdG9tZXJJRApHUk9VUCBCWSBDLkN1c3RvbWVySUQKLS0gT3JkZXIgY291bnQgc2hvdWxkIGF0bGVhc3QgYmUgMQpIQVZJTkcgT3JkZXJDb3VudCA+IDAKT1JERVIgQlkgT3JkZXJDb3VudCBERVNDCkxJTUlUIDEwOwpgYGAKCioqNC4gV2hhdCBpcyB0aGUgbGFzdCBuYW1lIGFuZCBmaXJzdCBuYW1lIG9mIHRoZSB5b3VuZ2VzdCBlbXBsb3llZT8qKgpgYGB7c3FsIHlvdW5nZXN0RW1wbG95ZWUsIGNvbm5lY3Rpb24gPSBjb25ufQotLSBQb3NzaWJsZSBtdWx0aXBsZSBlbXBsb3llZXMgY2FuIGhhdmUgdGhlIHNhbWUgYmlydGhkYXRlCi0tIEZpbmlkaW5nIHRoZSB5b3VuZ2VzdCBiaXJ0aGRhdGUgYW5kIGZpbmRpbmcgZW1wbG95ZWVzIG1hdGNoaW5nIHRoaXMgdmFsdWUKV0lUSCBZb3VuZ2VzdEJpcnRoZGF0ZSBBUyAoCiAgICBTRUxFQ1QgU1RSRlRJTUUoJyVZLSVtJywgRW1wbG95ZWVzLkJpcnRoRGF0ZSkgQVMgQmlydGhEYXRlRm9ybWF0dGVkCiAgICBGUk9NIEVtcGxveWVlcwogICAgT1JERVIgQlkgQmlydGhEYXRlRm9ybWF0dGVkIERFU0MKICAgIExJTUlUIDEKKQpTRUxFQ1QgRS5MYXN0TmFtZSwgRS5GaXJzdE5hbWUKRlJPTSBFbXBsb3llZXMgRQpXSEVSRSBTVFJGVElNRSgnJVktJW0nLCBFLkJpcnRoRGF0ZSkgPSAoU0VMRUNUIEJpcnRoRGF0ZUZvcm1hdHRlZCBGUk9NIFlvdW5nZXN0QmlydGhkYXRlKTsKYGBgCgoqKjUuIFdoYXQgYXJlIHRoZSB0b3RhbCBudW1iZXIgb2YgdW5pcXVlIHB1cmNoYXNlcyBmb3IgZWFjaCBjb3VudHJ5LCBvcmRlcmVkIGFscGhhYmV0aWNhbGx5IGJ5IGNvdW50cnk/KioKYGBge3NxbCBjb3VudHJ5UHVyY2hhc2VzLCBjb25uZWN0aW9uID0gY29ubn0KU0VMRUNUIEMuQ291bnRyeSwgY291bnQoRElTVElOQ1QgTy5PcmRlcklEKSBBUyBUb3RhbFB1cmNoYXNlcwpGUk9NIEN1c3RvbWVycyBDCiAgICAgICAgIEpPSU4gT1JERVJTIE8gT04gQy5DdXN0b21lcklEID0gTy5DdXN0b21lcklECkdST1VQIEJZIEMuQ291bnRyeQpPUkRFUiBCWSBDLkNvdW50cnkKTElNSVQgMTA7CmBgYAoKKio2LiBIb3cgbWFueSBlbXBsb3llZXMgbmV2ZXIgd29ya2VkIHdpdGggYSBzaW5nbGUgY3VzdG9tZXIsIGkuZS4sIHRoZXkgYXBwZWFyIGluIHRoZSBFbXBsb3llZXMgdGFibGUgYnV0IG5vdCBpbiB0aGUgT3JkZXJzIHRhYmxlPyoqCmBgYHtzcWwgZW1wbG95ZWVzV2l0aG91dE9yZGVyLCBjb25uZWN0aW9uID0gY29ubn0KU0VMRUNUIENPVU5UKCopIEFTIEVtcGxveWVlc1dpdGhvdXRPcmRlcgpGUk9NIEVtcGxveWVlcyBFCiAgICAgICAgIExFRlQgSk9JTiBPcmRlcnMgTyBPTiBFLkVtcGxveWVlSUQgPSBPLkVtcGxveWVlSUQKLS0gSVMgTlVMTCBpbXBsaWVzIHRoZXkgZG8gbm90IGhhdmUgYW55IG9yZGVyLgpXSEVSRSBPLkVtcGxveWVlSUQgSVMgTlVMTDsKYGBgCgoqKjcuIEhvdyBtYW55IHByb2R1Y3RzIGNvbnRhaW4gZWl0aGVyICJDYXZpYXIiIG9yICJLYXZpYXIiIGluIHRoZSBuYW1lIG9mIHRoZSBwcm9kdWN0PyAqKgpgYGB7c3FsIGNhdmllclByb2R1Y3RzLCBjb25uZWN0aW9uID0gY29ubn0KU0VMRUNUIENPVU5UKCopIEFTIENhdmllclByb2R1Y3RzCkZST00gUHJvZHVjdHMgUApXSEVSRSBQLlByb2R1Y3ROYW1lIExJS0UgJyVDYXZpYXIlJwogICBPUiBQLlByb2R1Y3ROYW1lIExJS0UgJyVLYXZpYXIlJzsKYGBgCgoqKjguIFdoYXQgaXMgdGhlIHRvdGFsIG51bWJlciBvZiBkaXN0aW5jdCBjb3VudHJpZXMgdG8gd2hpY2ggYXQgbGVhc3Qgb25lIG9yZGVyIHdhcyBzaGlwcGVkPyoqCmBgYHtzcWwgY291bnRyaWVzV2l0aE9yZGVycywgY29ubmVjdGlvbiA9IGNvbm59ClNFTEVDVCBDT1VOVChESVNUSU5DVCBDLkNvdW50cnkpIEFTIENvdW50cmllc1dpdGhPcmRlcgpGUk9NIEN1c3RvbWVycyBDCiAgICAgICAgIEpPSU4gT1JERVJTIE8gT04gQy5DdXN0b21lcklEID0gTy5DdXN0b21lcklEOwpgYGAKCioqOS4gV2hhdCBpcyB0aGUgdG90YWwgZm9yIGVhY2ggb3JkZXIsIGkuZS4sIHRoZSBhbW91bnQgdGhhdCB0aGUgY3VzdG9tZXJzIGlzIHJlcXVpcmVkIHRvIHBheSBmb3IgdGhlIHByb2R1Y3RzIGF0IHRoZSBvcmRlcmVkIHF1YW50aXR5IGluIHRoZSBvcmRlci4gTGlzdCB0aGUgb3JkZXIgSUQsIHRoZSBvcmRlciBkYXRlLCB0aGUgbmFtZSBvZiB0aGUgY3VzdG9tZXIsIGFuZCB0aGUgdG90YWwgY29zdC4qKgpgYGB7c3FsIHRvdGFsQ29zdE9mRWFjaE9yZGVyLCBjb25uZWN0aW9uID0gY29ubn0KU0VMRUNUIE8uT3JkZXJJRCwgTy5PcmRlckRhdGUsIEMuQ3VzdG9tZXJOYW1lLCBTVU0oUC5QcmljZSAqIE9ELlF1YW50aXR5KSBBUyBUb3RhbENvc3QKRlJPTSBDdXN0b21lcnMgQwogICAgICAgICBKT0lOCiAgICAgT3JkZXJzIE8gT04gQy5DdXN0b21lcklEID0gTy5DdXN0b21lcklECiAgICAgICAgIEpPSU4gT3JkZXJEZXRhaWxzIE9EIE9OIE8uT3JkZXJJRCA9IE9ELk9yZGVySUQKICAgICAgICAgSk9JTiBQcm9kdWN0cyBQIE9OIE9ELlByb2R1Y3RJRCA9IFAuUHJvZHVjdElECkdST1VQIEJZIE8uT3JkZXJJRApMSU1JVCAxMDsKYGBgCgoqKjEwLiBXaGljaCBzdXBwbGllciBzZWxscyB0aGUgbW9zdCBwcm9kdWN0cz8qKgpgYGB7c3FsIHN1cHBsaWVyV2l0aE1vc3RQcm9kdWN0cywgY29ubmVjdGlvbiA9IGNvbm59CldJVEggU3VwcGxpZXJQcm9kdWN0Q291bnRzIEFTICgKICAgIFNFTEVDVCBTLlN1cHBsaWVyTmFtZSwgQ09VTlQoUC5Qcm9kdWN0SUQpIEFTIFByb2R1Y3RDb3VudAogICAgRlJPTSBTdXBwbGllcnMgUwogICAgSk9JTiBQcm9kdWN0cyBQIE9OIFMuU3VwcGxpZXJJRCA9IFAuU3VwcGxpZXJJRAogICAgR1JPVVAgQlkgUy5TdXBwbGllck5hbWUKKQotLSBNdWx0aXBsZSBzdXBwbGllcnMgY291bGQgaGF2ZSBzb2xkIG1heCBwcm9kdWN0cy4KU0VMRUNUIFN1cHBsaWVyTmFtZSBBUyBTdXBwbGllcldpdGhNb3N0UHJvZHVjdHMKRlJPTSBTdXBwbGllclByb2R1Y3RDb3VudHMKV0hFUkUgUHJvZHVjdENvdW50ID0gKFNFTEVDVCBNQVgoUHJvZHVjdENvdW50KSBGUk9NIFN1cHBsaWVyUHJvZHVjdENvdW50cyk7CmBgYAoKKioxMS4gV2hpY2ggcHJvZHVjdCB3YXMgb3JkZXJlZCBtb3N0IG9mdGVuIGJ5IGRpZmZlcmVudCBjdXN0b21lcnM/KioKYGBge3NxbCBwcm9kdWN0T3JkZXJCeURpZmZlcmVudEN1c3RvbWVycywgY29ubmVjdGlvbiA9IGNvbm59CldJVEggUHJvZHVjdE9yZGVyZWRDb3VudCBBUyAoU0VMRUNUIFAuUHJvZHVjdE5hbWUsIENPVU5UKERJU1RJTkNUIE8uQ3VzdG9tZXJJRCkgQVMgQ291bnRPZlByb2R1Y3RPcmRlcmVkCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRlJPTSBPcmRlcnMgTwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEpPSU4gT3JkZXJEZXRhaWxzIE9EIE9OIE8uT3JkZXJJRCA9IE9ELk9yZGVySUQKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBKT0lOIFByb2R1Y3RzIFAgT04gT0QuUHJvZHVjdElEID0gUC5Qcm9kdWN0SUQKICAgICAgICAgICAgICAgICAgICAgICAgICAgICBHUk9VUCBCWSBQLlByb2R1Y3ROYW1lKQpTRUxFQ1QgUHJvZHVjdE5hbWUgQVMgUHJvZHVjdE9yZGVyQnlEaWZmZXJlbnRDdXN0b21lcnMKRlJPTSBQcm9kdWN0T3JkZXJlZENvdW50CldIRVJFIENvdW50T2ZQcm9kdWN0T3JkZXJlZCA9IChTRUxFQ1QgTUFYKENvdW50T2ZQcm9kdWN0T3JkZXJlZCkgRlJPTSBQcm9kdWN0T3JkZXJlZENvdW50KTsKYGBgCgoqKjEyLiBXaGljaCBwcm9kdWN0IGhhcyB0aGUgbW9zdCBxdWFudGl0eSBzb2xkPyoqCmBgYHtzcWwgcHJvZHVjdFdpdGhNb3N0UXVhbnRpdHksIGNvbm5lY3Rpb24gPSBjb25ufQpXSVRIIFRvdGFsUXVhbnRpdGllc09mUHJvZHVjdCBBUyAoU0VMRUNUIFAuUHJvZHVjdE5hbWUsIFNVTShPRC5RdWFudGl0eSkgQVMgVG90YWxRdWFudGl0eVNvbGQKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEZST00gT3JkZXJEZXRhaWxzIE9ECiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBKT0lOIFByb2R1Y3RzIFAgT04gT0QuUHJvZHVjdElEID0gUC5Qcm9kdWN0SUQKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEdST1VQIEJZIFAuUHJvZHVjdE5hbWUpCgpTRUxFQ1QgUHJvZHVjdE5hbWUgQVMgUHJvZHVjdFdpdGhNb3N0UXVhbnRpdHkKRlJPTSBUb3RhbFF1YW50aXRpZXNPZlByb2R1Y3QKV0hFUkUgVG90YWxRdWFudGl0eVNvbGQgPQogICAgICAoU2VsZWN0IG1heChUb3RhbFF1YW50aXR5U29sZCkKICAgICAgIEZST00gVG90YWxRdWFudGl0aWVzT2ZQcm9kdWN0KTsKYGBgCgoqKjEzLiBXaGF0IGlzIHRoZSB0b3RhbCBhbW91bnQgc3BlbnQgYnkgYWxsIGN1c3RvbWVycyB3aG8gZG8gbGl2ZSBpbiBHZXJtYW55PyoqCmBgYHtzcWwgdG90YWxBbW91bnRTcGVudEluR2VybWFueSwgY29ubmVjdGlvbiA9IGNvbm59ClNFTEVDVCBTVU0oT0QuUXVhbnRpdHkgKiBQLlByaWNlKSBBUyBUb3RhbEFtb3VudFNwZW50SW5HZXJtYW55CkZST00gQ3VzdG9tZXJzIEMKSk9JTiBPcmRlcnMgTyBPTiBDLkN1c3RvbWVySUQgPSBPLkN1c3RvbWVySUQKSk9JTiBPcmRlckRldGFpbHMgT0QgT04gTy5PcmRlcklEID0gT0QuT3JkZXJJRApKT0lOIFByb2R1Y3RzIFAgT04gT0QuUHJvZHVjdElEID0gUC5Qcm9kdWN0SUQKV0hFUkUgQy5Db3VudHJ5ID0gJ0dlcm1hbnknOwpgYGAKCioqMTQuIFdoYXQgaXMgdGhlIGRpZmZlcmVuY2UgaW4gc3BlbmRpbmcgYmV0d2VlbiB0aGUgY291bnRyeSB0byB3aGljaCB0aGUgbW9zdCB3YXMgc29sZCB2ZXJzdXMgdGhlIGNvdW50cnkgdG8gd2hpY2ggdGhlIGxlYXN0IHdhcyBzb2xkPyoqCmBgYHtzcWwgZGlmZmVyZW5jZUluU3BlbmRpbmcsIGNvbm5lY3Rpb24gPSBjb25ufQpXSVRIIFRvdGFsU3BlbmRpbmcgQVMgKAogICAgU0VMRUNUIEMuQ291bnRyeSxTVU0oT0QuUXVhbnRpdHkgKiBQLlByaWNlKSBBUyBUb3RhbEFtb3VudFNwZW50CkZST00gQ3VzdG9tZXJzIEMKSk9JTiBPcmRlcnMgTyBPTiBDLkN1c3RvbWVySUQgPSBPLkN1c3RvbWVySUQKSk9JTiBPcmRlckRldGFpbHMgT0QgT04gTy5PcmRlcklEID0gT0QuT3JkZXJJRApKT0lOIFByb2R1Y3RzIFAgT04gT0QuUHJvZHVjdElEID0gUC5Qcm9kdWN0SUQKR1JPVVAgQlkgQy5Db3VudHJ5CikKU0VMRUNUCiAgICBNQVgoVG90YWxBbW91bnRTcGVudCkgLSBNSU4oVG90YWxBbW91bnRTcGVudCkgQVMgU3BlbmRpbmdEaWZmZXJlbmNlCkZST00gVG90YWxTcGVuZGluZzsKYGBgCgoqKjE1LiBXaGljaCBjb3VudHJ5IGhhcyB0aGUgbW9zdCBjdXN0b21lcnM/KioKYGBge3NxbCBjb3VudHJ5V2l0aE1vc3RDdXN0b21lcnMsIGNvbm5lY3Rpb249IGNvbm59CldJVEggQ3VzdG9tZXJDb3VudCBBUyAoU0VMRUNUIEMuQ291bnRyeSwgQ09VTlQoKikgQVMgTnVtYmVyT2ZDdXN0b21lcnMKICAgICAgICAgICAgICAgICAgICAgICBGUk9NIEN1c3RvbWVycyBDCiAgICAgICAgICAgICAgICAgICAgICAgR1JPVVAgQlkgQy5Db3VudHJ5KQpTRUxFQ1QgQ291bnRyeSBBUyBDb3VudHJ5V2l0aE1vc3RDdXN0b21lcgpGUk9NIEN1c3RvbWVyQ291bnQKV0hFUkUgTnVtYmVyT2ZDdXN0b21lcnMgPSAoU0VMRUNUIE1BWChOdW1iZXJPZkN1c3RvbWVycykgRlJPTSBDdXN0b21lckNvdW50KTsKYGBgCgoqKjE2LiBXaGljaCBlbXBsb3llZSBzb2xkIHRoZSBtb3N0IGluIHRlcm1zIG9mICJkb2xsYXIgYW1vdW50IiBzb2xkPyoqCmBgYHtzcWwgZW1wbG95ZWVXaXRoTW9zdEFtb3VudFNvbGQsICBjb25uZWN0aW9uPSBjb25ufQpXSVRIIEVtcGxveWVlU2FsZXMgQVMgKFNFTEVDVCBFLkVtcGxveWVlSUQsRS5GaXJzdE5hbWUsIEUuTGFzdE5hbWUsIFNVTShPRC5RdWFudGl0eSAqIFAuUHJpY2UpIEFTIFRvdGFsU2FsZXMKICAgICAgICAgICAgICAgICAgICAgICBGUk9NIEVtcGxveWVlcyBFCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSk9JTiBPcmRlcnMgTyBPTiBFLkVtcGxveWVlSUQgPSBPLkVtcGxveWVlSUQKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBKT0lOIE9yZGVyRGV0YWlscyBPRCBPTiBPLk9yZGVySUQgPSBPRC5PcmRlcklECiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSk9JTiBQcm9kdWN0cyBQIE9OIE9ELlByb2R1Y3RJRCA9IFAuUHJvZHVjdElECiAgICAgICAgICAgICAgICAgICAgICAgR1JPVVAgQlkgRS5FbXBsb3llZUlEKQoKU0VMRUNUIEZpcnN0TmFtZSwgTGFzdE5hbWUKRlJPTSBFbXBsb3llZVNhbGVzCndoZXJlIFRvdGFsU2FsZXMgPSAoU0VMRUNUIG1heChUb3RhbFNhbGVzKSBGUk9NIEVtcGxveWVlU2FsZXMpOwpgYGAKKioxNy4gV2hpY2ggY3VzdG9tZXJzIChuYW1lIGFuZCBJRCkgaGF2ZSBuZXZlciBib3VnaHQgYW55dGhpbmc/KioKYGBge3NxbCBjdXN0b21lcldpdGhvdXJQdXJjaGFzZSwgIGNvbm5lY3Rpb249IGNvbm59ClNFTEVDVCBDLkN1c3RvbWVySUQsIEMuQ3VzdG9tZXJOYW1lIEFTIEN1c3RvbWVyV2l0aG91dFB1cmNoYXNlCkZST00gQ3VzdG9tZXJzIEMKTEVGVCBKT0lOIE9yZGVycyBPIE9OIEMuQ3VzdG9tZXJJRCA9IE8uQ3VzdG9tZXJJRApXSEVSRSBPLk9yZGVySUQgSVMgTlVMTCBMSU1JVCAxMDsKYGBgCioqMTguIFdoYXQgaXMgdGhlIGF2ZXJhZ2UgY29zdCBvZiB0aGUgcHJvZHVjdHMgaW4gZWFjaCBjYXRlZ29yeT8gTGlzdCB0aGUgY2F0ZWdvcnkgbmFtZSBhbmQgdGhlIGF2ZXJhZ2UgY29zdC4qKgpgYGB7c3FsIGF2ZXJhZ2VQcm9kdWN0Q29zdCwgIGNvbm5lY3Rpb249IGNvbm59ClNFTEVDVCBDLkNhdGVnb3J5TmFtZSwgQVZHKFAuUHJpY2UpIEFTIEF2ZXJhZ2VDb3N0CkZST00gUHJvZHVjdHMgUAogICAgICAgICBKT0lOIENhdGVnb3JpZXMgQyBPTiBQLkNhdGVnb3J5SUQgPSBDLkNhdGVnb3J5SUQKR1JPVVAgQlkgQy5DYXRlZ29yeU5hbWUKTElNSVQgMTA7CgpgYGAKKioxOS4gV2hhdCBpcyB0aGUgbW9zdCByZWNlbnQgb3JkZXI/IExpc3QgdGhlIG9yZGVyIElEIGFuZCB0aGUgbmFtZSwgY2l0eSwgYW5kIGNvdW50cnkgb2YgdGhlIGN1c3RvbWVyIHdobyBwbGFjZWQgaXQuKioKYGBge3NxbCBtb3N0UmVjZW50T3JkZXIsICBjb25uZWN0aW9uPSBjb25ufQpTRUxFQ1QgTy5PcmRlcklELCBDLkN1c3RvbWVyTmFtZSwgQy5DaXR5LCBDLkNvdW50cnkKRlJPTSBDdXN0b21lcnMgQwpKT0lOIE9yZGVycyBPIE9OIEMuQ3VzdG9tZXJJRCA9IE8uQ3VzdG9tZXJJRApXSEVSRSBPLk9yZGVyRGF0ZSA9ICgKICAgIFNFTEVDVCBNQVgoT3JkZXJEYXRlKQogICAgRlJPTSBPcmRlcnMKKTsKYGBgCioqMjAuIEZyb20gaG93IG1hbnkgZGlmZmVyZW50ICh1bmlxdWUpIGNvdW50cmllcyBkbyB0aGUgcHJvZHVjdHMgY29tZSBmcm9tPyoqCmBgYHtzcWwgdW5pcXVlQ291bnRyaWVzSGF2aW5nUHJvZHVjdCwgIGNvbm5lY3Rpb249IGNvbm59ClNFTEVDVCBDT1VOVChESVNUSU5DVCBTLkNvdW50cnkpIEFTIFVuaXF1ZUNvdW50cmllcwpGUk9NIFN1cHBsaWVycyBTOwpgYGAKCmBgYHtyIGVjaG8gPSBGQUxTRX0KIyBDbG9zaW5nIGNvbm5lY3Rpb24gdG8gZGF0YWJhc2UKIyByZWZlcnJlZEZyb206IGh0dHA6Ly9hcnRpZmljaXVtLnVzL2xlc3NvbnMvMDYuci9sLTYtMzAwLWNyZWF0ZS1zcWxpdGVkYi1pbi1yL2wtNi0zMDAuaHRtbApkYkRpc2Nvbm5lY3QoY29ubik=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ21kK1NoaWZ0K0VudGVyKi4gCgpgYGB7cn0KcGxvdChjYXJzKQpgYGAKCkFkZCBhIG5ldyBjaHVuayBieSBjbGlja2luZyB0aGUgKkluc2VydCBDaHVuayogYnV0dG9uIG9uIHRoZSB0b29sYmFyIG9yIGJ5IHByZXNzaW5nICpDbWQrT3B0aW9uK0kqLgoKV2hlbiB5b3Ugc2F2ZSB0aGUgbm90ZWJvb2ssIGFuIEhUTUwgZmlsZSBjb250YWluaW5nIHRoZSBjb2RlIGFuZCBvdXRwdXQgd2lsbCBiZSBzYXZlZCBhbG9uZ3NpZGUgaXQgKGNsaWNrIHRoZSAqUHJldmlldyogYnV0dG9uIG9yIHByZXNzICpDbWQrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4gCgpUaGUgcHJldmlldyBzaG93cyB5b3UgYSByZW5kZXJlZCBIVE1MIGNvcHkgb2YgdGhlIGNvbnRlbnRzIG9mIHRoZSBlZGl0b3IuIENvbnNlcXVlbnRseSwgdW5saWtlICpLbml0KiwgKlByZXZpZXcqIGRvZXMgbm90IHJ1biBhbnkgUiBjb2RlIGNodW5rcy4gSW5zdGVhZCwgdGhlIG91dHB1dCBvZiB0aGUgY2h1bmsgd2hlbiBpdCB3YXMgbGFzdCBydW4gaW4gdGhlIGVkaXRvciBpcyBkaXNwbGF5ZWQuCgo=</div>
 
 
 
@@ -2098,7 +1823,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("ShubhaA.SQL-Queries.Rmd");
+  window.initializeSourceEmbed("ShubhaA.CS5200.Report.sqldf.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

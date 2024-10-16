@@ -1,0 +1,158 @@
+---
+title: "ASSIGNMENT 06.2"
+author: "Shubha, Adithya"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+subtitle: Query Tabular Data with SQL
+---
+
+```{r,echo=FALSE,warning=FALSE}
+# Install program required packages =============================
+# Installs sqldf,RSQLite and kableExtra
+# Referred from: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
+installRequiredPackages <- function() {
+  packages <- c("sqldf","RSQLite","kableExtra")
+  # Install packages that are not installed
+  installed_packages <- packages %in% rownames(installed.packages())
+  if (any(installed_packages == FALSE)) {
+    install.packages(packages[!installed_packages])
+  }
+  
+  suppressMessages({
+  library(sqldf)
+  library(RSQLite)
+  library(kableExtra)
+})
+}  
+installRequiredPackages()  
+```
+
+## Analysis of Restaurant Visits
+```{r ,echo=FALSE,  warning=FALSE}
+
+# reading the csv file from s3 bucket.
+dfJanToMarch <- read.csv(file = "https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Jan2Mar.csv", header = TRUE, stringsAsFactors = FALSE)
+
+dfSeptToOct <- read.csv(file = "https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Sep2Oct.csv", header = TRUE, stringsAsFactors = FALSE) 
+
+dfNovToDec <- read.csv(file = "https://s3.us-east-2.amazonaws.com/artificium.us/assignments/80.xml/a-80-305/gen-xml/synthsalestxns-Nov2Dec.csv", header = TRUE, stringsAsFactors = FALSE) 
+
+# combining all three csv files to perform analysis.
+# referredFrom: https://www.w3schools.com/sql/sql_union.asp
+combineDFQuery <- "SELECT * FROM dfJanToMarch
+UNION ALL
+SELECT * FROM dfSeptToOct
+UNION ALL
+SELECT * FROM dfNovToDec;
+"
+
+# quering from sqldf was referred from: http://artificium.us/lessons/06.r/l-6-301-sqlite-from-r/l-6-301.html#Querying_Data_Frames_with_sqldf
+dfCombined <- sqldf(combineDFQuery)
+
+# removing dollar symbol from amount and converting it to numeric. 
+# referredFrom: http://artificium.us/lessons/06.r/l-6-112-text-proc/l-6-112.html
+dfCombined$amount <- as.numeric(gsub("\\$", "", dfCombined$amount))
+
+# total visits will be the number of rows present after combining the data
+# Each row with name and guest is assumed to be 1 visit.
+totalVisitQuery <- "SELECT COUNT(*) AS totalVisit FROM dfCombined;"
+totalVisit <- sqldf(totalVisitQuery)$totalVisit
+
+distinctRestaurantQuery <- "SELECT COUNT(DISTINCT restaurant) AS distinctRestaurant FROM dfCombined;"
+
+distinctRestaurants <- sqldf(distinctRestaurantQuery)$distinctRestaurant
+
+# using SQL inbuild function to compute median
+medianQuery <- "SELECT ROUND(MEDIAN(amount),2) AS amountMedian FROM dfCombined;"
+amountMedian <- sqldf(medianQuery)$amountMedian
+
+# Computing mean to compute standard deviation
+
+meanQuery <- "SELECT ROUND(AVG(amount),2) AS meanAmount FROM dfCombined;"
+meanAmount <- sqldf(meanQuery)$meanAmount
+
+# Formula of standard deviation referredFrom: https://www.cuemath.com/data/standard-deviation/
+varianceQuery <- sprintf("SELECT AVG((amount - %s) * (amount -%s)) AS variance FROM dfCombined;", meanAmount, meanAmount)
+variance <- sqldf(varianceQuery)$variance
+amountStdDev <- round(sqrt(variance), 2)
+
+
+restaurantWithLeastVisitQuery <- "SELECT restaurant
+    FROM dfCombined
+    GROUP BY restaurant
+    ORDER BY  COUNT(*) ASC
+    LIMIT 1;"
+restaurantWithLeastVisit <- sqldf(restaurantWithLeastVisitQuery)$restaurant
+
+# case in sql referred from:  https://www.w3schools.com/sql/sql_case.asp
+groupsConsumingWineQuery <- "SELECT 
+    SUM(CASE WHEN wine = 'Yes' THEN 1 ELSE 0 END)  AS consumedWine
+  FROM dfCombined;"
+
+groupsConsumingWine <- sqldf(groupsConsumingWineQuery)$consumedWine
+
+percentageOfGroupsConsumingWine <- round((groupsConsumingWine*100)/totalVisit,2)
+
+# Adding guest+1 assuming that guest column denotes the guest bought along
+# and name column is the actual customer
+averagePartySizeQuery <- "SELECT ROUND(AVG(guests + 1),2) as averagePartySize FROM dfCombined;"
+averagePartySize <- sqldf(averagePartySizeQuery)$averagePartySize
+```
+We recorded a total number of `r totalVisit` visits across `r distinctRestaurants` different restaurants.The median amount spent for a visit across all restaurants is `r amountMedian` (σ = `r amountStdDev`).The least number of visits visits were to `r restaurantWithLeastVisit`.The average amount spent in a visit was `r meanAmount` and `r percentageOfGroupsConsumingWine`% of all parties consumed wine.The average size of a party was `r averagePartySize`.
+
+
+## Summary of Revenue
+```{r ,echo=FALSE}
+dfCombined$date <-  as.Date(dfCombined$date, format = "%m/%d/%y")
+# creating a new column with only month.
+dfCombined$month <- format(dfCombined$date, '%m')
+
+summaryOfRevenueQuery <-  "
+    SELECT 
+           month,
+           ROUND(SUM(amount),2) AS totalRevenue,
+           COUNT(*) AS totalVisits
+    FROM dfCombined 
+    GROUP BY month;"
+
+summaryOfRevenue <- sqldf(summaryOfRevenueQuery)
+# Creating a dataframe from 1,12 to check if all months are present or not.
+# referredFrom: https://www.w3schools.com/r/r_data_frames.asp
+allMonths <-data.frame(month = 1:12)
+
+# formatting all months to readable format. 
+# left join ensures that month not present in combinedDf will result in null.
+# using COALESCE to remove null and replace it with -- after joining. 
+# referredFrom: https://www.w3schools.com/sql/func_sqlserver_coalesce.asp
+summaryForAllMonthsQuery <-  
+"Select CASE 
+    WHEN M.month = 1 THEN 'January'
+    WHEN M.month = 2 THEN 'February'
+    WHEN M.month = 3 THEN 'March'
+    WHEN M.month = 4 THEN 'April'
+    WHEN M.month = 5 THEN 'May'
+    WHEN M.month = 6 THEN 'June'
+    WHEN M.month = 7 THEN 'July'
+    WHEN M.month = 8 THEN 'August'
+    WHEN M.month = 9 THEN 'September'
+    WHEN M.month = 10 THEN 'October'
+    WHEN M.month = 11 THEN 'November'
+    WHEN M.month = 12 THEN 'December'
+  END AS month,
+COALESCE(SR.totalRevenue, '--') as totalRevenue,
+COALESCE(SR.totalVisits, '--') as totalVisits 
+FROM allMonths M LEFT JOIN summaryOfRevenue SR ON
+M.month = SR.month
+ORDER BY M.month
+"
+summaryForAllMonths <- sqldf(summaryForAllMonthsQuery)
+# referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
+kable(summaryForAllMonths, 
+      col.names = c("Month", "Total Revenue", "Total Visits"),
+      format = "html") %>%
+# referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
+kable_styling(full_width = FALSE)
+```
+
