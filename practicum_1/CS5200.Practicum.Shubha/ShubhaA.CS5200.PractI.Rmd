@@ -7,7 +7,7 @@ date: "`r Sys.Date()`"
 output: html_notebook
 ---
 
-```{r installAndLoadRequiredPackages, echo=TRUE,warning=FALSE}
+```{r installAndLoadRequiredPackages, echo=TRUE,warning=FALSE, eval= TRUE}
 # Install program required packages
 
 installRequiredPackages <- function() {
@@ -31,8 +31,8 @@ loadRequiredPackages()
 ```
 
 
-```{r connectToDatabase, echo=TRUE,warning=FALSE}
-# DB credentials
+```{r connectToDatabase, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 3: Connecting to the database
 connectToDatabase <- function(){
   # DB credentials
   dbName <- "defaultdb"
@@ -53,7 +53,7 @@ connectToDatabase <- function(){
 dbCon <- connectToDatabase()
 ```
 
-```{r dropAllExistingTables, echo=TRUE,warning=FALSE}
+```{r dropAllExistingTables, echo=TRUE,warning=FALSE, eval= TRUE}
 # SQL query to drop the given table if it exists.
 # @param: table - table to drop
 dropTableIfExist <- function(table) {
@@ -72,7 +72,10 @@ dropAllExistingTable <- function(dbCon) {
 dropAllExistingTable(dbCon)
 ```
 
-``` {r createTables , echo=TRUE,warning=FALSE}
+``` {r createTables , echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 4: Creating tables in the database
+
+
 # Creates flight table in database
 # @param: dbCon - database connection to connect to
 createFlight <- function(dbCon){
@@ -152,6 +155,8 @@ createAllTables(dbCon)
 ```
 
 ```{r validateTableCreation, echo=FALSE, warning=FALSE, eval=FALSE}
+# Part 4.g: Validating the table creation
+
 # Function to describe the table
 # @param: dbCon - database connection to connect to
 describeTable <- function(dbCon, table){
@@ -244,4 +249,9 @@ validateTableCreation<- function(dbCon){
 
 validateTableCreation(dbCon)
 
+```
+
+```{r loadCSVData, echo=FALSE,warning=FALSE, eval= TRUE}
+# Part 5: Loading CSV data into dataframe.
+bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv", header = TRUE, stringsAsFactors = FALSE)
 ```
