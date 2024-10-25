@@ -5,10 +5,10 @@
 # ______________
 
 # Install program required packages =============================
-# Installs RSQLite to connect to SqlLite.
+# Installs RSQLite and DBI to connect to SqlLite.
 # Referred from: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
 installRequiredPackages <- function() {
-  packages <- c("RSQLite")
+  packages <- c("RSQLite","DBI")
 
   # Install packages that are not installed
   installed_packages <- packages %in% rownames(installed.packages())
