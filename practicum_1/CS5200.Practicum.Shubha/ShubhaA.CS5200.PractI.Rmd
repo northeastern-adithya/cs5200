@@ -51,19 +51,25 @@ connectToDatabase <- function(){
 }
 
 dbCon <- connectToDatabase()
+
+widlifeStrikesTableName <- paste0('"', "wildlife.strikes", '"')
+flightsTableName <- 'flights'
+airportsTableName <- 'airports'
+conditionsTableName <- 'conditions'
+wildlifeSizeTableName <- 'wildlifeSize'
 ```
 
 ```{r dropAllExistingTables, echo=TRUE,warning=FALSE, eval= TRUE}
 # SQL query to drop the given table if it exists.
 # @param: table - table to drop
 dropTableIfExist <- function(table) {
-  return (sprintf('DROP TABLE IF EXISTS %s', table))
+  return (sprintf("DROP TABLE IF EXISTS %s", table))
 }
 
 # Drops all the existing tables from a given db connection.
 # @param: dbCon - database connection to connect to
 dropAllExistingTable <- function(dbCon) {
-  tables <- c("incidents","flights", "airports", "conditions", "wildlifeSize")
+  tables <- c(widlifeStrikesTableName, flightsTableName, airportsTableName, conditionsTableName, wildlifeSizeTableName)
   for (table in tables) {
     dbExecute(dbCon, dropTableIfExist(table))
   }
@@ -79,65 +85,64 @@ dropAllExistingTable(dbCon)
 # Creates flight table in database
 # @param: dbCon - database connection to connect to
 createFlight <- function(dbCon){
-  query <- "CREATE TABLE IF NOT EXISTS flights(
+  query <- sprintf("CREATE TABLE IF NOT EXISTS %s(
     fid INT PRIMARY KEY AUTO_INCREMENT,
     date DATE,
     originAirport INT,
     airlineName TEXT,
     aircraftType TEXT,
     isHeavy BOOLEAN,
-    FOREIGN KEY (originAirport) REFERENCES airports(aid)
-);
-"
+    FOREIGN KEY (originAirport) REFERENCES %s(aid)
+);",flightsTableName,airportsTableName)
 dbExecute(dbCon, query)
 }
 
 # Creates airport table in database
 # @param: dbCon - database connection to connect to
 createAirports <- function(dbCon){
-  query <- "CREATE TABLE IF NOT EXISTS airports (
+  query <- sprintf("CREATE TABLE IF NOT EXISTS %s (
     aid INT PRIMARY KEY AUTO_INCREMENT,
     airportName TEXT,
     airportState TEXT,
     airportCode VARCHAR(3) DEFAULT 'ZZZ'
-    );"
+    );",airportsTableName)
   dbExecute(dbCon, query)
 }
 
 # Creates condition table in database
 # @param: dbCon - database connection to connect to
 createConditions <-function(dbCon){
-  query <- "CREATE TABLE IF NOT EXISTS conditions (
+  query <- sprintf("CREATE TABLE IF NOT EXISTS %s (
     cid INT PRIMARY KEY AUTO_INCREMENT,            
     sky_condition TEXT,       
     explanation TEXT                
-);"
+);",conditionsTableName)
   dbExecute(dbCon, query)
 }
 
 # Create wildlife size table in database
 # @param: dbCon - database connection to connect to
 createWildLifeSize <- function(dbCon){
-  query <- "CREATE TABLE IF NOT EXISTS wildlifeSize (
+  query <- sprintf("CREATE TABLE IF NOT EXISTS %s (
     wlId INT PRIMARY KEY AUTO_INCREMENT,          
-    size TEXT);"
+    size TEXT);",wildlifeSizeTableName)
   dbExecute(dbCon, query)
 }
 
-# Create incidents table in database
+# Create wildlife.strikes table in database
 # @param: dbCon - database connection to connect to
-createIncidents <- function(dbCon){
-  query <- "CREATE TABLE IF NOT EXISTS incidents (
+createWildLifeStrikes <- function(dbCon){
+  query <- sprintf("CREATE TABLE IF NOT EXISTS %s (
     iid INT PRIMARY KEY AUTO_INCREMENT,
     fid INT,
     wlsize INT,
     impact TEXT,
     altitude INT CHECK (altitude >= 0),
     conditions INT,
-    FOREIGN KEY (fid) REFERENCES flights(fid),
-    FOREIGN KEY (wlsize) REFERENCES wildlifeSize(wlId),
-    FOREIGN KEY (conditions) REFERENCES conditions(cid)
-);"
+    FOREIGN KEY (fid) REFERENCES %s(fid),
+    FOREIGN KEY (wlsize) REFERENCES %s(wlId),
+    FOREIGN KEY (conditions) REFERENCES %s(cid)
+);",widlifeStrikesTableName,flightsTableName,wildlifeSizeTableName,conditionsTableName)
   dbExecute(dbCon, query)
 }
 
@@ -148,7 +153,7 @@ createAllTables <- function(dbCon){
   createFlight(dbCon)
   createConditions(dbCon)
   createWildLifeSize(dbCon)
-  createIncidents(dbCon)
+  createWildLifeStrikes(dbCon)
 }
 # Creating all tables in database
 createAllTables(dbCon)
@@ -168,7 +173,7 @@ describeTable <- function(dbCon, table){
 # Validates the columns created by describing the table.
 # @param: dbCon - database connection to connect to
 validateAirportsTable <- function(dbCon){
-  airportsTable <- describeTable(dbCon, "airports")
+  airportsTable <- describeTable(dbCon, airportsTableName)
   expect_equal(nrow(airportsTable), 4)
   expect_equal(airportsTable$Field, c("aid", "airportName", "airportState", "airportCode"))
   expect_equal(airportsTable$Type, c("int", "text", "text", "varchar(3)"))
@@ -181,7 +186,7 @@ validateAirportsTable <- function(dbCon){
 # Validates the columns created by describing the table.
 # @param: dbCon - database connection to connect to
 validateFlightTable <- function(dbCon){
-  flightTable <- describeTable(dbCon, "flights")
+  flightTable <- describeTable(dbCon, flightsTableName)
   expect_equal(nrow(flightTable), 6)
   expect_equal(flightTable$Field, c("fid", "date", "originAirport", "airlineName", "aircraftType", "isHeavy"))
   expect_equal(flightTable$Type, c("int", "date", "int", "text", "text", "tinyint(1)"))
@@ -194,7 +199,7 @@ validateFlightTable <- function(dbCon){
 # Validates the columns created by describing the table.
 # @param: dbCon - database connection to connect to
 validateConditionTable <- function(dbCon){
-  conditionTable <- describeTable(dbCon, "conditions")
+  conditionTable <- describeTable(dbCon, conditionsTableName)
   expect_equal(nrow(conditionTable), 3)
   expect_equal(conditionTable$Field, c("cid", "sky_condition", "explanation"))
   expect_equal(conditionTable$Type, c("int", "text", "text"))
@@ -207,7 +212,7 @@ validateConditionTable <- function(dbCon){
 # Validates the columns created by describing the table.
 # @param: dbCon - database connection to connect to
 validateWildLifeSizeTable <- function(dbCon){
-  wildlifeSizeTable <- describeTable(dbCon, "wildlifeSize")
+  wildlifeSizeTable <- describeTable(dbCon, wildlifeSizeTableName)
   expect_equal(nrow(wildlifeSizeTable), 2)
   expect_equal(wildlifeSizeTable$Field, c("wlId", "size"))
   expect_equal(wildlifeSizeTable$Type, c("int", "text"))
@@ -216,17 +221,17 @@ validateWildLifeSizeTable <- function(dbCon){
   expect_equal(wildlifeSizeTable$Extra, c("auto_increment", ""))
 }
 
-# Function to validate the incidents table.
+# Function to validate the wildlife.strikes table.
 # Validates the columns created by describing the table.
 # @param: dbCon - database connection to connect to
-validateIncidentsTable <- function(dbCon){
-  incidentsTable <- describeTable(dbCon, "incidents")
-  expect_equal(nrow(incidentsTable), 6)
-  expect_equal(incidentsTable$Field, c("iid", "fid", "wlsize", "impact", "altitude", "conditions"))
-  expect_equal(incidentsTable$Type, c("int", "int", "int", "text", "int", "int"))
-  expect_equal(incidentsTable$Key, c("PRI", "MUL", "MUL", "", "", "MUL"))
-  expect_equal(all(is.na(incidentsTable$Default)), TRUE)
-  expect_equal(incidentsTable$Extra, c("auto_increment", "", "", "", "", ""))
+validateWildlifeStrikesTable <- function(dbCon){
+  wildLifeStrikesTable <- describeTable(dbCon, widlifeStrikesTableName)
+  expect_equal(nrow(wildLifeStrikesTable), 6)
+  expect_equal(wildLifeStrikesTable$Field, c("iid", "fid", "wlsize", "impact", "altitude", "conditions"))
+  expect_equal(wildLifeStrikesTable$Type, c("int", "int", "int", "text", "int", "int"))
+  expect_equal(wildLifeStrikesTable$Key, c("PRI", "MUL", "MUL", "", "", "MUL"))
+  expect_equal(all(is.na(wildLifeStrikesTable$Default)), TRUE)
+  expect_equal(wildLifeStrikesTable$Extra, c("auto_increment", "", "", "", "", ""))
 }
 
 
@@ -239,16 +244,14 @@ validateTableCreation<- function(dbCon){
     validateFlightTable(dbCon)
     validateConditionTable(dbCon)
     validateWildLifeSizeTable(dbCon)
-    validateIncidentsTable(dbCon)
+    validateWildlifeStrikesTable(dbCon)
     print("Validations of create table statements for all tables successfull")
   }, error = function(e) {
     print("Error in validating table creations")
     print(e)
   })
 }
-
 validateTableCreation(dbCon)
-
 ```
 
 ```{r loadCSVData, echo=FALSE,warning=FALSE, eval= TRUE}
