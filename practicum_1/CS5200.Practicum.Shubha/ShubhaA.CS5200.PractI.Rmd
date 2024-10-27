@@ -406,6 +406,7 @@ insertIntoFlights <- function(dbCon, dataFrame,batchSize){
   
   airportMapping <- dbGetQuery(dbCon, 
     sprintf("SELECT aid, airportName,airportState FROM %s", airportsTableName))
+  
   values <- apply(flights, 1, function(row) {
     sprintf("('%s', %s, '%s', '%s', %s)"
             ,row["flight_date"],
@@ -427,12 +428,17 @@ insertIntoFlights <- function(dbCon, dataFrame,batchSize){
 # @param: aircraftType - aircraft type of the flight
 # @param: isHeavy - if the flight is heavy
 getFlightId <- function(flightMapping,date, originAirport, airlineName, aircraftType, isHeavy) {
-  matchingRow <- flightMapping[flightMapping$date == date & 
+  searchDate <- as.character(as.Date(date))
+  flightMapping$date <- as.character(flightMapping$date)
+  searchHeavy <- as.logical(isHeavy)
+  
+  
+  matchingRow <- flightMapping[flightMapping$date == searchDate & 
                                 flightMapping$originAirport == originAirport & 
                                 flightMapping$airlineName == airlineName & 
                                 flightMapping$aircraftType == aircraftType & 
-                                flightMapping$isHeavy == isHeavy, ]
-  return(matchingRow$aid[1])
+                                flightMapping$isHeavy == searchHeavy,]
+  return(matchingRow$fid[1])
 }
 
 # Gets wild life size id from given wild life size
@@ -473,20 +479,26 @@ insertIntoWildLifeStrikes <- function(dbCon, dataFrame,batchSize){
     sprintf("SELECT aid, airportName,airportState FROM %s", airportsTableName))
   
   query <- sprintf("INSERT INTO %s (iid,fid, wlsize, impact, altitude, conditions) VALUES", widlifeStrikesTableName)
+  
   values <- apply(dataFrame, 1, function(row) {
-    sprintf("(%s,%s, %s, '%s', %s,%s)"
-            ,row["iid"]
-            ,getFlightId(flightMapping,row["flight_date"]
+    flightId <- getFlightId(flightMapping,row["flight_date"]
                          ,getAirportId(airportsMapping
                                        ,row["dep_airport"]
                                        ,row["origin_state"])
                          ,row["airline"]
                          ,row["aircraft"]
                          ,row["heavy_flag"])
-            ,getWildLifeSizeId(wildlifeSizeMapping, row["wildlife_size"])
+    
+    wildlifeSizeId <- getWildLifeSizeId(wildlifeSizeMapping, row["wildlife_size"])
+    conditionId <- getConditionId(conditionMapping,row["sky_conditions"])
+    
+    sprintf("(%s,%s, %s, '%s', %s,%s)"
+            ,row["iid"]
+            ,flightId
+            ,wildlifeSizeId
             , gsub("'", "''", row["impact"])
             ,row["altitude_ft"]
-            , getConditionId(conditionMapping,row["sky_conditions"]))
+            , conditionId)
   })
   insertInBatches(dbCon,batchSize,query,values)
   return (length(values))
@@ -498,7 +510,7 @@ insertIntoWildLifeStrikes <- function(dbCon, dataFrame,batchSize){
 # @param: dbCon - database connection to connect to
 # @param: dataFrame - data frame to insert into the database
 insertValuesIntoDatabase <- function(dbCon,dataFrame){
-  batchSize<- 1000
+  batchSize<- 100
   dataFrame <- cleanUpData(dataFrame)
   val <- insertIntoAirports(dbCon, dataFrame,batchSize)
   print(sprintf("Inserted %s values into airports", val))
