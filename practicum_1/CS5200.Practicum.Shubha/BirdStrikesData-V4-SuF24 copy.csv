@@ -1,0 +1,224 @@
+﻿iid,aircraft,model,flight_date,damage,airline,dep_airport,origin_state,flight_phase,wildlife_size,sky_conditions,pilot_warned_flag,altitude_ft,heavy_flag,impact
+202152,Airplane,B-737-400,11/23/00 0:00,Damage,US AIRWAYS,LAGUARDIA NY,New York,Climb,Medium,No Cloud,N,"1,500",Yes,Engine Shut Down
+208159,Airplane,MD-80,7/25/01 0:00,Damage,AMERICAN AIRLINES,DALLAS/FORT WORTH INTL ARPT,Texas,Landing Roll,Small,Some Cloud,Y,0,No,None
+207601,Airplane,C-500,9/14/01 0:00,No damage,BUSINESS,LAKEFRONT AIRPORT,Louisiana,Approach,Small,No Cloud,N,50,No,None
+215953,Airplane,B-737-400,09/05/02 0:00,No damage,ALASKA AIRLINES,SEATTLE-TACOMA INTL,Washington,Climb,Small,Some Cloud,Y,50,Yes,Precautionary Landing
+219878,Airplane,CL-RJ100/200,6/23/03 0:00,No damage,COMAIR AIRLINES,NORFOLK INTL,Virginia,Approach,Small,No Cloud,N,50,No,None
+218432,Airplane,A-300,7/24/03 0:00,No damage,AMERICAN AIRLINES,GUAYAQUIL/S BOLIVAR,N/A,Take-off run,Small,No Cloud,N,0,No,None
+221697,Airplane,LEARJET-25,8/17/03 0:00,Damage,BUSINESS,NEW CASTLE COUNTY,Delaware,Climb,Small,No Cloud,N,150,No,Other
+236635,Airplane,A-320,03/01/06 0:00,Damage,UNITED AIRLINES,WASHINGTON DULLES INTL ARPT,DC,Approach,Small,Some Cloud,Y,100,No,Other
+207369,Airplane,DC-9-30,01/06/00 0:00,No damage,AIRTRAN AIRWAYS,ATLANTA INTL,Georgia,Take-off run,Small,Some Cloud,N,0,No,Aborted Take-off
+204371,Airplane,A-330,01/07/00 0:00,No damage,AIRTOURS INTL,ORLANDO SANFORD INTL AIRPORT,Florida,Landing Roll,Small,Some Cloud,N,0,No,None
+201589,Airplane,A-320,01/08/00 0:00,No damage,AMERICA WEST AIRLINES,ONTARIO INTL ARPT,California,Approach,Small,Some Cloud,N,200,No,None
+205958,Airplane,FOKKER F100,1/20/00 0:00,Damage,AMERICAN AIRLINES,CHICAGO O'HARE INTL ARPT,Illinois,Approach,Large,No Cloud,N,"1,700",No,None
+200220,Airplane,C-421,1/30/00 0:00,No damage,BUSINESS,GROTON-NEW LONDON AR,Connecticut,Landing Roll,Small,Overcast,N,0,No,None
+200219,Airplane,C-560,1/30/00 0:00,No damage,EXECUTIVE JET AVIATION,SPIRIT OF ST LOUIS,Missouri,Approach,Small,Overcast,N,"1,800",No,None
+203756,Airplane,B-737-200,1/30/00 0:00,No damage,US AIRWAYS,THEODORE FRANCIS GREEN STATE,Rhode Island,Approach,Small,No Cloud,N,50,Yes,None
+204061,Airplane,MD-80,02/01/00 0:00,No damage,TRANS WORLD AIRLINES,KANSAS CITY INTL,Missouri,Approach,Large,Some Cloud,Y,500,No,None
+202604,Airplane,DC-9-50,02/11/00 0:00,No damage,HAWAIIAN AIR,LIHUE ARPT,Hawaii,Take-off run,Small,No Cloud,Y,0,No,None
+201044,Airplane,B-737,02/12/00 0:00,No damage,AMERICA WEST AIRLINES,PHOENIX SKY HARBOR,Arizona,Landing Roll,Small,Overcast,N,0,Yes,None
+202254,Airplane,B-737-400,2/18/00 0:00,No damage,US AIRWAYS,NASHVILLE INTL,Tennessee,Climb,Small,Some Cloud,N,800,Yes,None
+205346,Airplane,C-560,2/23/00 0:00,Damage,BUSINESS,JIM HAMILTON L B OWENS ARPT,South Carolina,Climb,Small,Some Cloud,N,500,No,None
+201610,Airplane,B-737-300,2/25/00 0:00,No damage,UNITED AIRLINES,CHICAGO O'HARE INTL ARPT,Illinois,Climb,Medium,Overcast,N,"5,000",Yes,None
+202454,Airplane,B-737-200,2/29/00 0:00,No damage,DELTA AIR LINES,WASHINGTON DULLES INTL ARPT,DC,Climb,Medium,No Cloud,Y,"1,500",Yes,Precautionary Landing
+201013,Airplane,B-737-400,2/29/00 0:00,No damage,AIR TRANSAT,SOUTHWEST FLORIDA INTL ARPT,Florida,Landing Roll,Large,Some Cloud,Y,0,Yes,None
+205771,Airplane,SAAB-340,03/04/00 0:00,No damage,MESABA AIRLINES,ABERDEEN REGIONAL AR,South Dakota,Climb,Small,Some Cloud,N,"2,000",No,None
+202226,Airplane,MD-82,03/06/00 0:00,No damage,CONTINENTAL AIRLINES,NEWARK LIBERTY INTL ARPT,New Jersey,Landing Roll,Small,No Cloud,Y,0,No,None
+204404,Airplane,HAWKER 800,03/06/00 0:00,No damage,EXECUTIVE JET AVIATION,ASPEN-PITKIN CO/SARD,Colorado,Approach,Small,No Cloud,N,20,No,None
+202138,Airplane,FOKKER F28 MK 1000,03/06/00 0:00,No damage,AMERICAN AIRLINES,ROCHESTER INTL,Minnesota,Climb,Small,No Cloud,N,200,No,Precautionary Landing
+201983,Airplane,B-757-200,03/07/00 0:00,No damage,NORTHWEST AIRLINES,MINNEAPOLIS-ST PAUL INTL,Minnesota,Approach,Small,Overcast,N,75,Yes,None
+200247,Airplane,HAWKER 800,03/11/00 0:00,No damage,BUSINESS,PUEBLO MEMORIAL ARPT,Colorado,Approach,Small,No Cloud,N,10,No,None
+201387,Airplane,EMB-135,3/13/00 0:00,No damage,CONTINENTAL AIRLINES,WESTCHESTER COUNTY ARPT,New York,Climb,Medium,No Cloud,Y,10,No,None
+200542,Airplane,DC-9-40,3/13/00 0:00,No damage,ABX AIR,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Descent,Small,No Cloud,N,"5,000",No,None
+202076,Airplane,DC-9-30,3/14/00 0:00,No damage,AIRTRAN AIRWAYS,ATLANTA INTL,Georgia,Approach,Medium,No Cloud,N,"1,000",No,None
+204836,Airplane,B-727-200,3/15/00 0:00,Damage,DELTA AIR LINES,LAGUARDIA NY,New York,Approach,Medium,No Cloud,N,"1,300",No,None
+203390,Airplane,DC-10-30,3/15/00 0:00,Damage,HAWAIIAN AIR,TAHITI FAAA,N/A,Landing Roll,Medium,Some Cloud,N,0,Yes,None
+203936,Airplane,SAAB-340,3/18/00 0:00,No damage,AMERICAN EAGLE AIRLINES,ORLANDO INTL,Florida,Take-off run,Medium,Some Cloud,Y,0,No,Aborted Take-off
+203938,Airplane,B-737,3/22/00 0:00,Damage,US AIRWAYS,MYRTLE BEACH INTL,South Carolina,Landing Roll,Large,Some Cloud,N,0,Yes,None
+200130,Airplane,DC-9-10,3/23/00 0:00,Damage,NORTHWEST AIRLINES,MINNEAPOLIS-ST PAUL INTL,Minnesota,Climb,Large,Overcast,Y,800,No,Engine Shut Down
+201705,Airplane,SAAB-340,3/23/00 0:00,No damage,AMERICAN EAGLE AIRLINES,LAFAYETTE REGIONAL (LA),Louisiana,Climb,Small,No Cloud,Y,"1,000",No,None
+201770,Airplane,EMB-145,3/25/00 0:00,No damage,EXPRESSJET (CONTINENTAL EXPRS),CLEVELAND-HOPKINS INTL ARPT,Ohio,Approach,Small,No Cloud,N,"1,500",No,None
+201506,Airplane,B-737-300,04/01/00 0:00,No damage,US AIRWAYS,WASHINGTON DULLES INTL ARPT,DC,Approach,Small,No Cloud,N,"1,000",Yes,None
+201524,Airplane,B-747-1/200,04/02/00 0:00,No damage,NORTHWEST AIRLINES,SAN FRANCISCO INTL ARPT,California,Take-off run,Small,No Cloud,Y,0,No,None
+207027,Airplane,SAAB-340,04/04/00 0:00,No damage,MESABA AIRLINES,CENTRAL WISCONSIN ARPT,Wisconsin,Approach,Small,Some Cloud,N,50,No,None
+4064,Airplane,B-52H,04/06/00 0:00,No damage,MILITARY,BARKSDALE AIR FORCE BASE ARPT,Louisiana,Approach,Medium,No Cloud,Y,"1,000",No,None
+202816,Airplane,DC-9,04/08/00 0:00,Damage,US AIRWAYS,DETROIT METRO WAYNE COUNTY ARPT,Michigan,Climb,Medium,Some Cloud,N,100,No,None
+200828,Airplane,DC-9,04/09/00 0:00,No damage,AIRTRAN AIRWAYS,MYRTLE BEACH INTL,South Carolina,Climb,Small,No Cloud,N,100,No,None
+203262,Airplane,B-737-500,04/12/00 0:00,No damage,UNITED AIRLINES,SAN FRANCISCO INTL ARPT,California,Approach,Small,Some Cloud,Y,50,Yes,None
+200681,Airplane,CL-RJ100/200,4/13/00 0:00,Damage,COMAIR AIRLINES,TOLEDO EXPRESS ARPT,Ohio,Landing Roll,Large,Some Cloud,N,0,No,Other
+202210,Airplane,B-737-700,4/16/00 0:00,No damage,ALOHA AIRLINES,METRO OAKLAND INTL,California,Landing Roll,Small,Some Cloud,Y,0,Yes,None
+202062,Airplane,B-757-200,4/21/00 0:00,No damage,DELTA AIR LINES,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Approach,Small,No Cloud,N,500,Yes,None
+200155,Airplane,C-560,4/25/00 0:00,No damage,BUSINESS,BEVERLY MUNICIPAL ARPT,Massachusetts,Take-off run,Large,Some Cloud,N,0,No,Aborted Take-off
+202836,Airplane,B-747-400,4/26/00 0:00,Damage,ATLAS AIR,TED STEVENS ANCHORAGE INTL,Alaska,Descent,Large,No Cloud,Y,"3,500",No,None
+204057,Airplane,FOKKER F100,4/28/00 0:00,No damage,US AIRWAYS,CHARLOTTE/DOUGLAS INTL ARPT,North Carolina,Approach,Small,Overcast,N,"1,000",No,None
+201230,Airplane,B-757-200,4/29/00 0:00,No damage,DELTA AIR LINES,TED STEVENS ANCHORAGE INTL,Alaska,Approach,Small,Overcast,Y,30,Yes,None
+205954,Airplane,CL-RJ100/200,4/30/00 0:00,No damage,COMAIR AIRLINES,CINCINNATI/NORTHERN KENTUCKY INTL ARPT,Kentucky,Approach,Small,No Cloud,Y,"2,000",No,None
+201585,Airplane,BE-58  BARON,05/03/00 0:00,No damage,PRIVATELY OWNED,GREATER PEORIA REGIONAL ARPT,Illinois,Approach,Small,No Cloud,N,"1,800",No,None
+201990,Airplane,DC-9-30,05/03/00 0:00,No damage,US AIRWAYS,INDIANAPOLIS INTL,Indiana,Landing Roll,Small,No Cloud,N,0,No,None
+202887,Airplane,B-737-500,05/04/00 0:00,No damage,UNITED AIRLINES,SAN FRANCISCO INTL ARPT,California,Landing Roll,Small,Some Cloud,N,0,Yes,None
+200068,Airplane,B-767-300,05/09/00 0:00,No damage,UPS AIRLINES,LOUISVILLE INTL ARPT,Kentucky,Approach,Small,Overcast,Y,75,Yes,None
+209758,Airplane,DC-10,05/10/00 0:00,No damage,FEDEX EXPRESS,PORTLAND INTL (OR),Oregon,Landing Roll,Medium,Overcast,Y,0,No,None
+200785,Airplane,FOKKER F100,5/13/00 0:00,No damage,AMERICAN AIRLINES,STEWART INTL AIRPORT,New York,Climb,Medium,Some Cloud,N,50,No,None
+201283,Airplane,SAAB-340,5/15/00 0:00,Damage,AMERICAN EAGLE AIRLINES,LOS ANGELES INTL,California,Take-off run,Small,Some Cloud,N,0,No,Aborted Take-off
+7379,Airplane,B-52H,5/18/00 0:00,No damage,MILITARY,BARKSDALE AIR FORCE BASE ARPT,Louisiana,Approach,Small,No Cloud,Y,"1,200",No,None
+200893,Airplane,PA-31 NAVAJO,5/19/00 0:00,No damage,BUSINESS,BURKE LAKEFRONT,Ohio,Landing Roll,Medium,Overcast,Y,0,No,None
+203391,Airplane,FOKKER F100,5/23/00 0:00,No damage,AMERICAN AIRLINES,PHILADELPHIA INTL,Pennsylvania,Approach,Medium,Overcast,Y,850,No,None
+207700,Airplane,B-737-300,5/28/00 0:00,No damage,UNITED AIRLINES,METRO OAKLAND INTL,California,Climb,Small,Some Cloud,Y,30,Yes,None
+201771,Airplane,SAAB-340,5/29/00 0:00,No damage,CHAUTAUQUA AIRLINES,CAPITAL CITY (MI),Michigan,Take-off run,Small,Some Cloud,N,0,No,None
+203389,Airplane,B-727,5/29/00 0:00,No damage,DELTA AIR LINES,CAPITAL (BEIJING),N/A,Approach,Small,No Cloud,Y,300,No,None
+203333,Airplane,C-172,5/30/00 0:00,Damage,PRIVATELY OWNED,PEASE INTL TRADEPORT,New Hampshire,Climb,Medium,Some Cloud,Y,"1,000",No,Precautionary Landing
+202886,Airplane,EMB-145,06/01/00 0:00,No damage,EXPRESSJET (CONTINENTAL EXPRS),SAVANNAH INTL,Georgia,Take-off run,Small,Overcast,Y,0,No,None
+201053,Airplane,A-320,06/03/00 0:00,No damage,AMERICA WEST AIRLINES,PHILADELPHIA INTL,Pennsylvania,Approach,Small,No Cloud,N,500,No,None
+203804,Airplane,BA-31 JETSTR,06/06/00 0:00,No damage,ATLANTIC COAST AIRLINES,WASHINGTON DULLES INTL ARPT,DC,Approach,Small,No Cloud,N,150,No,None
+202701,Airplane,LEARJET-35,06/06/00 0:00,No damage,BUSINESS,BURKE LAKEFRONT,Ohio,Landing Roll,Medium,Some Cloud,Y,0,No,None
+202151,Airplane,DC-9-50,06/07/00 0:00,No damage,HAWAIIAN AIR,HILO INTL ARPT,Hawaii,Landing Roll,Small,Some Cloud,N,0,No,None
+205305,Airplane,MD-88,06/08/00 0:00,No damage,DELTA AIR LINES,FORT LAUDERDALE/HOLLYWOOD INTL,Florida,Climb,Small,Some Cloud,Y,10,No,Precautionary Landing
+203483,Airplane,B-737,06/09/00 0:00,No damage,SOUTHWEST AIRLINES,DALLAS LOVE FIELD ARPT,Texas,Landing Roll,Small,Overcast,N,0,Yes,None
+204287,Airplane,B-737-300,06/11/00 0:00,Damage,US AIRWAYS,LOGAN INTL,Massachusetts,Climb,Large,Overcast,N,800,Yes,Precautionary Landing
+200031,Airplane,BE-1900,06/12/00 0:00,No damage,GREAT LAKES AIRLINES,DENVER INTL AIRPORT,Colorado,Approach,Small,No Cloud,N,500,No,None
+201214,Airplane,B-757-200,6/14/00 0:00,No damage,DELTA AIR LINES,SAVANNAH INTL,Georgia,Take-off run,Small,No Cloud,N,0,Yes,None
+201505,Airplane,CL-RJ100/200,6/15/00 0:00,No damage,COMAIR AIRLINES,KALAMAZOO/BATTLE CREEK INTL,Michigan,Approach,Small,Some Cloud,N,40,No,None
+204115,Airplane,IAI-1124,6/16/00 0:00,No damage,UNKNOWN,NORFOLK INTL,Virginia,Take-off run,Medium,Some Cloud,N,0,No,Precautionary Landing
+202139,Airplane,DC-9-40,6/20/00 0:00,No damage,NORTHWEST AIRLINES,GERALD R FORD INTL,Michigan,Landing Roll,Small,Overcast,N,0,No,None
+203968,Airplane,B-757-200,6/21/00 0:00,No damage,AMERICA WEST AIRLINES,INDIANAPOLIS INTL,Indiana,Landing Roll,Small,Some Cloud,Y,0,Yes,None
+202994,Airplane,C-172,6/25/00 0:00,No damage,BUSINESS,FORT SMITH MUNICIPAL ARPT,Arkansas,Approach,Small,No Cloud,N,20,No,None
+202602,Airplane,BE-1900,6/25/00 0:00,No damage,EXPRESSJET (CONTINENTAL EXPRS),CINCINNATI/NORTHERN KENTUCKY INTL ARPT,Kentucky,Landing Roll,Small,Some Cloud,Y,0,No,None
+201414,Airplane,B-727,6/26/00 0:00,No damage,ATA AIRLINES,MCCARREN INTL,Nevada,Climb,Medium,Overcast,N,"5,100",No,None
+203143,Airplane,BA-31 JETSTR,6/27/00 0:00,Damage,BUSINESS,ATLANTA INTL,Georgia,Landing Roll,Medium,Some Cloud,N,0,No,None
+203243,Airplane,LEARJET-31,6/28/00 0:00,Damage,BUSINESS,HESLER-NOBLE FIELD ARPT,Mississippi,Climb,Medium,No Cloud,N,100,No,Precautionary Landing
+204609,Airplane,CL-RJ100/200,6/29/00 0:00,No damage,AIR WISCONSIN AIRLINES,CHICAGO O'HARE INTL ARPT,Illinois,Take-off run,Small,No Cloud,Y,0,No,Aborted Take-off
+201335,Airplane,C-402,6/30/00 0:00,No damage,CAPE AIR,SOUTHWEST FLORIDA INTL ARPT,Florida,Take-off run,Small,Some Cloud,Y,0,No,Aborted Take-off
+202613,Airplane,SHORTS SC7,07/06/00 0:00,No damage,UNKNOWN,PENSACOLA REGIONAL,Florida,Climb,Small,No Cloud,N,20,No,None
+200807,Airplane,MD-88,07/07/00 0:00,No damage,DELTA AIR LINES,PHILADELPHIA INTL,Pennsylvania,Approach,Small,No Cloud,Y,100,No,None
+202419,Airplane,B-757-200,07/07/00 0:00,No damage,UNITED AIRLINES,BALTIMORE WASH INTL,Maryland,Climb,Small,Some Cloud,Y,100,Yes,None
+200696,Airplane,B-737-800,07/10/00 0:00,No damage,CONTINENTAL AIRLINES,SAN FRANCISCO INTL ARPT,California,Climb,Small,No Cloud,Y,10,Yes,None
+200108,Airplane,A-319,07/10/00 0:00,No damage,UNITED AIRLINES,WASHINGTON DULLES INTL ARPT,DC,Landing Roll,Medium,No Cloud,Y,0,No,None
+203355,Airplane,CITATION II,07/10/00 0:00,No damage,BUSINESS,LAURENCE G HANSCOM,Massachusetts,Landing Roll,Small,Some Cloud,N,0,No,None
+202117,Airplane,ATR-72,07/11/00 0:00,No damage,ATLANTIC SOUTHEAST,PANAMA CITY - BAY COUNTY INTL,Florida,Landing Roll,Small,Some Cloud,Y,0,No,None
+202204,Airplane,B-737-300,07/12/00 0:00,No damage,SOUTHWEST AIRLINES,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Landing Roll,Medium,Some Cloud,Y,0,Yes,None
+205917,Airplane,ATR-72,7/15/00 0:00,No damage,ATLANTIC SOUTHEAST,PANAMA CITY - BAY COUNTY INTL,Florida,Landing Roll,Small,No Cloud,Y,0,No,None
+204602,Airplane,A-320,7/16/00 0:00,No damage,TRANSMERIDIAN AIRLINES,SUVA FIJI,N/A,Approach,Small,No Cloud,N,100,No,None
+205350,Airplane,C-172,7/17/00 0:00,No damage,PRIVATELY OWNED,OXNARD ARPT,California,Approach,Small,No Cloud,N,100,No,None
+203335,Airplane,B-737-500,7/18/00 0:00,No damage,UNITED AIRLINES,PORTLAND INTL (OR),Oregon,Landing Roll,Medium,Overcast,Y,0,Yes,None
+204308,Airplane,DA-20 FALCON,7/19/00 0:00,No damage,BUSINESS,MORRISTOWN MUNICIPAL ARPT,New Jersey,Take-off run,Small,Some Cloud,Y,0,No,None
+200758,Airplane,B-737-200,7/20/00 0:00,No damage,US AIRWAYS,LOUISVILLE INTL ARPT,Kentucky,Climb,Medium,No Cloud,N,20,Yes,None
+204677,Airplane,B-737-200,7/21/00 0:00,No damage,US AIRWAYS,LOUISVILLE INTL ARPT,Kentucky,Landing Roll,Small,Overcast,N,0,Yes,None
+205312,Airplane,SAAB-340,7/21/00 0:00,No damage,AMERICAN EAGLE AIRLINES,DALLAS/FORT WORTH INTL ARPT,Texas,Take-off run,Small,Some Cloud,N,0,No,Aborted Take-off
+206984,Airplane,ATR-72,7/22/00 0:00,No damage,ATLANTIC SOUTHEAST,PANAMA CITY - BAY COUNTY INTL,Florida,Take-off run,Small,Some Cloud,Y,0,No,None
+203849,Airplane,BE-400 BJET,7/22/00 0:00,No damage,BUSINESS,TRENTON MERCER ARPT,New Jersey,Climb,Small,No Cloud,Y,350,No,None
+203187,Airplane,CL-RJ100/200,7/23/00 0:00,No damage,COMAIR AIRLINES,CINCINNATI/NORTHERN KENTUCKY INTL ARPT,Kentucky,Take-off run,Small,No Cloud,Y,0,No,None
+205741,Airplane,C-402,7/24/00 0:00,No damage,AMERIFLIGHT,PORTLAND INTL (OR),Oregon,Approach,Small,No Cloud,Y,200,No,None
+203630,Airplane,SAAB-340,7/28/00 0:00,No damage,PINNACLE,PANAMA CITY - BAY COUNTY INTL,Florida,Climb,Small,Some Cloud,N,50,No,None
+203455,Airplane,DA-2000,7/28/00 0:00,No damage,BUSINESS,TETERBORO AIRPORT,New Jersey,Take-off run,Small,Overcast,N,0,No,None
+202567,Airplane,HAWKER-SDLY HS125,7/28/00 0:00,No damage,BUSINESS,SANFORD REGIONAL ARPT,Maine,Approach,Small,Some Cloud,N,50,No,None
+202382,Airplane,C-560,7/30/00 0:00,No damage,BUSINESS,PANAMA CITY - BAY COUNTY INTL,Florida,Landing Roll,Small,Some Cloud,N,0,No,None
+200793,Airplane,A-300,08/04/00 0:00,No damage,AMERICAN AIRLINES,NEWARK LIBERTY INTL ARPT,New Jersey,Landing Roll,Medium,No Cloud,N,0,No,None
+205461,Airplane,SAAB-340,08/05/00 0:00,No damage,AMERICAN EAGLE AIRLINES,DALLAS/FORT WORTH INTL ARPT,Texas,Landing Roll,Small,No Cloud,N,0,No,None
+203512,Airplane,B-767,08/06/00 0:00,No damage,DELTA AIR LINES,CINCINNATI/NORTHERN KENTUCKY INTL ARPT,Kentucky,Approach,Small,Overcast,Y,100,Yes,None
+201322,Airplane,B-737-300,08/06/00 0:00,Damage,UNITED AIRLINES,MEMPHIS INTL,Tennessee,Take-off run,Small,Some Cloud,N,0,Yes,Aborted Take-off
+203160,Airplane,A-319,08/06/00 0:00,No damage,AMERICAN AIRLINES,GREATER ROCHESTER INTL,New York,Take-off run,Small,Overcast,N,0,No,None
+201114,Airplane,B-737-300,08/06/00 0:00,No damage,US AIRWAYS,BALTIMORE WASH INTL,Maryland,Landing Roll,Small,Overcast,Y,0,Yes,None
+202199,Airplane,SAAB-340,08/08/00 0:00,Damage,PINNACLE,PANAMA CITY - BAY COUNTY INTL,Florida,Take-off run,Small,No Cloud,N,0,No,Aborted Take-off
+201407,Airplane,FOKKER F100,08/08/00 0:00,No damage,US AIRWAYS,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Landing Roll,Medium,No Cloud,Y,0,No,None
+200672,Airplane,B-737-300,08/09/00 0:00,No damage,SOUTHWEST AIRLINES,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Approach,Medium,Some Cloud,N,100,Yes,None
+208831,Airplane,HAWKER 1000,08/10/00 0:00,No damage,EXECUTIVE JET AVIATION,SAINT HUBERT,Quebec,Landing Roll,Medium,No Cloud,N,0,No,None
+201896,Airplane,B-727-200,08/10/00 0:00,No damage,AMERICAN AIRLINES,RALEIGH-DURHAM INTL,North Carolina,Take-off run,Large,Some Cloud,N,0,No,Aborted Take-off
+204264,Airplane,C-172,08/12/00 0:00,No damage,BUSINESS,DUPAGE AIRPORT,Illinois,Climb,Small,No Cloud,N,150,No,None
+204225,Airplane,PA-28,08/12/00 0:00,No damage,PRIVATELY OWNED,DUPAGE AIRPORT,Illinois,Approach,Small,Some Cloud,N,100,No,None
+202482,Airplane,CL-RJ100/200,8/13/00 0:00,No damage,ATLANTIC SOUTHEAST,DALLAS LOVE FIELD ARPT,Texas,Approach,Small,No Cloud,N,"2,500",No,None
+202464,Airplane,BE-23 SUNDOWNER,8/14/00 0:00,No damage,BUSINESS,ROANOKE REGIONAL,Virginia,Landing Roll,Small,No Cloud,N,0,No,None
+200732,Airplane,B-737-300,8/16/00 0:00,No damage,US AIRWAYS,LOUISVILLE INTL ARPT,Kentucky,Landing Roll,Small,No Cloud,N,0,Yes,None
+208561,,BELL-206,,No damage,,,Louisiana,,,No Cloud,,,,
+203380,Airplane,B-737-300,8/18/00 0:00,No damage,SOUTHWEST AIRLINES,EL PASO INTL ARPT,Texas,Approach,Small,Some Cloud,N,100,Yes,None
+200698,Airplane,B-737-500,8/19/00 0:00,No damage,CONTINENTAL AIRLINES,NEWARK LIBERTY INTL ARPT,New Jersey,Approach,Small,Some Cloud,N,30,Yes,None
+200664,Airplane,B-727-200,8/20/00 0:00,No damage,AMERICAN AIRLINES,NEWARK LIBERTY INTL ARPT,New Jersey,Landing Roll,Small,Some Cloud,Y,0,No,None
+200794,Airplane,BE-400 BJET,8/21/00 0:00,No damage,BUSINESS,PANAMA CITY - BAY COUNTY INTL,Florida,Climb,Small,Some Cloud,Y,40,No,None
+204415,Airplane,BE-1900,8/21/00 0:00,No damage,BUSINESS,PALM BEACH INTL,Florida,Take-off run,Small,Some Cloud,Y,0,No,Precautionary Landing
+207534,Airplane,DHC8 DASH 8,8/22/00 0:00,No damage,HORIZON AIR,LEWISTON-NEZ PERCE CO ARPT,Idaho,Approach,Small,No Cloud,N,5,No,None
+201872,Airplane,A-319,8/23/00 0:00,No damage,NORTHWEST AIRLINES,GERALD R FORD INTL,Michigan,Approach,Small,Some Cloud,Y,25,No,None
+204521,Airplane,B-747-1/200,8/23/00 0:00,Damage,EVERGREEN INTL AIRLINES,PHILADELPHIA INTL,Pennsylvania,Take-off run,Large,Overcast,Y,0,No,Aborted Take-off
+201139,Airplane,BE-90  KING,8/23/00 0:00,No damage,BUSINESS,BLOOMINGTON/NORMAL,Illinois,Take-off run,Small,Some Cloud,N,0,No,Aborted Take-off
+200375,Airplane,SAAB-340,8/23/00 0:00,No damage,MESABA AIRLINES,BLOOMINGTON/NORMAL,Illinois,Take-off run,Small,Some Cloud,Y,0,No,Aborted Take-off
+205933,Airplane,HAWKER 1000,8/24/00 0:00,No damage,BUSINESS,INDIANAPOLIS REGIONAL ARPT,Indiana,Approach,Small,No Cloud,N,10,No,None
+202578,Airplane,B-737-300,8/25/00 0:00,No damage,SOUTHWEST AIRLINES,JACKSON EVERS INTL,Mississippi,Climb,Small,No Cloud,Y,300,Yes,None
+203634,Airplane,MD-80,8/25/00 0:00,No damage,CONTINENTAL AIRLINES,NEWARK LIBERTY INTL ARPT,New Jersey,Approach,Small,Some Cloud,Y,15,No,None
+201828,Airplane,DC-9-30,8/27/00 0:00,No damage,LEGEND AIRLINES,DALLAS LOVE FIELD ARPT,Texas,Take-off run,Medium,No Cloud,Y,0,No,None
+200783,Airplane,CL-RJ100/200,8/28/00 0:00,No damage,COMAIR AIRLINES,SAVANNAH INTL,Georgia,Landing Roll,Small,Some Cloud,Y,0,No,None
+202035,Airplane,DHC8 DASH 8,8/30/00 0:00,No damage,HORIZON AIR,VANCOUVER INTL,British Columbia,Approach,Small,Some Cloud,N,50,No,None
+200560,Airplane,DC-9,8/30/00 0:00,No damage,US AIRWAYS,LEHIGH VALLEY INTL,Pennsylvania,Landing Roll,Medium,Overcast,N,0,No,None
+204413,Airplane,B-727,09/03/00 0:00,No damage,DELTA AIR LINES,SALT LAKE CITY INTL,Utah,Approach,Small,No Cloud,N,"1,000",No,None
+202289,Airplane,B-767-200,09/04/00 0:00,No damage,DELTA AIR LINES,LOGAN INTL,Massachusetts,Approach,Small,No Cloud,Y,20,Yes,None
+202074,Airplane,B-727,09/04/00 0:00,No damage,DELTA AIR LINES,GREATER ROCHESTER INTL,New York,Landing Roll,Small,Overcast,N,0,No,None
+202788,Airplane,BA-146,09/04/00 0:00,No damage,AIR WISCONSIN AIRLINES,QUAD CITY ARPT,Illinois,Take-off run,Small,Overcast,N,0,No,None
+206920,Airplane,DC-9,09/04/00 0:00,No damage,NORTHWEST AIRLINES,PORT COLUMBUS INTL,Ohio,Take-off run,Small,Some Cloud,N,0,No,None
+202461,Airplane,GULFAERO III,09/05/00 0:00,No damage,BUSINESS,TETERBORO AIRPORT,New Jersey,Take-off run,Small,Some Cloud,N,0,No,None
+205207,Airplane,A-320,09/05/00 0:00,No damage,UNITED AIRLINES,BALTIMORE WASH INTL,Maryland,Approach,Medium,No Cloud,Y,500,No,None
+201570,Airplane,BA-31 JETSTR,09/07/00 0:00,No damage,CCAIR,NASHVILLE INTL,Tennessee,Take-off run,Small,Overcast,N,0,No,Aborted Take-off
+204351,Airplane,B-737-300,09/08/00 0:00,No damage,CONTINENTAL AIRLINES,KANSAS CITY INTL,Missouri,Approach,Small,Some Cloud,Y,30,Yes,None
+202351,Airplane,B-737-200,09/08/00 0:00,No damage,FRONTIER AIRLINES,EPPLEY AIRFIELD,Nebraska,Approach,Small,No Cloud,Y,200,Yes,None
+204272,Airplane,BE-300 KING,09/09/00 0:00,No damage,BUSINESS,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Landing Roll,Small,Some Cloud,Y,0,No,None
+201340,Airplane,MU2,09/10/00 0:00,No damage,UNKNOWN,QUAD CITY ARPT,Illinois,Landing Roll,Medium,Some Cloud,Y,0,No,None
+204571,Airplane,B-737-300,09/11/00 0:00,No damage,UNITED AIRLINES,BOB HOPE ARPT,California,Approach,Small,No Cloud,N,40,Yes,None
+208477,Airplane,DORNIER,09/12/00 0:00,No damage,SKYWAY AIRLINES,GENERAL MITCHELL INTL,Wisconsin,Approach,Small,No Cloud,Y,"2,500",No,None
+200193,Airplane,BE-200 KING,9/13/00 0:00,No damage,BUSINESS,LAURENCE G HANSCOM,Massachusetts,Landing Roll,Large,No Cloud,N,0,No,None
+202764,Airplane,B-727-200,9/13/00 0:00,No damage,PAN AM,PEASE INTL TRADEPORT,New Hampshire,Take-off run,Small,Some Cloud,Y,0,No,None
+206860,Airplane,EMB-145,9/13/00 0:00,No damage,EXPRESSJET (CONTINENTAL EXPRS),CLEVELAND-HOPKINS INTL ARPT,Ohio,Approach,Small,No Cloud,Y,"2,200",No,None
+200625,Airplane,FOKKER F100,9/15/00 0:00,No damage,US AIRWAYS,CHARLOTTE/DOUGLAS INTL ARPT,North Carolina,Approach,Small,No Cloud,N,150,No,None
+200867,Airplane,SAAB-340,9/16/00 0:00,No damage,AMERICAN EAGLE AIRLINES,FRESNO YOSEMITE INTL,California,Approach,Medium,No Cloud,N,100,No,None
+203468,Airplane,BA-41 JETSTR,9/20/00 0:00,No damage,ATLANTIC COAST AIRLINES,UNIVERSITY PARK ARPT,Pennsylvania,Take-off run,Small,Some Cloud,N,0,No,None
+200147,Airplane,B-767-300,9/20/00 0:00,No damage,DELTA AIR LINES,SALT LAKE CITY INTL,Utah,Approach,Large,No Cloud,N,100,Yes,None
+202797,Airplane,B-737-300,9/20/00 0:00,No damage,UNITED AIRLINES,COLORADO SPRINGS MUNICIPAL,Colorado,Landing Roll,Small,Some Cloud,N,0,Yes,None
+205344,Airplane,BE-1900,9/21/00 0:00,Damage,EXPRESSJET (CONTINENTAL EXPRS),FORT WAYNE INTL,Indiana,Approach,Large,No Cloud,N,"3,200",No,None
+200688,Airplane,DC-9-50,9/24/00 0:00,No damage,HAWAIIAN AIR,HILO INTL ARPT,Hawaii,Approach,Small,No Cloud,N,100,No,None
+204695,Airplane,B-737-200,9/26/00 0:00,No damage,DELTA AIR LINES,ORLANDO INTL,Florida,Take-off run,Small,Some Cloud,Y,0,Yes,Precautionary Landing
+205168,Airplane,SAAB-340,9/28/00 0:00,No damage,AMERICAN EAGLE AIRLINES,THEODORE FRANCIS GREEN STATE,Rhode Island,Landing Roll,Small,Some Cloud,N,0,No,None
+200931,Airplane,BE-1900,9/28/00 0:00,No damage,GREAT LAKES AIRLINES,KEARNEY MUNICIPAL,Nebraska,Approach,Small,Some Cloud,N,"2,500",No,None
+213893,Airplane,A-310,9/28/00 0:00,No damage,FEDEX EXPRESS,DETROIT METRO WAYNE COUNTY ARPT,Michigan,Take-off run,Large,No Cloud,Y,0,No,None
+206536,Airplane,B-727,9/29/00 0:00,No damage,FEDEX EXPRESS,NEWARK LIBERTY INTL ARPT,New Jersey,Approach,Medium,No Cloud,N,"1,400",No,None
+200479,Airplane,B-727-200,10/01/00 0:00,No damage,AMERICAN AIRLINES,TOCUMEN INTL,N/A,Approach,Small,Some Cloud,Y,150,No,None
+214147,Airplane,FOKKER F100,10/02/00 0:00,No damage,AMERICAN AIRLINES,DALLAS/FORT WORTH INTL ARPT,Texas,Approach,Medium,No Cloud,N,20,No,None
+202348,Airplane,CL-RJ100/200,10/03/00 0:00,No damage,ATLANTIC COAST AIRLINES,WASHINGTON DULLES INTL ARPT,DC,Approach,Small,No Cloud,Y,100,No,None
+200048,Airplane,CITATION II,10/04/00 0:00,No damage,BUSINESS,NASHVILLE INTL,Tennessee,Approach,Small,No Cloud,N,"2,000",No,None
+200403,Airplane,A-320,10/05/00 0:00,No damage,UNITED AIRLINES,LOGAN INTL,Massachusetts,Take-off run,Small,Overcast,Y,0,No,None
+202758,Airplane,C-560,10/05/00 0:00,No damage,BUSINESS,BURKE LAKEFRONT,Ohio,Landing Roll,Medium,Overcast,Y,0,No,None
+204244,Airplane,FOKKER F100,10/06/00 0:00,No damage,AMERICAN AIRLINES,DALLAS/FORT WORTH INTL ARPT,Texas,Approach,Medium,Some Cloud,Y,400,No,None
+201960,Airplane,CL-RJ100/200,10/09/00 0:00,No damage,COMAIR AIRLINES,DETROIT METRO WAYNE COUNTY ARPT,Michigan,Approach,Small,No Cloud,N,300,No,None
+206581,Airplane,EMB-110,10/10/00 0:00,No damage,GREAT LAKES AIRLINES,WATERLOO REGIONAL ARPT,Iowa,Take-off run,Small,No Cloud,Y,0,No,None
+205661,Airplane,B-737,10/13/00 0:00,No damage,VANGUARD AIRLINES,KANSAS CITY INTL,Missouri,Landing Roll,Small,Some Cloud,Y,0,Yes,None
+204994,Airplane,B-727,10/14/00 0:00,Damage,AMERICAN AIRLINES,SANTO DOMINGO/LAS AM,N/A,Climb,Medium,No Cloud,N,10,No,None
+208027,Airplane,B-737-700,10/15/00 0:00,Damage,SOUTHWEST AIRLINES,ALBANY INTL,New York,Take-off run,Medium,No Cloud,N,0,Yes,Precautionary Landing
+200477,Airplane,B-767-400,10/15/00 0:00,Damage,DELTA AIR LINES,FORT LAUDERDALE/HOLLYWOOD INTL,Florida,Approach,Medium,No Cloud,N,"1,500",Yes,None
+205270,Airplane,DA-10 FALCON,10/16/00 0:00,No damage,BUSINESS,LOUISVILLE INTL ARPT,Kentucky,Approach,Small,Overcast,N,200,No,None
+206599,Airplane,SAAB-340,10/16/00 0:00,No damage,AMERICAN EAGLE AIRLINES,LOGAN INTL,Massachusetts,Take-off run,Small,Overcast,Y,0,No,Aborted Take-off
+204605,Airplane,B-757-200,10/19/00 0:00,No damage,DELTA AIR LINES,PALM BEACH INTL,Florida,Climb,Medium,No Cloud,N,"3,400",Yes,None
+209019,Airplane,EMB-145,10/20/00 0:00,No damage,EXPRESSJET (CONTINENTAL EXPRS),DALLAS LOVE FIELD ARPT,Texas,Approach,Small,Overcast,N,250,No,None
+203507,Airplane,DHC8 DASH 8,10/22/00 0:00,No damage,CCAIR,CHARLOTTE/DOUGLAS INTL ARPT,North Carolina,Approach,Medium,No Cloud,Y,"2,000",No,None
+206675,Airplane,C-208,10/24/00 0:00,No damage,BUSINESS,SACRAMENTO INTL,California,Climb,Large,No Cloud,N,"1,000",No,Precautionary Landing
+208274,Airplane,A-300,10/25/00 0:00,No damage,ASTAR AIR CARGO,JOHN F KENNEDY INTL,New York,Take-off run,Medium,No Cloud,N,0,No,None
+205535,Airplane,B-727,10/30/00 0:00,No damage,DELTA AIR LINES,MEMPHIS INTL,Tennessee,Climb,Small,Overcast,Y,50,No,None
+204007,Airplane,CL-RJ100/200,10/31/00 0:00,No damage,COMAIR AIRLINES,BUFFALO-NIAGARA INTL,New York,Take-off run,Small,No Cloud,N,0,No,None
+203497,Airplane,BA-31 JETSTR,11/01/00 0:00,No damage,BUSINESS,PEASE INTL TRADEPORT,New Hampshire,Take-off run,Small,Some Cloud,Y,0,No,Precautionary Landing
+204236,Airplane,EMB-145,11/02/00 0:00,No damage,EXPRESSJET (CONTINENTAL EXPRS),CLEVELAND-HOPKINS INTL ARPT,Ohio,Approach,Small,Some Cloud,N,"3,500",No,None
+205876,Airplane,IAI-1124,11/05/00 0:00,No damage,BUSINESS,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Take-off run,Small,Overcast,Y,0,No,None
+204191,Airplane,EMB-120,11/05/00 0:00,Damage,SKYWEST AIRLINES,SACRAMENTO INTL,California,Approach,Medium,No Cloud,Y,"2,000",No,None
+204441,Airplane,A-319,11/06/00 0:00,No damage,US AIRWAYS,PHILADELPHIA INTL,Pennsylvania,Approach,Small,No Cloud,N,"4,000",No,None
+206406,Airplane,B-737-300,11/07/00 0:00,No damage,CONTINENTAL AIRLINES,ATLANTA INTL,Georgia,Approach,Large,Overcast,N,50,Yes,None
+203254,Airplane,DC-9,11/07/00 0:00,No damage,NORTHWEST AIRLINES,AUSTIN STRAUBEL INTL,Wisconsin,Take-off run,Small,Overcast,N,0,No,None
+206018,Airplane,PA-31T CHEYENNE II,11/08/00 0:00,Damage,GOVERNMENT,DES MOINES INTL,Iowa,Descent,Medium,Overcast,Y,"9,000",No,None
+208957,Airplane,DA-50 FALCON,11/08/00 0:00,No damage,BUSINESS,WAUKEGAN REGIONAL ARPT,Illinois,Take-off run,Small,No Cloud,N,0,No,None
+200641,Airplane,B-737-200,11/11/00 0:00,No damage,FRONTIER AIRLINES,DENVER INTL AIRPORT,Colorado,Approach,Small,Overcast,N,20,Yes,None
+206414,Airplane,RKWLTRBO 690,11/12/00 0:00,No damage,BUSINESS,BIRMINGHAM-SHUTTLESWORTH INTL,Alabama,Climb,Small,No Cloud,Y,50,No,None
+205559,Airplane,B-737-400,11/12/00 0:00,No damage,US AIRWAYS,LOGAN INTL,Massachusetts,Landing Roll,Small,No Cloud,N,0,Yes,None
+208033,Airplane,SAAB-340,11/13/00 0:00,Damage,MESABA AIRLINES,MINNEAPOLIS-ST PAUL INTL,Minnesota,Climb,Large,Overcast,N,"1,800",No,Precautionary Landing
+5401,Airplane,B-52H,11/13/00 0:00,No damage,MILITARY,BARKSDALE AIR FORCE BASE ARPT,Louisiana,Approach,Small,No Cloud,Y,500,No,None
+203050,Airplane,MD-80,11/15/00 0:00,No damage,US AIRWAYS,LOGAN INTL,Massachusetts,Climb,Small,No Cloud,Y,100,No,None
+208821,Airplane,B-727,11/16/00 0:00,No damage,DELTA AIR LINES,LAGUARDIA NY,New York,Climb,Small,No Cloud,N,400,No,None
+202477,Airplane,B-767-300,11/16/00 0:00,Damage,DELTA AIR LINES,PALM BEACH INTL,Florida,Climb,Large,No Cloud,Y,400,Yes,Precautionary Landing
+206885,Airplane,A-319,11/19/00 0:00,No damage,US AIRWAYS,RONALD REAGAN WASHINGTON NATL,DC,Approach,Small,Overcast,Y,25,No,None
+205078,Airplane,B-737-300,11/24/00 0:00,No damage,UNITED AIRLINES,SAN FRANCISCO INTL ARPT,California,Landing Roll,Small,Overcast,N,0,Yes,None
+4978,Airplane,C-17A,11/29/00 0:00,No damage,MILITARY,CHARLESTON AFB/INTL ARPT,South Carolina,Approach,Medium,No Cloud,Y,"1,600",No,None
+208354,Airplane,B-757-200,12/01/00 0:00,No damage,NATIONAL AIRLINES,JOHN F KENNEDY INTL,New York,Take-off run,Small,No Cloud,N,0,Yes,Aborted Take-off
+205670,Airplane,C-560,12/05/00 0:00,No damage,BUSINESS,LOVELL FIELD ARPT,Tennessee,Climb,Medium,Some Cloud,N,30,No,None
+200949,Airplane,FOKKER F100,12/09/00 0:00,No damage,AMERICAN AIRLINES,JAMES M COX DAYTON INTL,Ohio,Landing Roll,Medium,No Cloud,N,0,No,None
+4964,Airplane,B-52H,12/12/00 0:00,Damage,MILITARY,BARKSDALE AIR FORCE BASE ARPT,Louisiana,Climb,Medium,No Cloud,Y,500,No,Precautionary Landing
+205109,Airplane,CL-RJ100/200,12/13/00 0:00,Damage,COMAIR AIRLINES,CINCINNATI/NORTHERN KENTUCKY INTL ARPT,Kentucky,Climb,Medium,Overcast,N,400,No,Precautionary Landing

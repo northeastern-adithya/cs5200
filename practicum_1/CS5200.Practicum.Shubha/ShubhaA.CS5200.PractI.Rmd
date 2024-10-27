@@ -9,7 +9,7 @@ output: html_notebook
 
 ```{r installAndLoadRequiredPackages, echo=TRUE,warning=FALSE, eval= TRUE}
 # Install program required packages
-
+# Installs RMysql, DBI and testthat packages
 installRequiredPackages <- function() {
   packages <- c("RMySQL","DBI","testthat")
   # Install packages that are not installed
@@ -19,6 +19,8 @@ installRequiredPackages <- function() {
   }
 } 
 
+# Loads the required packages to the environment
+# Loads RMysql, DBI and testthat packages
 loadRequiredPackages <- function(){
 suppressMessages({
   library(RMySQL)
@@ -40,6 +42,7 @@ connectToDatabase <- function(){
   dbPassword <- "AVNS_LfgR_-4_x2xF-vv7_Bg"
   dbHost <- "practicum-1-cs-5200.b.aivencloud.com"
   dbPort <- 22694
+  
   return (dbConnect(
   RMySQL::MySQL(),
   user = dbUser,
@@ -50,8 +53,11 @@ connectToDatabase <- function(){
   ))      
 }
 
+# Global variable to connect to the database
 dbCon <- connectToDatabase()
 
+# Adding double quotes to process dot(.) in table name. 
+# Global varaibles defining list of tables used throughout the code.
 widlifeStrikesTableName <- paste0('"', "wildlife.strikes", '"')
 flightsTableName <- 'flights'
 airportsTableName <- 'airports'
@@ -66,7 +72,7 @@ dropTableIfExist <- function(table) {
   return (sprintf("DROP TABLE IF EXISTS %s", table))
 }
 
-# Drops all the existing tables from a given db connection.
+# Drops all the existing tables of program from a given db connection.
 # @param: dbCon - database connection to connect to
 dropAllExistingTable <- function(dbCon) {
   tables <- c(widlifeStrikesTableName, flightsTableName, airportsTableName, conditionsTableName, wildlifeSizeTableName)
@@ -80,7 +86,6 @@ dropAllExistingTable(dbCon)
 
 ``` {r createTables , echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 4: Creating tables in the database
-
 
 # Creates flight table in database
 # @param: dbCon - database connection to connect to
@@ -257,4 +262,259 @@ validateTableCreation(dbCon)
 ```{r loadCSVData, echo=FALSE,warning=FALSE, eval= TRUE}
 # Part 5: Loading CSV data into dataframe.
 bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv", header = TRUE, stringsAsFactors = FALSE)
+```
+
+```{r insertDataIntoTables, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
+
+# Function to replace empty values with sentinel values
+# @param: column - column to replace empty values
+# @param: sentinelValues - sentinel values to replace empty values
+replaceEmptyValues <- function(column, sentinelValues) {
+  ifelse(is.na(column) | column == "", sentinelValues, column)
+}
+
+# Function to clean up the data frame with sentinel values before inserting
+# @param: dataFrame - data frame to clean up
+# @return: cleaned up data frame
+cleanUpData <- function(dataFrame){
+  neededColumns <- c("iid", "aircraft", "flight_date", "airline", "dep_airport", 
+                  "origin_state", "wildlife_size", "sky_conditions", "altitude_ft", 
+                  "heavy_flag", "impact")
+  # Getting only the needed columns
+  dataFrame <- dataFrame[, neededColumns]
+  
+  # Removing rows with NA in iid
+  dataFrame <- dataFrame[!is.na(dataFrame$iid), ]
+  
+  # Defining map of sentinel values
+  sentinelValues <- list(
+    aircraft = "Unknown Aircraft",
+    flight_date = "1/1/1970 0:00",
+    airline = "Unknown Airline",
+    dep_airport = "Unknown Airport",
+    origin_state = "Unknown State",
+    wildlife_size = "Unknown",
+    sky_conditions = "Unknown",
+    impact = "Unknown",
+    heavy_flag = "No"
+  )
+  
+  # Replacing empty values with sentinel values
+  dataFrame[names(sentinelValues)] <- Map(
+    replaceEmptyValues,
+    dataFrame[names(sentinelValues)],
+    sentinelValues
+  )
+  
+  # Converting from string to date data type 
+  dataFrame$flight_date <- as.Date(dataFrame$flight_date, format = "%m/%d/%y")
+  
+  # Removing comma from altitude_ft and converting to numeric
+  dataFrame$altitude_ft <- as.numeric(gsub(",", "", dataFrame$altitude_ft))
+  dataFrame$altitude_ft[is.na(dataFrame$altitude_ft)] <- 0
+  
+  # Converting heavy_flag to boolean
+  dataFrame$heavy_flag <- ifelse(dataFrame$heavy_flag == "Yes", TRUE, FALSE)
+
+  return(dataFrame)
+}
+
+# Insert into database in batches
+# @param: dbCon - database connection to connect to
+# @param: batchSize - batch size to insert into the database
+# @param: initialQuery - insert query with table and column names
+# @param: values - values to insert into the database
+insertInBatches<- function(dbCon,batchSize,initialQuery,values){
+  numBatches <- ceiling(length(values) / batchSize)
+    for (i in 1:numBatches) {
+      startIdx <- (i - 1) * batchSize + 1
+      endIdx <- min(i * batchSize, length(values))
+      batchValues <- values[startIdx:endIdx]
+      completeQuery <- paste(initialQuery, paste(batchValues, collapse = ","))
+      dbExecute(dbCon, completeQuery)
+    }
+}
+
+# Insert into airports table
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+# @param: batchSize - batch size to insert into the database
+insertIntoAirports <- function(dbCon, dataFrame,batchSize){
+  airports <- unique(dataFrame[c("dep_airport", "origin_state")])
+  if(nrow(airports) > 0) {
+    query <- sprintf("INSERT INTO %s (airportName, airportState) VALUES", airportsTableName)
+    values <- apply(airports, 1, function(row) {
+      sprintf("('%s', '%s')", gsub("'", "''", row["dep_airport"])
+              ,gsub("'", "''",row["origin_state"]))
+    })
+    insertInBatches(dbCon,batchSize,query,values)
+    return (length(values))
+  }
+}
+
+# Insert into conditions table
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+# @param: batchSize - batch size to insert into the database
+insertIntoConditions <- function(dbCon, dataFrame,batchSize){
+  conditions <- unique(dataFrame[c("sky_conditions")])
+  if(nrow(conditions) > 0) {
+    query <- sprintf("INSERT INTO %s (sky_condition,explanation) VALUES", conditionsTableName)
+    values <- apply(conditions, 1, function(row) {
+      sprintf("('%s', '')", gsub("'", "''", row["sky_conditions"]))
+    })
+    insertInBatches(dbCon,batchSize,query,values)
+  }
+  return (length(values))
+}
+
+
+# Insert into wildlife size table
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+insertIntoWildLifeSize <- function(dbCon, dataFrame,batchSize){
+  wildlifeSize <- unique(dataFrame[c("wildlife_size")])
+  if(nrow(wildlifeSize) > 0) {
+    query <- sprintf("INSERT INTO %s (size) VALUES", wildlifeSizeTableName)
+    values <- apply(wildlifeSize, 1, function(row) {
+      sprintf("('%s')", gsub("'", "''", row["wildlife_size"]))
+    })
+    insertInBatches(dbCon,batchSize,query,values)
+  }
+  return (length(values))
+}
+
+
+# Gets the airport id from given airport name and state
+# @param: airportMapping - airport mapping data frame
+# @param: airportName - airport name
+# @param: airportState - airport state
+getAirportId <- function(airportMapping,airportName, airportState) {
+  matchingRow <- airportMapping[airportMapping$airportName == airportName & 
+                                airportMapping$airportState == airportState, ]
+  return(matchingRow$aid[1])
+}
+
+# Insert into flights table
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+# @param: batchSize - batch size to insert into the database
+insertIntoFlights <- function(dbCon, dataFrame,batchSize){
+  flights <- unique(dataFrame[c("flight_date", "dep_airport", "origin_state", "airline", "aircraft","heavy_flag")])
+  query <- sprintf("INSERT INTO %s (date, originAirport, airlineName, aircraftType, isHeavy) VALUES", flightsTableName)
+  
+  airportMapping <- dbGetQuery(dbCon, 
+    sprintf("SELECT aid, airportName,airportState FROM %s", airportsTableName))
+  values <- apply(flights, 1, function(row) {
+    sprintf("('%s', %s, '%s', '%s', %s)"
+            ,row["flight_date"],
+            getAirportId(airportMapping,row["dep_airport"],row["origin_state"])
+            ,gsub("'", "''", row["airline"])
+            ,gsub("'", "''", row["aircraft"])
+            ,row["heavy_flag"])
+  })
+  insertInBatches(dbCon,batchSize,query,values)
+  return (length(values))
+}
+
+
+# Gets flight id from given date, origin airport, airline name, aircraft type and if its heavy
+# @param: flightMapping - flight mapping data frame
+# @param: date - date of the flight
+# @param: originAirport - origin airport of the flight
+# @param: airlineName - airline name of the flight
+# @param: aircraftType - aircraft type of the flight
+# @param: isHeavy - if the flight is heavy
+getFlightId <- function(flightMapping,date, originAirport, airlineName, aircraftType, isHeavy) {
+  matchingRow <- flightMapping[flightMapping$date == date & 
+                                flightMapping$originAirport == originAirport & 
+                                flightMapping$airlineName == airlineName & 
+                                flightMapping$aircraftType == aircraftType & 
+                                flightMapping$isHeavy == isHeavy, ]
+  return(matchingRow$aid[1])
+}
+
+# Gets wild life size id from given wild life size
+# @param: wildlifeSizeMapping - wildlife size mapping data frame
+# @param: wildlifeSize - wildlife size
+getWildLifeSizeId <- function(wildlifeSizeMapping, wildlifeSize) {
+  matchingRow <- wildlifeSizeMapping[wildlifeSizeMapping$size == wildlifeSize, ]
+  return(matchingRow$wlId[1])
+}
+
+# Gets condition id from given sky condition
+# @param: conditionMapping - condition mapping data frame
+# @param: skyCondition - sky condition
+getConditionId <- function(conditionMapping, skyCondition) {
+  matchingRow <- conditionMapping[conditionMapping$sky_condition == skyCondition, ]
+  return(matchingRow$cid[1])
+}
+
+
+
+
+# Insert into wildlife.strikes table
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+# @param: batchSize - batch size to insert into the database
+insertIntoWildLifeStrikes <- function(dbCon, dataFrame,batchSize){
+  
+  flightMapping <- dbGetQuery(dbCon, 
+    sprintf("SELECT fid, date, originAirport, airlineName, aircraftType, isHeavy FROM %s",   flightsTableName))
+  
+  wildlifeSizeMapping <- dbGetQuery(dbCon, 
+    sprintf("SELECT wlId, size FROM %s", wildlifeSizeTableName))
+  
+  conditionMapping <- dbGetQuery(dbCon,
+    sprintf("SELECT cid, sky_condition FROM %s", conditionsTableName))
+  
+  airportsMapping <- dbGetQuery(dbCon, 
+    sprintf("SELECT aid, airportName,airportState FROM %s", airportsTableName))
+  
+  query <- sprintf("INSERT INTO %s (iid,fid, wlsize, impact, altitude, conditions) VALUES", widlifeStrikesTableName)
+  values <- apply(dataFrame, 1, function(row) {
+    sprintf("(%s,%s, %s, '%s', %s,%s)"
+            ,row["iid"]
+            ,getFlightId(flightMapping,row["flight_date"]
+                         ,getAirportId(airportsMapping
+                                       ,row["dep_airport"]
+                                       ,row["origin_state"])
+                         ,row["airline"]
+                         ,row["aircraft"]
+                         ,row["heavy_flag"])
+            ,getWildLifeSizeId(wildlifeSizeMapping, row["wildlife_size"])
+            , gsub("'", "''", row["impact"])
+            ,row["altitude_ft"]
+            , getConditionId(conditionMapping,row["sky_conditions"]))
+  })
+  insertInBatches(dbCon,batchSize,query,values)
+  return (length(values))
+}
+
+
+
+# Insert values into the database
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+insertValuesIntoDatabase <- function(dbCon,dataFrame){
+  batchSize<- 1000
+  dataFrame <- cleanUpData(dataFrame)
+  val <- insertIntoAirports(dbCon, dataFrame,batchSize)
+  print(sprintf("Inserted %s values into airports", val))
+  val <- insertIntoConditions(dbCon, dataFrame,batchSize)
+  print(sprintf("Inserted %s values into conditions", val))
+  val <- insertIntoWildLifeSize(dbCon, dataFrame,batchSize)
+  print(sprintf("Inserted %s values into wildlifeSize", val))
+  val<-insertIntoFlights(dbCon, dataFrame,batchSize)
+  print(sprintf("Inserted %s values into flights", val))
+  val <-insertIntoWildLifeStrikes(dbCon, dataFrame,batchSize)
+  print(sprintf("Inserted %s values into wildlifeStrikes", val))
+}
+
+insertValuesIntoDatabase(dbCon, bds.raw)
+```
+
+```{r closeConnection, echo=TRUE, warning=FALSE, eval=TRUE}
+dbDisconnect(dbCon)
 ```
