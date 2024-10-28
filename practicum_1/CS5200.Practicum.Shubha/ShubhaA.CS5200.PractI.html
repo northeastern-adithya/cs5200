@@ -11,9 +11,9 @@
 
 <meta name="author" content="Shubha, Adithya" />
 
-<meta name="date" content="2024-10-27" />
+<meta name="date" content="2024-10-28" />
 
-<title>ASSIGNMENT 06.1</title>
+<title>Analysis of Wildlife Strikes in Commercial Aviation</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1499,6 +1499,230 @@ window.onload = function() {
   PagedTableDoc.initAll();
 };
 </script>
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+border-bottom: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic tfoot tr td {
+border: 0;
+}
+.lightable-classic tfoot tr:first-child td {
+border-top: 0.14em solid #111111;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+border-bottom: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 tfoot tr td {
+border: 0;
+}
+.lightable-classic-2 tfoot tr:first-child td {
+border-top: 3px double #111111;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material tfoot tr td {
+border: 0;
+}
+.lightable-material tfoot tr:first-child td {
+border-top: 1px solid #EEE;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark tfoot tr td {
+border: 0;
+}
+.lightable-material-dark tfoot tr:first-child td {
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper tfoot tr td {
+border: 0;
+}
+.lightable-paper tfoot tr:first-child td {
+border-top: 1px solid #00000020;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
 
 <style type="text/css">
 code{white-space: pre-wrap;}
@@ -1621,793 +1845,202 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">ASSIGNMENT 06.1</h1>
-<h3 class="subtitle">Query a Database with SQL</h3>
+<h1 class="title toc-ignore">Analysis of Wildlife Strikes in Commercial
+Aviation</h1>
+<h3 class="subtitle">Practicum I CS5200</h3>
 <h4 class="author">Shubha, Adithya</h4>
-<h4 class="date">2024-10-27</h4>
+<h4 class="date">2024-10-28</h4>
 
 </div>
 
 
-<p><strong>1. What are the last name, first name, and birth date of all
-employees, sorted by last name?</strong></p>
-<pre class="sql"><code>SELECT E.LastName, E.FirstName, E.BirthDate
-FROM Employees E
-ORDER BY E.LastName
-LIMIT 10;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>Displaying records 1 - 10</caption>
-<thead>
-<tr class="header">
-<th align="left">LastName</th>
-<th align="left">FirstName</th>
-<th align="left">BirthDate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Buchanan</td>
-<td align="left">Steven</td>
-<td align="left">1985-03-04</td>
-</tr>
-<tr class="even">
-<td align="left">Callahan</td>
-<td align="left">Laura</td>
-<td align="left">1968-01-09</td>
-</tr>
-<tr class="odd">
-<td align="left">Davolio</td>
-<td align="left">Nancy</td>
-<td align="left">1998-12-08</td>
-</tr>
-<tr class="even">
-<td align="left">Dodsworth</td>
-<td align="left">Anne</td>
-<td align="left">1979-07-02</td>
-</tr>
-<tr class="odd">
-<td align="left">Fuller</td>
-<td align="left">Andrew</td>
-<td align="left">2002-02-19</td>
-</tr>
-<tr class="even">
-<td align="left">King</td>
-<td align="left">Robert</td>
-<td align="left">2000-05-29</td>
-</tr>
-<tr class="odd">
-<td align="left">Leverling</td>
-<td align="left">Janet</td>
-<td align="left">1993-08-30</td>
-</tr>
-<tr class="even">
-<td align="left">Peacock</td>
-<td align="left">Margaret</td>
-<td align="left">1978-09-19</td>
-</tr>
-<tr class="odd">
-<td align="left">Suyama</td>
-<td align="left">Michael</td>
-<td align="left">1993-07-02</td>
-</tr>
-<tr class="even">
-<td align="left">West</td>
-<td align="left">Adam</td>
-<td align="left">2004-09-19</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>2. What are the names of each category and the number of
-distinct products in that category?</strong></p>
-<pre class="sql"><code>SELECT C.CategoryName, COUNT(DISTINCT P.ProductID) AS DistinctProductCount
-FROM Products P
-JOIN Categories C ON P.CategoryID = C.CategoryID
-GROUP BY C.CategoryName
-LIMIT 10;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>8 records</caption>
-<thead>
-<tr class="header">
-<th align="left">CategoryName</th>
-<th align="right">DistinctProductCount</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Beverages</td>
-<td align="right">12</td>
-</tr>
-<tr class="even">
-<td align="left">Condiments</td>
-<td align="right">12</td>
-</tr>
-<tr class="odd">
-<td align="left">Confections</td>
-<td align="right">13</td>
-</tr>
-<tr class="even">
-<td align="left">Dairy Products</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">Grains/Cereals</td>
-<td align="right">7</td>
-</tr>
-<tr class="even">
-<td align="left">Meat/Poultry</td>
-<td align="right">6</td>
-</tr>
-<tr class="odd">
-<td align="left">Produce</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">Seafood</td>
-<td align="right">12</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>3. List the number of orders by customer ID and name, ordered
-from most to least, restricted to those customers who have placed at
-least one order.</strong></p>
-<pre class="sql"><code>SELECT C.CustomerID, C.CustomerName, COUNT(O.OrderID) AS OrderCount
-FROM Customers C
-         JOIN Orders O ON C.CustomerID = O.CustomerID
-GROUP BY C.CustomerID
--- Order count should atleast be 1
-HAVING OrderCount &gt; 0
-ORDER BY OrderCount DESC
-LIMIT 10;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>Displaying records 1 - 10</caption>
-<thead>
-<tr class="header">
-<th align="right">CustomerID</th>
-<th align="left">CustomerName</th>
-<th align="right">OrderCount</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">20</td>
-<td align="left">Ernst Handel</td>
-<td align="right">10</td>
-</tr>
-<tr class="even">
-<td align="right">87</td>
-<td align="left">Wartian Herkku</td>
-<td align="right">7</td>
-</tr>
-<tr class="odd">
-<td align="right">65</td>
-<td align="left">Rattlesnake Canyon Grocery</td>
-<td align="right">7</td>
-</tr>
-<tr class="even">
-<td align="right">63</td>
-<td align="left">QUICK-Stop</td>
-<td align="right">7</td>
-</tr>
-<tr class="odd">
-<td align="right">75</td>
-<td align="left">Split Rail Beer &amp; Ale</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="right">37</td>
-<td align="left">Hungry Owl All-Night Grocers</td>
-<td align="right">6</td>
-</tr>
-<tr class="odd">
-<td align="right">51</td>
-<td align="left">Mère Paillarde</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="right">46</td>
-<td align="left">LILA-Supermercado</td>
-<td align="right">5</td>
-</tr>
-<tr class="odd">
-<td align="right">41</td>
-<td align="left">La maison d’’Asie</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="right">86</td>
-<td align="left">Die Wandernde Kuh</td>
-<td align="right">4</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>4. What is the last name and first name of the youngest
-employee?</strong></p>
-<pre class="sql"><code>-- Possible multiple employees can have the same birthdate
--- Finding the youngest birthdate and finding employees matching this value
-WITH YoungestBirthdate AS (
-    SELECT STRFTIME(&#39;%Y-%m&#39;, Employees.BirthDate) AS BirthDateFormatted
-    FROM Employees
-    ORDER BY BirthDateFormatted DESC
-    LIMIT 1
-)
-SELECT E.LastName, E.FirstName
-FROM Employees E
-WHERE STRFTIME(&#39;%Y-%m&#39;, E.BirthDate) = (SELECT BirthDateFormatted FROM YoungestBirthdate);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="left">LastName</th>
-<th align="left">FirstName</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">West</td>
-<td align="left">Adam</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>5. What are the total number of unique purchases for each
-country, ordered alphabetically by country?</strong></p>
-<pre class="sql"><code>SELECT C.Country, count(DISTINCT O.OrderID) AS TotalPurchases
-FROM Customers C
-         JOIN ORDERS O ON C.CustomerID = O.CustomerID
-GROUP BY C.Country
-ORDER BY C.Country
-LIMIT 10;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>Displaying records 1 - 10</caption>
-<thead>
-<tr class="header">
-<th align="left">Country</th>
-<th align="right">TotalPurchases</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Argentina</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">Austria</td>
-<td align="right">13</td>
-</tr>
-<tr class="odd">
-<td align="left">Belgium</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="right">19</td>
-</tr>
-<tr class="odd">
-<td align="left">Canada</td>
-<td align="right">9</td>
-</tr>
-<tr class="even">
-<td align="left">Denmark</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td align="left">Finland</td>
-<td align="right">8</td>
-</tr>
-<tr class="even">
-<td align="left">France</td>
-<td align="right">18</td>
-</tr>
-<tr class="odd">
-<td align="left">Germany</td>
-<td align="right">25</td>
-</tr>
-<tr class="even">
-<td align="left">Ireland</td>
-<td align="right">6</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>6. How many employees never worked with a single customer,
-i.e., they appear in the Employees table but not in the Orders
-table?</strong></p>
-<pre class="sql"><code>SELECT COUNT(*) AS EmployeesWithoutOrder
-FROM Employees E
-         LEFT JOIN Orders O ON E.EmployeeID = O.EmployeeID
--- IS NULL implies they do not have any order.
-WHERE O.EmployeeID IS NULL;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">EmployeesWithoutOrder</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>7. How many products contain either “Caviar” or “Kaviar” in
-the name of the product? </strong></p>
-<pre class="sql"><code>SELECT COUNT(*) AS CavierProducts
-FROM Products P
-WHERE P.ProductName LIKE &#39;%Caviar%&#39;
-   OR P.ProductName LIKE &#39;%Kaviar%&#39;;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">CavierProducts</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>8. What is the total number of distinct countries to which at
-least one order was shipped?</strong></p>
-<pre class="sql"><code>SELECT COUNT(DISTINCT C.Country) AS CountriesWithOrder
-FROM Customers C
-         JOIN ORDERS O ON C.CustomerID = O.CustomerID;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">CountriesWithOrder</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">21</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>9. What is the total for each order, i.e., the amount that
-the customers is required to pay for the products at the ordered
-quantity in the order. List the order ID, the order date, the name of
-the customer, and the total cost.</strong></p>
-<pre class="sql"><code>SELECT O.OrderID, O.OrderDate, C.CustomerName, SUM(P.Price * OD.Quantity) AS TotalCost
-FROM Customers C
-         JOIN
-     Orders O ON C.CustomerID = O.CustomerID
-         JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-         JOIN Products P ON OD.ProductID = P.ProductID
-GROUP BY O.OrderID
-LIMIT 10;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>Displaying records 1 - 10</caption>
-<thead>
-<tr class="header">
-<th align="left">OrderID</th>
-<th align="left">OrderDate</th>
-<th align="left">CustomerName</th>
-<th align="right">TotalCost</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">10248</td>
-<td align="left">2023-07-04</td>
-<td align="left">Wilman Kala</td>
-<td align="right">566.00</td>
-</tr>
-<tr class="even">
-<td align="left">10249</td>
-<td align="left">2023-07-05</td>
-<td align="left">Tradição Hipermercados</td>
-<td align="right">2329.25</td>
-</tr>
-<tr class="odd">
-<td align="left">10250</td>
-<td align="left">2023-07-08</td>
-<td align="left">Hanari Carnes</td>
-<td align="right">2267.25</td>
-</tr>
-<tr class="even">
-<td align="left">10251</td>
-<td align="left">2023-07-08</td>
-<td align="left">Victuailles en stock</td>
-<td align="right">839.50</td>
-</tr>
-<tr class="odd">
-<td align="left">10252</td>
-<td align="left">2023-07-09</td>
-<td align="left">Suprêmes délices</td>
-<td align="right">4662.50</td>
-</tr>
-<tr class="even">
-<td align="left">10253</td>
-<td align="left">2023-07-10</td>
-<td align="left">Hanari Carnes</td>
-<td align="right">1806.00</td>
-</tr>
-<tr class="odd">
-<td align="left">10254</td>
-<td align="left">2023-07-11</td>
-<td align="left">Chop-suey Chinese</td>
-<td align="right">781.50</td>
-</tr>
-<tr class="even">
-<td align="left">10255</td>
-<td align="left">2023-07-12</td>
-<td align="left">Richter Supermarkt</td>
-<td align="right">3115.75</td>
-</tr>
-<tr class="odd">
-<td align="left">10256</td>
-<td align="left">2023-07-15</td>
-<td align="left">Wellington Importadora</td>
-<td align="right">648.00</td>
-</tr>
-<tr class="even">
-<td align="left">10257</td>
-<td align="left">2023-07-16</td>
-<td align="left">HILARIÓN-Abastos</td>
-<td align="right">1400.50</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>10. Which supplier sells the most products?</strong></p>
-<pre class="sql"><code>WITH SupplierProductCounts AS (
-    SELECT S.SupplierName, COUNT(P.ProductID) AS ProductCount
-    FROM Suppliers S
-    JOIN Products P ON S.SupplierID = P.SupplierID
-    GROUP BY S.SupplierName
-)
--- Multiple suppliers could have sold max products.
-SELECT SupplierName AS SupplierWithMostProducts
-FROM SupplierProductCounts
-WHERE ProductCount = (SELECT MAX(ProductCount) FROM SupplierProductCounts);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>2 records</caption>
-<thead>
-<tr class="header">
-<th align="left">SupplierWithMostProducts</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Pavlova, Ltd.</td>
-</tr>
-<tr class="even">
-<td align="left">Plutzer Lebensmittelgroßmärkte AG</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>11. Which product was ordered most often by different
-customers?</strong></p>
-<pre class="sql"><code>WITH ProductOrderedCount AS (SELECT P.ProductName, COUNT(DISTINCT O.CustomerID) AS CountOfProductOrdered
-                             FROM Orders O
-                                      JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-                                      JOIN Products P ON OD.ProductID = P.ProductID
-                             GROUP BY P.ProductName)
-SELECT ProductName AS ProductOrderByDifferentCustomers
-FROM ProductOrderedCount
-WHERE CountOfProductOrdered = (SELECT MAX(CountOfProductOrdered) FROM ProductOrderedCount);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="left">ProductOrderByDifferentCustomers</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Gorgonzola Telino</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>12. Which product has the most quantity sold?</strong></p>
-<pre class="sql"><code>WITH TotalQuantitiesOfProduct AS (SELECT P.ProductName, SUM(OD.Quantity) AS TotalQuantitySold
-                                  FROM OrderDetails OD
-                                           JOIN Products P ON OD.ProductID = P.ProductID
-                                  GROUP BY P.ProductName)
+<pre class="r"><code># Part 4: Creating tables in the database
 
-SELECT ProductName AS ProductWithMostQuantity
-FROM TotalQuantitiesOfProduct
-WHERE TotalQuantitySold =
-      (Select max(TotalQuantitySold)
-       FROM TotalQuantitiesOfProduct);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="left">ProductWithMostQuantity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Gorgonzola Telino</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>13. What is the total amount spent by all customers who do
-live in Germany?</strong></p>
-<pre class="sql"><code>SELECT SUM(OD.Quantity * P.Price) AS TotalAmountSpentInGermany
-FROM Customers C
-JOIN Orders O ON C.CustomerID = O.CustomerID
-JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-JOIN Products P ON OD.ProductID = P.ProductID
-WHERE C.Country = &#39;Germany&#39;;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">TotalAmountSpentInGermany</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">47241.82</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>14. What is the difference in spending between the country to
-which the most was sold versus the country to which the least was
-sold?</strong></p>
-<pre class="sql"><code>WITH TotalSpending AS (
-    SELECT C.Country,SUM(OD.Quantity * P.Price) AS TotalAmountSpent
-FROM Customers C
-JOIN Orders O ON C.CustomerID = O.CustomerID
-JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-JOIN Products P ON OD.ProductID = P.ProductID
-GROUP BY C.Country
-)
-SELECT
-    MAX(TotalAmountSpent) - MIN(TotalAmountSpent) AS SpendingDifference
-FROM TotalSpending;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">SpendingDifference</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">69212.75</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>15. Which country has the most customers?</strong></p>
-<pre class="sql"><code>WITH CustomerCount AS (SELECT C.Country, COUNT(*) AS NumberOfCustomers
-                       FROM Customers C
-                       GROUP BY C.Country)
-SELECT Country AS CountryWithMostCustomer
-FROM CustomerCount
-WHERE NumberOfCustomers = (SELECT MAX(NumberOfCustomers) FROM CustomerCount);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="left">CountryWithMostCustomer</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">USA</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>16. Which employee sold the most in terms of “dollar amount”
-sold?</strong></p>
-<pre class="sql"><code>WITH EmployeeSales AS (SELECT E.EmployeeID,E.FirstName, E.LastName, SUM(OD.Quantity * P.Price) AS TotalSales
-                       FROM Employees E
-                                JOIN Orders O ON E.EmployeeID = O.EmployeeID
-                                JOIN OrderDetails OD ON O.OrderID = OD.OrderID
-                                JOIN Products P ON OD.ProductID = P.ProductID
-                       GROUP BY E.EmployeeID)
+# Creates flight table in database
+# @param: dbCon - database connection to connect to
+createFlight &lt;- function(dbCon){
+  query &lt;- sprintf(&quot;CREATE TABLE IF NOT EXISTS %s(
+    fid INT PRIMARY KEY AUTO_INCREMENT,
+    date DATE,
+    originAirport INT,
+    airlineName TEXT,
+    aircraftType TEXT,
+    isHeavy BOOLEAN,
+    FOREIGN KEY (originAirport) REFERENCES %s(aid)
+);&quot;,flightsTableName,airportsTableName)
+invisible(dbExecute(dbCon, query))
+}
 
-SELECT FirstName, LastName
-FROM EmployeeSales
-where TotalSales = (SELECT max(TotalSales) FROM EmployeeSales);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
+# Creates airport table in database
+# @param: dbCon - database connection to connect to
+createAirports &lt;- function(dbCon){
+  query &lt;- sprintf(&quot;CREATE TABLE IF NOT EXISTS %s (
+    aid INT PRIMARY KEY AUTO_INCREMENT,
+    airportName TEXT,
+    airportState TEXT,
+    airportCode VARCHAR(3) DEFAULT &#39;ZZZ&#39;
+    );&quot;,airportsTableName)
+  invisible(dbExecute(dbCon, query))
+}
+
+# Creates condition table in database
+# @param: dbCon - database connection to connect to
+createConditions &lt;-function(dbCon){
+  query &lt;- sprintf(&quot;CREATE TABLE IF NOT EXISTS %s (
+    cid INT PRIMARY KEY AUTO_INCREMENT,            
+    sky_condition TEXT,       
+    explanation TEXT                
+);&quot;,conditionsTableName)
+  invisible(dbExecute(dbCon, query))
+}
+
+# Create wildlife size table in database
+# @param: dbCon - database connection to connect to
+createWildLifeSize &lt;- function(dbCon){
+  query &lt;- sprintf(&quot;CREATE TABLE IF NOT EXISTS %s (
+    wlId INT PRIMARY KEY AUTO_INCREMENT,          
+    size TEXT);&quot;,wildlifeSizeTableName)
+  invisible(dbExecute(dbCon, query))
+}
+
+# Create wildlife.strikes table in database
+# @param: dbCon - database connection to connect to
+createWildLifeStrikes &lt;- function(dbCon){
+  query &lt;- sprintf(&quot;CREATE TABLE IF NOT EXISTS %s (
+    iid INT PRIMARY KEY AUTO_INCREMENT,
+    fid INT,
+    wlsize INT,
+    impact TEXT,
+    altitude INT CHECK (altitude &gt;= 0),
+    conditions INT,
+    FOREIGN KEY (fid) REFERENCES %s(fid),
+    FOREIGN KEY (wlsize) REFERENCES %s(wlId),
+    FOREIGN KEY (conditions) REFERENCES %s(cid)
+);&quot;,widlifeStrikesTableName,flightsTableName,wildlifeSizeTableName,conditionsTableName)
+  invisible(dbExecute(dbCon, query))
+}
+
+# Create all tables in the database.
+# @param: dbCon - database connection to connect to
+createAllTables &lt;- function(dbCon){
+  createAirports(dbCon)
+  createFlight(dbCon)
+  createConditions(dbCon)
+  createWildLifeSize(dbCon)
+  createWildLifeStrikes(dbCon)
+}
+# Creating all tables in database
+createAllTables(dbCon)</code></pre>
+<div id="top-states-with-strikes" class="section level2">
+<h2>Top States With Strikes</h2>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">FirstName</th>
-<th align="left">LastName</th>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
+State
+</th>
+<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
+Number of Incidents
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">Margaret</td>
-<td align="left">Peacock</td>
+<tr>
+<td style="text-align:left;">
+Florida
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+California
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Illinois
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Jersey
+</td>
+<td style="text-align:right;">
+10
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><strong>17. Which customers (name and ID) have never bought
-anything?</strong></p>
-<pre class="sql"><code>SELECT C.CustomerID, C.CustomerName AS CustomerWithoutPurchase
-FROM Customers C
-LEFT JOIN Orders O ON C.CustomerID = O.CustomerID
-WHERE O.OrderID IS NULL LIMIT 10;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>Displaying records 1 - 10</caption>
+<div id="analysis-by-airport" class="section level2">
+<h2>Analysis by Airport</h2>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="right">CustomerID</th>
-<th align="left">CustomerWithoutPurchase</th>
+<tr>
+<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
+Airport Name
+</th>
+<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
+Number of Incidents
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">Alfreds Futterkiste</td>
+<tr>
+<td style="text-align:left;">
+JACKSON EVERS INTL
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="left">Blauer See Delikatessen</td>
+<tr>
+<td style="text-align:left;">
+LEHIGH VALLEY INTL
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
-<tr class="odd">
-<td align="right">12</td>
-<td align="left">Cactus Comidas para llevar</td>
+<tr>
+<td style="text-align:left;">
+VANCOUVER INTL
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
-<tr class="even">
-<td align="right">22</td>
-<td align="left">FISSA Fabrica Inter. Salchichas S.A.</td>
+<tr>
+<td style="text-align:left;">
+PORT COLUMBUS INTL
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
-<tr class="odd">
-<td align="right">26</td>
-<td align="left">France restauration</td>
-</tr>
-<tr class="even">
-<td align="right">32</td>
-<td align="left">Great Lakes Food Market</td>
-</tr>
-<tr class="odd">
-<td align="right">40</td>
-<td align="left">La corne d’’abondance</td>
-</tr>
-<tr class="even">
-<td align="right">42</td>
-<td align="left">Laughing Bacchus Wine Cellars</td>
-</tr>
-<tr class="odd">
-<td align="right">43</td>
-<td align="left">Lazy K Kountry Store</td>
-</tr>
-<tr class="even">
-<td align="right">45</td>
-<td align="left">Let’’s Stop N Shop</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>18. What is the average cost of the products in each
-category? List the category name and the average cost.</strong></p>
-<pre class="sql"><code>SELECT C.CategoryName, AVG(P.Price) AS AverageCost
-FROM Products P
-         JOIN Categories C ON P.CategoryID = C.CategoryID
-GROUP BY C.CategoryName
-LIMIT 10;
-</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>8 records</caption>
-<thead>
-<tr class="header">
-<th align="left">CategoryName</th>
-<th align="right">AverageCost</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Beverages</td>
-<td align="right">37.97917</td>
-</tr>
-<tr class="even">
-<td align="left">Condiments</td>
-<td align="right">23.06250</td>
-</tr>
-<tr class="odd">
-<td align="left">Confections</td>
-<td align="right">25.16000</td>
-</tr>
-<tr class="even">
-<td align="left">Dairy Products</td>
-<td align="right">28.73000</td>
-</tr>
-<tr class="odd">
-<td align="left">Grains/Cereals</td>
-<td align="right">20.25000</td>
-</tr>
-<tr class="even">
-<td align="left">Meat/Poultry</td>
-<td align="right">54.00667</td>
-</tr>
-<tr class="odd">
-<td align="left">Produce</td>
-<td align="right">32.37000</td>
-</tr>
-<tr class="even">
-<td align="left">Seafood</td>
-<td align="right">20.68250</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>19. What is the most recent order? List the order ID and the
-name, city, and country of the customer who placed it.</strong></p>
-<pre class="sql"><code>SELECT O.OrderID, C.CustomerName, C.City, C.Country
-FROM Customers C
-JOIN Orders O ON C.CustomerID = O.CustomerID
-WHERE O.OrderDate = (
-    SELECT MAX(OrderDate)
-    FROM Orders
-);</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">OrderID</th>
-<th align="left">CustomerName</th>
-<th align="left">City</th>
-<th align="left">Country</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">10399</td>
-<td align="left">Vaffeljernet</td>
-<td align="left">Århus</td>
-<td align="left">Denmark</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>20. From how many different (unique) countries do the
-products come from?</strong></p>
-<pre class="sql"><code>SELECT COUNT(DISTINCT S.Country) AS UniqueCountries
-FROM Suppliers S;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>1 records</caption>
-<thead>
-<tr class="header">
-<th align="right">UniqueCountries</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">16</td>
+<tr>
+<td style="text-align:left;">
+INDIANAPOLIS REGIONAL ARPT
+</td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 </tbody>
 </table>
