@@ -11,6 +11,7 @@ subtitle: Practicum I CS5200
 ```{r installAndLoadRequiredPackages, echo=FALSE,warning=FALSE, eval= TRUE}
 # Install program required packages
 # Installs RMysql, DBI and testthat,kableExtra packages
+# referredFrom: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
 installRequiredPackages <- function() {
   packages <- c("RMySQL","DBI","testthat","kableExtra")
   # Install packages that are not installed
@@ -37,6 +38,10 @@ loadRequiredPackages()
 
 ```{r connectToDatabase, echo=FALSE,warning=FALSE, eval= TRUE}
 # Part 3: Connecting to the database
+
+# Function to connect to the database
+# @return: database connection
+# referredFrom: http://artificium.us/lessons/06.r/l-6-301-sqlite-from-r/l-6-301.html#Connect_to_Database
 connectToDatabase <- function(){
   # DB credentials
   dbName <- "defaultdb"
@@ -44,6 +49,7 @@ connectToDatabase <- function(){
   dbPassword <- "AVNS_LfgR_-4_x2xF-vv7_Bg"
   dbHost <- "practicum-1-cs-5200.b.aivencloud.com"
   dbPort <- 22694
+  
   
   return (dbConnect(
   RMySQL::MySQL(),
@@ -58,8 +64,10 @@ connectToDatabase <- function(){
 # Global variable to connect to the database
 dbCon <- connectToDatabase()
 
-# Adding double quotes to process dot(.) in table name. 
+
 # Global varaibles defining list of tables used throughout the code.
+
+# Adding double quotes to process dot(.) in table name. 
 widlifeStrikesTableName <- paste0('"', "wildlife.strikes", '"')
 flightsTableName <- 'flights'
 airportsTableName <- 'airports'
@@ -79,6 +87,8 @@ dropTableIfExist <- function(table) {
 dropAllExistingTable <- function(dbCon) {
   tables <- c(widlifeStrikesTableName, flightsTableName, airportsTableName, conditionsTableName, wildlifeSizeTableName)
   for (table in tables) {
+    # Using invisible to prevent knitting of the output
+    # referredFrom: https://www.geeksforgeeks.org/invisible-function-in-r/
     invisible(dbExecute(dbCon, dropTableIfExist(table)))
   }
 }
@@ -263,6 +273,8 @@ validateTableCreation(dbCon)
 
 ```{r loadCSVData, echo=FALSE,warning=FALSE, eval= TRUE}
 # Part 5: Loading CSV data into dataframe.
+
+# referredFrom: http://artificium.us/lessons/06.r/l-6-302-bulkload-data-into-db/l-6-302.html#Load_CSV_Data
 bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24 copy.csv", header = TRUE, stringsAsFactors = FALSE)
 ```
 
@@ -637,6 +649,82 @@ airportsBelowAverageStrikes <- function(dbCon){
 airportsBelowAverageStrikes(dbCon)
 ```
 
+
+## Analysis by Year
+```{r strikesByWildlifeSize, echo=FALSE,warning=FALSE,eval=TRUE}
+# Part 10: Analysis to to find the (total) number of "small", "medium", and "large" wildlife strikes per year.
+
+# Function to get the number of small, medium and large wildlife strikes per year
+# @param: dbCon - database connection to connect to
+strikesByWildlifeSize <- function(dbCon){
+  query <- query <- sprintf("
+    WITH yearlyStrikes AS (
+      SELECT 
+        YEAR(f.date) as strikeYear,
+        wl.size,
+        COUNT(*) as strikeCount
+      FROM %s ws
+      JOIN %s f ON ws.fid = f.fid
+      JOIN %s wl ON ws.wlsize = wl.wlId
+      WHERE wl.size != 'Unknown'
+      GROUP BY YEAR(f.date), wl.size
+      ORDER BY strikeYear
+    )
+    SELECT 
+      strikeYear,
+      MAX(CASE WHEN size = 'Small' THEN strikeCount ELSE 0 END) as small,
+      MAX(CASE WHEN size = 'Medium' THEN strikeCount ELSE 0 END) as medium,
+      MAX(CASE WHEN size = 'Large' THEN strikeCount ELSE 0 END) as large,
+      SUM(strikeCount) as total
+    FROM yearlyStrikes
+    GROUP BY strikeYear
+    ORDER BY strikeYear ASC
+  ", widlifeStrikesTableName, flightsTableName, wildlifeSizeTableName)
+  return (dbGetQuery(dbCon, query))
+}
+
+resultTable <- strikesByWildlifeSize(dbCon)
+kable(resultTable,
+  format = "html", 
+        col.names = c("Year", "Small", "Medium", "Large", "Total")) %>%
+  kable_styling(
+    # striped is used to get color contrast between rows.
+    bootstrap_options = c("striped"),
+    full_width = FALSE,
+                position = "center") %>%
+  # changing the header row.
+  row_spec(0, bold = TRUE, color = "white", background = "#557A95")
+```
+
+## Trend by Year
+```{r visualiseTrendByYear, echo=FALSE,warning=FALSE,eval=TRUE}
+#. Part 11: Visualizing trend per year using plot.
+
+# Function to visualize the trend of wildlife strikes per year
+# @param: dataFrame - data frame with the number of small, medium and large wildlife strikes per year
+visualiseTrendByYear <- function(dataFrame){
+   
+  plot(dataFrame$strikeYear, dataFrame$total,
+       type = "o",  
+       col = "darkblue",
+       pch = 19,    
+       lwd = 2,   
+       xlab = "Year",
+       ylab = "Total Number of Strikes",
+       main = "Wildlife Strike Incidents by Year",
+       ylim = c(0, max(dataFrame$total) * 1.2)) 
+  
+
+   grid(lty = 2, col = "gray80")
+  text(dataFrame$strikeYear, dataFrame$total + 10,
+       labels = dataFrame$total,
+       cex = 0.8,
+       col = "darkblue")
+}
+
+result <- strikesByWildlifeSize(dbCon)
+visualiseTrendByYear(result)
+```
 
 ```{r closeConnection, echo=FALSE, warning=FALSE, eval=TRUE}
 invisible(dbDisconnect(dbCon))
