@@ -17,10 +17,10 @@ rm(list = ls())
 
 ```{r installAndLoadRequiredPackages, echo=FALSE,warning=FALSE, eval= TRUE}
 # Install program required packages
-# Installs RMysql, DBI and testthat,kableExtra packages
+# Installs RMysql, DBI and testthat,kableExtra,jsonlite packages
 # referredFrom: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
 installRequiredPackages <- function() {
-  packages <- c("RMySQL", "DBI", "testthat", "kableExtra")
+  packages <- c("RMySQL", "DBI", "testthat", "kableExtra", "jsonlite")
   # Install packages that are not installed
   installed_packages <- packages %in% rownames(installed.packages())
   if (any(installed_packages == FALSE)) {
@@ -36,6 +36,7 @@ loadRequiredPackages <- function() {
     library(DBI)
     library(kableExtra)
     library(testthat)
+    library(jsonlite)
   })
 }
 installRequiredPackages()
@@ -82,6 +83,7 @@ flightsTableName <- 'flights'
 airportsTableName <- 'airports'
 conditionsTableName <- 'conditions'
 wildlifeSizeTableName <- 'wildlifeSize'
+updateLog <- 'update_log'
 ```
 
 ```{r dropAllExistingTables, echo=FALSE,warning=FALSE, eval= TRUE}
@@ -99,7 +101,8 @@ dropAllExistingTable <- function(dbCon) {
     flightsTableName,
     airportsTableName,
     conditionsTableName,
-    wildlifeSizeTableName
+    wildlifeSizeTableName,
+    updateLog
   )
   for (table in tables) {
     # Using invisible to prevent knitting of the output
@@ -120,11 +123,11 @@ createFlight <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s(
     fid INT PRIMARY KEY AUTO_INCREMENT,
-    date DATE,
-    originAirport INT,
-    airlineName TEXT,
-    aircraftType TEXT,
-    isHeavy BOOLEAN,
+    date DATE NOT NULL,
+    originAirport INT NOT NULL,
+    airlineName TEXT NOT NULL,
+    aircraftType TEXT NOT NULL,
+    isHeavy BOOLEAN NOT NULL,
     FOREIGN KEY (originAirport) REFERENCES %s(aid)
 );",
 flightsTableName,
@@ -139,9 +142,9 @@ createAirports <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     aid INT PRIMARY KEY AUTO_INCREMENT,
-    airportName TEXT,
-    airportState TEXT,
-    airportCode VARCHAR(3) DEFAULT 'ZZZ'
+    airportName TEXT NOT NULL,
+    airportState TEXT NOT NULL,
+    airportCode VARCHAR(3) NOT NULL DEFAULT 'ZZZ'
     );",
     airportsTableName
   )
@@ -154,8 +157,8 @@ createConditions <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     cid INT PRIMARY KEY AUTO_INCREMENT,
-    sky_condition TEXT,
-    explanation TEXT
+    sky_condition TEXT NOT NULL,
+    explanation TEXT NOT NULL
 );",
 conditionsTableName
   )
@@ -168,7 +171,7 @@ createWildLifeSize <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     wlId INT PRIMARY KEY AUTO_INCREMENT,
-    size TEXT);",
+    size TEXT NOT NULL);",
     wildlifeSizeTableName
   )
   invisible(dbExecute(dbCon, query))
@@ -180,11 +183,11 @@ createWildLifeStrikes <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     iid INT PRIMARY KEY AUTO_INCREMENT,
-    fid INT,
-    wlsize INT,
-    impact TEXT,
-    altitude INT CHECK (altitude >= 0),
-    conditions INT,
+    fid INT NOT NULL,
+    wlsize INT NOT NULL,
+    impact TEXT NOT NULL,
+    altitude INT NOT NULL CHECK (altitude >= 0),
+    conditions INT NOT NULL,
     FOREIGN KEY (fid) REFERENCES %s(fid),
     FOREIGN KEY (wlsize) REFERENCES %s(wlId),
     FOREIGN KEY (conditions) REFERENCES %s(cid)
@@ -328,7 +331,7 @@ validateTableCreation(dbCon)
 # Part 5: Loading CSV data into dataframe.
 
 # referredFrom: http://artificium.us/lessons/06.r/l-6-302-bulkload-data-into-db/l-6-302.html#Load_CSV_Data
-bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv",
+bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24 copy.csv",
                     header = TRUE,
                     stringsAsFactors = FALSE)
 ```
@@ -340,7 +343,10 @@ bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv",
 # @param: column - column to replace empty values
 # @param: sentinelValues - sentinel values to replace empty values
 replaceEmptyValues <- function(column, sentinelValues) {
-  ifelse(is.na(column) | column == "", sentinelValues, column)
+  ifelse(is.na(column) |
+           column == "" | column == "N/A",
+         sentinelValues,
+         column)
 }
 
 # Function to clean up the data frame with sentinel values before inserting
@@ -369,7 +375,9 @@ cleanUpData <- function(dataFrame) {
   # Defining map of sentinel values
   sentinelValues <- list(
     aircraft = "Unknown Aircraft",
-    flight_date = "1/1/1970 0:00",
+    # Setting it to minimum value of date in mysql.
+    # referredFrom: https://dev.mysql.com/doc/refman/8.4/en/datetime.html
+    flight_date = "01/01/1000 0:00",
     airline = "Unknown Airline",
     dep_airport = "Unknown Airport",
     origin_state = "Unknown State",
@@ -533,7 +541,7 @@ getFlightId <- function(flightMapping,
   searchDate <- as.character(as.Date(date))
   flightMapping$date <- as.character(flightMapping$date)
   
-  # Converting to boolean to compare. 
+  # Converting to boolean to compare.
   searchHeavy <- as.logical(isHeavy)
   
   
@@ -655,20 +663,20 @@ insertValuesIntoDatabase(dbCon, bds.raw)
 # @param: dbCon - database connection to connect to
 # @param: table - table to get data from
 # @param: limit - limit of rows to get
-displayTable <- function(dbCon, table,limit){
-  query <- sprintf("SELECT * FROM %s LIMIT %s", table,limit)
+displayTable <- function(dbCon, table, limit) {
+  query <- sprintf("SELECT * FROM %s LIMIT %s", table, limit)
   return (dbGetQuery(dbCon, query))
 }
 
-validateDataInsertion <- function(dbCon){
+validateDataInsertion <- function(dbCon) {
   tryCatch({
     print("Starting validations of data insertions")
     limit <- 5
-    airportTable <- displayTable(dbCon, airportsTableName,limit)
-    conditionTable <- displayTable(dbCon, conditionsTableName,limit)
-    wildlifeSizeTable <- displayTable(dbCon, wildlifeSizeTableName,limit)
-    flightTable <- displayTable(dbCon, flightsTableName,limit)
-    wildlifeStrikesTable <- displayTable(dbCon, widlifeStrikesTableName,limit)
+    airportTable <- displayTable(dbCon, airportsTableName, limit)
+    conditionTable <- displayTable(dbCon, conditionsTableName, limit)
+    wildlifeSizeTable <- displayTable(dbCon, wildlifeSizeTableName, limit)
+    flightTable <- displayTable(dbCon, flightsTableName, limit)
+    wildlifeStrikesTable <- displayTable(dbCon, widlifeStrikesTableName, limit)
     
     print(head(airportTable))
     print(head(conditionTable))
@@ -812,7 +820,6 @@ strikesByWildlifeSize <- function(dbCon) {
       FROM %s ws
       JOIN %s f ON ws.fid = f.fid
       JOIN %s wl ON ws.wlsize = wl.wlId
-      WHERE wl.size != 'Unknown'
       GROUP BY YEAR(f.date), wl.size
       ORDER BY strikeYear
     )
@@ -821,6 +828,7 @@ strikesByWildlifeSize <- function(dbCon) {
       MAX(CASE WHEN size = 'Small' THEN strikeCount ELSE 0 END) as small,
       MAX(CASE WHEN size = 'Medium' THEN strikeCount ELSE 0 END) as medium,
       MAX(CASE WHEN size = 'Large' THEN strikeCount ELSE 0 END) as large,
+      MAX(CASE WHEN size = 'Unknown' THEN strikeCount ELSE 0 END) as unknown,
       SUM(strikeCount) as total
     FROM yearlyStrikes
     GROUP BY strikeYear
@@ -837,7 +845,7 @@ resultTable <- strikesByWildlifeSize(dbCon)
 kable(
   resultTable,
   format = "html",
-  col.names = c("Year", "Small", "Medium", "Large", "Total")
+  col.names = c("Year", "Small", "Medium", "Large", "Unknown", "Total")
 ) %>%
   kable_styling(
     # striped is used to get color contrast between rows.
@@ -905,7 +913,7 @@ visualiseTrendByYear <- function(dataFrame) {
     pch = 19,
     bg = "white",
     # used to set box width
-    box.lwd = 1 
+    box.lwd = 1
   )
 }
 
@@ -913,6 +921,220 @@ result <- strikesByWildlifeSize(dbCon)
 visualiseTrendByYear(result)
 ```
 
+```{r createUpdateLogTable , echo=FALSE,warning=FALSE, eval= TRUE}
+# Part 12: Creating update log table
+
+# Function to create update log table
+# @param: dbCon - database connection to connect to
+createUpdateLogTable <- function(dbCon) {
+  query <- sprintf(
+    "CREATE TABLE IF NOT EXISTS %s (
+    logId INT PRIMARY KEY AUTO_INCREMENT,
+    modificationType VARCHAR(20) NOT NULL,
+    tableName VARCHAR(50) NOT NULL,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    changes JSON NOT NULL
+);",
+updateLog
+  )
+  invisible(dbExecute(dbCon, query))
+}
+createUpdateLogTable(dbCon)
+```
+
+```{r createProcedureForUpdatingWildLifeStrike, echo=FALSE,warning=FALSE, eval= TRUE}
+# Part 12: Creating procedure to update wildlife strikes
+
+dropProcedureForUpdatingWildLifeStrike <- function(dbCon) {
+  query <- sprintf("DROP PROCEDURE IF EXISTS UpdateWildlifeStrike")
+  invisible(dbExecute(dbCon, query))
+}
+
+# Function to create procedure for updating wildlife strikes
+# @param: dbCon - database connection to connect to
+createProcedureForUpdatingWildLifeStrike <- function(dbCon) {
+  dropProcedureForUpdatingWildLifeStrike(dbCon)
+  query <- sprintf(
+    "
+  CREATE PROCEDURE UpdateWildlifeStrike(
+    IN strikeId INT,
+    IN newFlightId INT,
+    IN newSize INT,
+    IN newImpact TEXT,
+    IN newAltitude INT,
+    IN newCondition INT
+)
+BEGIN
+
+    DECLARE oldFlightId INT;
+    DECLARE oldSize INT;
+    DECLARE oldImpact TEXT;
+    DECLARE oldAltitude INT;
+    DECLARE oldCondition INT;
+    DECLARE changesArray JSON DEFAULT JSON_ARRAY();
+    DECLARE changeForIid JSON;
+    DECLARE columnKey VARCHAR(6) DEFAULT 'column';
+    DECLARE oldValueKey VARCHAR(8) DEFAULT 'oldValue';
+    DECLARE newValueKey VARCHAR(8) DEFAULT 'newValue';
+
+    SELECT fid,wlsize, impact, altitude, conditions
+    INTO oldFlightId,oldSize, oldImpact, oldAltitude, oldCondition
+    FROM %s
+    WHERE iid = strikeId;
+
+
+
+    IF newFlightId IS NOT NULL AND oldFlightId != newFlightId  THEN
+       SET changesArray = JSON_ARRAY_APPEND(changesArray, '$',
+            JSON_OBJECT(
+                columnKey, 'fid',
+                oldValueKey, oldFlightId,
+                newValueKey, newFlightId
+            )
+        );
+    END IF;
+
+    IF newSize IS NOT NULL AND oldSize != newSize THEN
+        SET changesArray = JSON_ARRAY_APPEND(changesArray, '$',
+            JSON_OBJECT(
+                columnKey, 'wlsize',
+                oldValueKey, oldSize,
+                newValueKey, newSize
+            )
+        );
+    END IF;
+
+    IF newImpact IS NOT NULL AND oldImpact != newImpact THEN
+       SET changesArray = JSON_ARRAY_APPEND(changesArray, '$',
+            JSON_OBJECT(
+                columnKey, 'impact',
+                oldValueKey, oldImpact,
+                newValueKey, newImpact
+            )
+        );
+    END IF;
+
+     IF newAltitude IS NOT NULL AND newAltitude > 0 AND oldAltitude != newAltitude  THEN
+       SET changesArray = JSON_ARRAY_APPEND(changesArray, '$',
+            JSON_OBJECT(
+                columnKey, 'altitude',
+                oldValueKey, oldAltitude,
+                newValueKey, newAltitude
+            )
+        );
+    END IF;
+
+    IF newCondition IS NOT NULL AND oldCondition != newCondition  THEN
+       SET changesArray = JSON_ARRAY_APPEND(changesArray, '$',
+            JSON_OBJECT(
+                columnKey, 'conditions',
+                oldValueKey, oldCondition,
+                newValueKey, newCondition
+            )
+        );
+    END IF;
+
+
+    IF JSON_LENGTH(changesArray) > 0 THEN
+        SET changeForIid = JSON_OBJECT(CAST(strikeId AS CHAR), changesArray);
+        INSERT INTO update_log (
+            modificationType,
+            tableName,
+            changes
+        )
+        VALUES (
+            'UPDATE',
+            'wildlife.strikes',
+            changeForIid
+        );
+
+        UPDATE %s
+        SET
+            fid = IFNULL(newFlightId,fid),
+            wlsize = IFNULL(newSize, wlsize),
+            impact = IFNULL(newImpact, impact),
+            altitude = IFNULL(newAltitude, altitude),
+            conditions = IFNULL(newCondition, conditions)
+        WHERE iid = strikeId;
+    END IF;
+
+END
+  ", widlifeStrikesTableName, widlifeStrikesTableName)
+
+invisible(dbExecute(dbCon, query))
+}
+createProcedureForUpdatingWildLifeStrike(dbCon)
+```
+
+```{r updateWildLifeStrike, echo=FALSE,warning=FALSE, eval= FALSE}
+# Part 12: Validating update wildlife strikes procedure
+
+# Function to validate the update wildlife strikes procedure
+# Validates by calling update procedure and checking if the values are updated
+# Also validates if the log entry is created
+# @param: dbCon - database connection to connect to
+validateUpdateWildLifeStrikeProcedure <- function(dbCon) {
+  query <- sprintf(
+    "SELECT iid, fid,wlsize, impact, altitude, conditions
+           FROM %s
+           ORDER BY iid
+           LIMIT 1",
+    widlifeStrikesTableName
+  )
+  orginalStrike <- dbGetQuery(dbCon, query)
+  
+  newAltitude = orginalStrike$altitude + 10
+  
+  updateQuery <-  sprintf(
+    "
+    CALL UpdateWildlifeStrike(
+      %s,
+      NULL,
+      NULL,
+      NULL,
+      %s,
+      NULL
+    )",
+    orginalStrike$iid,
+    newAltitude
+  )
+  
+  invisible(dbExecute(dbCon, updateQuery))
+  
+  
+  updatedStrike <- dbGetQuery(
+    dbCon,
+    sprintf(
+      "SELECT iid, fid,wlsize, impact, altitude, conditions
+            FROM %s
+            WHERE iid = %d",
+      widlifeStrikesTableName,
+      orginalStrike$iid
+    )
+  )
+  
+  expect_equal(updatedStrike$fid, orginalStrike$fid)
+  expect_equal(updatedStrike$wlsize, orginalStrike$wlsize)
+  expect_equal(updatedStrike$impact, orginalStrike$impact)
+  expect_equal(updatedStrike$altitude, newAltitude)
+  
+  
+  updateLogEntry <- dbGetQuery(dbCon,
+                               sprintf("SELECT * FROM %s ORDER BY updatedAt DESC LIMIT 1", updateLog))
+  
+  expect_equal(updateLogEntry$tableName, "wildlife.strikes")
+  expect_equal(updateLogEntry$modificationType, "UPDATE")
+  
+  # referredFrom: https://stackoverflow.com/questions/51143588/convert-string-into-json-string-and-parsing-in-r
+  changes <- fromJSON(updateLogEntry$changes)
+  entry <- changes[[as.character(orginalStrike$iid)]]
+  expect_equal(entry$column, "altitude")
+  expect_equal(entry$oldValue, orginalStrike$altitude)
+  expect_equal(entry$newValue, newAltitude)
+}
+
+validateUpdateWildLifeStrikeProcedure(dbCon)
+```
 ```{r closeConnection, echo=FALSE, warning=FALSE, eval=TRUE}
 invisible(dbDisconnect(dbCon))
 ```

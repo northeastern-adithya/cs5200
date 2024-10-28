@@ -97,7 +97,7 @@ percentageOfGroupsConsumingWine <- round((groupsConsumingWine*100)/totalVisit,2)
 
 # Adding guest+1 assuming that guest column denotes the guest bought along
 # and name column is the actual customer
-averagePartySizeQuery <- "SELECT ROUND(AVG(guests + 1),2) as averagePartySize FROM dfCombined;"
+averagePartySizeQuery <- "SELECT ROUND(AVG(guests),2) as averagePartySize FROM dfCombined;"
 averagePartySize <- sqldf(averagePartySizeQuery)$averagePartySize
 ```
 We recorded a total number of `r totalVisit` visits across `r distinctRestaurants` different restaurants.The median amount spent for a visit across all restaurants is `r amountMedian` (σ = `r amountStdDev`).The least number of visits visits were to `r restaurantWithLeastVisit`.The average amount spent in a visit was `r meanAmount` and `r percentageOfGroupsConsumingWine`% of all parties consumed wine.The average size of a party was `r averagePartySize`.
