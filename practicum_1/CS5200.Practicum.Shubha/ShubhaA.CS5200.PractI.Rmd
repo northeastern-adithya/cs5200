@@ -118,7 +118,7 @@ dropAllExistingTable <- function(dbCon) {
 dropAllExistingTable(dbCon)
 ```
 
-## Create required tables
+## Create Tables In Database
 ``` {r createTables , echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 4: Creating tables in the database
 
@@ -150,7 +150,7 @@ createAirports <- function(dbCon) {
     aid INT PRIMARY KEY AUTO_INCREMENT,
     airportName TEXT NOT NULL,
     airportState TEXT NOT NULL,
-    airportCode VARCHAR(3) NOT NULL DEFAULT 'ZZZ'
+    airportCode VARCHAR(5) NOT NULL DEFAULT 'ZZZ'
     );",
     airportsTableName
   )
@@ -160,6 +160,7 @@ createAirports <- function(dbCon) {
 # Creates condition table in database
 # @param: dbCon - database connection to connect to
 createConditions <- function(dbCon) {
+  # Text cannot have default values
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     cid INT PRIMARY KEY AUTO_INCREMENT,
@@ -241,7 +242,8 @@ validateAirportsTable <- function(dbCon) {
   expect_equal(airportsTable$Field,
                c("aid", "airportName", "airportState", "airportCode"))
   # Validating column types
-  expect_equal(airportsTable$Type, c("int", "text", "text", "varchar(3)"))
+  # Airport code is varchar 5 because maximum possible airport code is 5 letter code.
+  expect_equal(airportsTable$Type, c("int", "text", "text", "varchar(5)"))
   # Validating column keys
   expect_equal(airportsTable$Key, c("PRI", "", "", ""))
   # Validating column default values
@@ -339,19 +341,164 @@ validateWildlifeStrikesTable <- function(dbCon) {
 # @param: dbCon - database connection to connect to
 validateTableCreation <- function(dbCon) {
   tryCatch({
-    print("Starting validations of create table statements for all tables")
+    print("Starting validations of create table statements using describe table")
     validateAirportsTable(dbCon)
     validateFlightTable(dbCon)
     validateConditionTable(dbCon)
     validateWildLifeSizeTable(dbCon)
     validateWildlifeStrikesTable(dbCon)
-    print("Validations of create table statements for all tables successfull")
+    print("Validations of create table statements using describe table successfull")
   }, error = function(e) {
     print("Error in validating table creations")
     print(e)
   })
 }
+
+
+# Function to validate the insert query
+# @param: dbCon - database connection to connect to
+# @param: insertQuery - insert query to validate
+# @return: TRUE if the insertion is successful, FALSE otherwise
+validateInsertion <- function(dbCon, insertQuery) {
+  tryCatch({
+    dbExecute(dbCon, insertQuery)
+    return(TRUE)
+  }, error = function(e) {
+    return(FALSE)
+  })
+}
+
+
+# Validates airport table creation through insertion of sample data
+# @param: dbCon - database connection to connect to
+validateInsertOnAirport <- function(dbCon) {
+  # Valid airport insertion
+  validAirportInsert <- sprintf(
+    "INSERT INTO %s (aid, airportName, airportState) VALUES (1,  'Valid Airport', 'Valid State')",
+    airportsTableName
+  )
+  
+  expect_true(validateInsertion(dbCon, validAirportInsert))
+  
+  # Invalid airport insertion with a duplicate primary key
+  invalidAirportInsert <- sprintf(
+    "INSERT INTO %s (aid, airportName, airportState) VALUES (1, 'Invalid Airport', 'Invalid State')",
+    airportsTableName
+  )
+  expect_false(validateInsertion(dbCon, invalidAirportInsert))
+}
+
+# Validates flights table creation through insertion of sample data
+# @param: dbCon - database connection to connect to
+validateInsertOnFlights <- function(dbCon) {
+  # Valid flight insertion with correct foreign key to 'airport'
+  validFlightInsert <- sprintf(
+    "INSERT INTO %s (date, originAirport, airlineName, aircraftType, isHeavy) VALUES ('2024-01-01', '1', 'airline', 'aircraft', 1)",
+    flightsTableName
+  )
+  expect_true(validateInsertion(dbCon, validFlightInsert))
+  
+  # Invalid flight insertion with incorrect foreign key to 'airport'
+  invalidFlightInsert <- sprintf(
+    "INSERT INTO %s (date, originAirport, airlineName, aircraftType, isHeavy) VALUES ('2024-01-01', '2', 'airline', 'aircraft', 1)",
+    flightsTableName
+  )
+  expect_false(validateInsertion(dbCon, invalidFlightInsert))
+}
+
+# Validates wildlifesize table creation through insertion of sample data
+# @param: dbCon - database connection to connect to
+validateInsertOnWildlifeSize <- function(dbCon) {
+  # Valid wildlife Size insertion
+  validWildlifeSizeInsertion <- sprintf("INSERT INTO %s (wlId, size) VALUES (1, 'Small')",
+                                        wildlifeSizeTableName)
+  expect_true(validateInsertion(dbCon, validWildlifeSizeInsertion))
+  
+  # Invalid wildlife Size insertion with duplicate primary key
+  inValidWildlifeSizeInsertion <- sprintf("INSERT INTO %s (wlId, size) VALUES (1, 'Large')",
+                                          wildlifeSizeTableName)
+  expect_false(validateInsertion(dbCon, inValidWildlifeSizeInsertion))
+}
+
+
+# Validates condition table creation through insertion of sample data
+# @param: dbCon - database connection to connect to
+validateInsertOnCondition <- function(dbCon) {
+  # Valid condition insertion
+  validConditionInsertion <- sprintf(
+    "INSERT INTO %s (cid, sky_condition, explanation) VALUES (1, 'Clear', 'Clear sky')",
+    conditionsTableName
+  )
+  expect_true(validateInsertion(dbCon, validConditionInsertion))
+  
+  # Invalid condition insertion with duplicate primary key
+  invalidConditionInsertion <- sprintf(
+    "INSERT INTO %s (cid, sky_condition, explanation) VALUES (1, 'Cloudy', 'Cloudy sky')",
+    conditionsTableName
+  )
+  expect_false(validateInsertion(dbCon, invalidConditionInsertion))
+  
+}
+
+# Validates wildlife strikes table creation through insertion of sample data
+# @param: dbCon - database connection to connect to
+validateInsertOnStrikes <- function(dbCon) {
+  # Valid wildlife.strikes insertion
+  validWildlifeStrikesInsertion <- sprintf(
+    "INSERT INTO %s (iid, fid, wlsize, impact, altitude, conditions) VALUES (1, 1, 1, 'Impact', 1000, 1)",
+    widlifeStrikesTableName
+  )
+  expect_true(validateInsertion(dbCon, validWildlifeStrikesInsertion))
+  
+  # Invalid wildlife.strikes insertion with incorrect foreign key to 'flights'
+  invalidWildlifeStrikesInsertion <- sprintf(
+    "INSERT INTO %s (iid, fid, wlsize, impact, altitude, conditions) VALUES (2, 2, 1, 'Impact', 1000, 1)",
+    widlifeStrikesTableName
+  )
+  expect_false(validateInsertion(dbCon, invalidWildlifeStrikesInsertion))
+  
+  # Invalid wildlife.strikes insertion with incorrect foreign key to 'wlsize'
+  invalidWildlifeStrikesInsertion <- sprintf(
+    "INSERT INTO %s (iid, fid, wlsize, impact, altitude, conditions) VALUES (2, 1, 2, 'Impact', 1000, 1)",
+    widlifeStrikesTableName
+  )
+  expect_false(validateInsertion(dbCon, invalidWildlifeStrikesInsertion))
+  
+  # Invalid wildlife.strikes insertion with incorrect foreign key to 'conditions'
+  invalidWildlifeStrikesInsertion <- sprintf(
+    "INSERT INTO %s (iid, fid, wlsize, impact, altitude, conditions) VALUES (2, 1, 1, 'Impact', 1000, 2)",
+    widlifeStrikesTableName
+  )
+  expect_false(validateInsertion(dbCon, invalidWildlifeStrikesInsertion))
+}
+
+cleanUpTestData <- function(dbCon) {
+  tables <- c(
+    widlifeStrikesTableName,
+    flightsTableName,
+    airportsTableName,
+    conditionsTableName,
+    wildlifeSizeTableName
+  )
+  for (table in tables) {
+    invisible(dbExecute(dbCon, sprintf("DELETE FROM %s", table)))
+  }
+}
+
+
+# Validates table creation through sample data insertion.
+validateTableCreationThroughDataInsertion <- function(dbCon) {
+  print("Starting validations of create table statements using actual data insertions")
+  validateInsertOnAirport(dbCon)
+  validateInsertOnFlights(dbCon)
+  validateInsertOnWildlifeSize(dbCon)
+  validateInsertOnCondition(dbCon)
+  validateInsertOnStrikes(dbCon)
+  cleanUpTestData(dbCon)
+  print("Completed validations of create table statements using actual data insertions")
+}
 validateTableCreation(dbCon)
+validateTableCreationThroughDataInsertion(dbCon)
 ```
 
 ```{r loadCSVData, echo=FALSE,warning=FALSE, eval= TRUE}
@@ -363,7 +510,7 @@ bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv",
                     stringsAsFactors = FALSE)
 ```
 
-## Inserting data into tables
+## Insert Data To Tables
 ### Clean Up CSV Data
 ```{r cleanUpData, echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 6: Inserting data into the tables
@@ -441,8 +588,8 @@ cleanUpData <- function(dataFrame) {
 }
 ```
 
-### Insert Data in Batches
-```{r insertDataInBathches, echo=TRUE,warning=FALSE, eval= TRUE}
+### Insert Data In Batches
+```{r insertDataInBatches, echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 6: Inserting data into the tables
 
 # Insert into database in batches
@@ -749,6 +896,42 @@ displayTable <- function(dbCon, table, limit) {
   return (dbGetQuery(dbCon, query))
 }
 
+#Joins all the tables to display the first 5 rows
+displayJoinOfAllTables <- function(dbCon) {
+  query <- sprintf(
+    "SELECT ws.iid,
+       ws.fid,
+       ws.wlsize,
+       ws.conditions,
+       ws.altitude,
+       ws.impact,
+       f.date,
+       f.originAirport,
+       f.aircraftType,
+       f.airlineName,
+       f.isHeavy,
+       a.airportName,
+       a.airportState,
+       a.airportCode,
+       wls.size,
+       c.sky_condition,
+       c.explanation
+
+FROM %s ws
+         INNER JOIN %s f ON ws.fid = f.fid
+         INNER JOIN %s a ON f.originAirport = a.aid
+         INNER JOIN %s wls ON ws.wlsize = wls.wlId
+         INNER JOIN %s c ON ws.conditions = c.cid
+LIMIT 5",
+widlifeStrikesTableName,
+flightsTableName,
+airportsTableName,
+wildlifeSizeTableName,
+conditionsTableName
+  )
+  return (dbGetQuery(dbCon, query))
+}
+
 # Prints the first 5 rows of each table to validate the data insertion
 # @param: dbCon - database connection to connect to
 validateDataInsertion <- function(dbCon) {
@@ -760,12 +943,14 @@ validateDataInsertion <- function(dbCon) {
     wildlifeSizeTable <- displayTable(dbCon, wildlifeSizeTableName, limit)
     flightTable <- displayTable(dbCon, flightsTableName, limit)
     wildlifeStrikesTable <- displayTable(dbCon, widlifeStrikesTableName, limit)
+    completeJoinTable <- displayJoinOfAllTables(dbCon)
     
     print(head(airportTable))
     print(head(conditionTable))
     print(head(wildlifeSizeTable))
     print(head(flightTable))
     print(head(wildlifeStrikesTable))
+    print(head(completeJoinTable))
     print("Validations of data insertions successfull")
   }, error = function(e) {
     print("Error in validating data insertions")
@@ -896,8 +1081,6 @@ airportsBelowAverageStrikes(dbCon)
 # Function to get the number of small, medium and large wildlife strikes per year
 # @param: dbCon - database connection to connect to
 strikesByWildlifeSize <- function(dbCon) {
-  # Here it is assumed that 1000 means it an unknown year since
-  # flight year data cannot be 1000.
   
   query <- query <- sprintf(
     # Gets the strike count grouped by year and size.
@@ -962,6 +1145,7 @@ kable(
 # @param: dataFrame - data frame with the number of small, medium and large wildlife strikes per year
 visualiseTrendByYear <- function(dataFrame) {
   # referredFrom: https://www.geeksforgeeks.org/r-line-graphs/
+  # Ignores null/N/A values of data for year.
   plot(
     dataFrame$strikeYear,
     dataFrame$total,
