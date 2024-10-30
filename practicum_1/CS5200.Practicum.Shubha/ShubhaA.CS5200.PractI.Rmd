@@ -1,7 +1,7 @@
 ---
 title: "Analysis of Wildlife Strikes in Commercial Aviation"
 author: "Shubha, Adithya"
-email: adithyaaravi10@gmail.com
+email: "shubha.a@northeastern.edu"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -12,6 +12,7 @@ subtitle: Practicum I CS5200
 
 ```{r cleanEnvironment, echo=FALSE,warning=FALSE, eval= TRUE}
 # Cleans the environment before beginning the execution
+# referredFrom:https://northeastern.instructure.com/courses/192346/assignments/2351524
 rm(list = ls())
 ```
 
@@ -43,8 +44,8 @@ installRequiredPackages()
 loadRequiredPackages()
 ```
 
-
-```{r connectToDatabase, echo=FALSE,warning=FALSE, eval= TRUE}
+## Connecting to a MySql Database
+```{r connectToDatabase, echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 3: Connecting to the database
 
 # Function to connect to the database
@@ -70,13 +71,16 @@ connectToDatabase <- function() {
     )
   )
 }
+```
+
+```{r globalVariables, echo=FALSE,warning=FALSE, eval=TRUE}
+# Define all the global variables used in the code
 
 # Global variable to connect to the database
 dbCon <- connectToDatabase()
 
 
-# Global varaibles defining list of tables used throughout the code.
-
+# Global variables defining list of tables used throughout the code.
 # Adding double quotes to process dot(.) in table name.
 widlifeStrikesTableName <- paste0('"', "wildlife.strikes", '"')
 flightsTableName <- 'flights'
@@ -114,6 +118,7 @@ dropAllExistingTable <- function(dbCon) {
 dropAllExistingTable(dbCon)
 ```
 
+## Create required tables
 ``` {r createTables , echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 4: Creating tables in the database
 
@@ -123,11 +128,11 @@ createFlight <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s(
     fid INT PRIMARY KEY AUTO_INCREMENT,
-    date DATE NOT NULL,
+    date DATE,
     originAirport INT NOT NULL,
     airlineName TEXT NOT NULL,
     aircraftType TEXT NOT NULL,
-    isHeavy BOOLEAN NOT NULL,
+    isHeavy BOOLEAN,
     FOREIGN KEY (originAirport) REFERENCES %s(aid)
 );",
 flightsTableName,
@@ -139,6 +144,7 @@ airportsTableName
 # Creates airport table in database
 # @param: dbCon - database connection to connect to
 createAirports <- function(dbCon) {
+  # Adding not null constriant to ensure data inserted is clean.
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     aid INT PRIMARY KEY AUTO_INCREMENT,
@@ -158,7 +164,7 @@ createConditions <- function(dbCon) {
     "CREATE TABLE IF NOT EXISTS %s (
     cid INT PRIMARY KEY AUTO_INCREMENT,
     sky_condition TEXT NOT NULL,
-    explanation TEXT NOT NULL
+    explanation TEXT
 );",
 conditionsTableName
   )
@@ -168,6 +174,7 @@ conditionsTableName
 # Create wildlife size table in database
 # @param: dbCon - database connection to connect to
 createWildLifeSize <- function(dbCon) {
+  # Adding not null constriant to ensure data inserted is clean.
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     wlId INT PRIMARY KEY AUTO_INCREMENT,
@@ -228,13 +235,21 @@ describeTable <- function(dbCon, table) {
 # @param: dbCon - database connection to connect to
 validateAirportsTable <- function(dbCon) {
   airportsTable <- describeTable(dbCon, airportsTableName)
+  # Validating column count.
   expect_equal(nrow(airportsTable), 4)
+  # Validating column names
   expect_equal(airportsTable$Field,
                c("aid", "airportName", "airportState", "airportCode"))
+  # Validating column types
   expect_equal(airportsTable$Type, c("int", "text", "text", "varchar(3)"))
+  # Validating column keys
   expect_equal(airportsTable$Key, c("PRI", "", "", ""))
+  # Validating column default values
   expect_equal(airportsTable$Default, c(NA, NA, NA, "ZZZ"))
+  # Validating column extra values
   expect_equal(airportsTable$Extra, c("auto_increment", "", "", ""))
+  # Validating column null values
+  expect_equal(airportsTable$Null, c("NO", "NO", "NO", "NO"))
 }
 
 # Function to validate the flight table.
@@ -242,7 +257,9 @@ validateAirportsTable <- function(dbCon) {
 # @param: dbCon - database connection to connect to
 validateFlightTable <- function(dbCon) {
   flightTable <- describeTable(dbCon, flightsTableName)
+  # Validating column count.
   expect_equal(nrow(flightTable), 6)
+  # Validating column names
   expect_equal(
     flightTable$Field,
     c(
@@ -254,11 +271,17 @@ validateFlightTable <- function(dbCon) {
       "isHeavy"
     )
   )
+  # Validating column types
   expect_equal(flightTable$Type,
                c("int", "date", "int", "text", "text", "tinyint(1)"))
+  # Validating column keys
   expect_equal(flightTable$Key, c("PRI", "", "MUL", "", "", ""))
+  # Validating column default values
   expect_equal(all(is.na(flightTable$Default)), TRUE)
+  # Validating column extra values
   expect_equal(flightTable$Extra, c("auto_increment", "", "", "", "", ""))
+  # Validating column null values
+  expect_equal(flightTable$Null, c("NO", "YES", "NO", "NO", "NO", "YES"))
 }
 
 # Function to validate the condition table.
@@ -273,6 +296,7 @@ validateConditionTable <- function(dbCon) {
   expect_equal(conditionTable$Key, c("PRI", "", ""))
   expect_equal(all(is.na(conditionTable$Default)), TRUE)
   expect_equal(conditionTable$Extra, c("auto_increment", "", ""))
+  expect_equal(conditionTable$Null, c("NO", "NO", "YES"))
 }
 
 # Function to validate the wildlife size table.
@@ -286,6 +310,7 @@ validateWildLifeSizeTable <- function(dbCon) {
   expect_equal(wildlifeSizeTable$Key, c("PRI", ""))
   expect_equal(all(is.na(wildlifeSizeTable$Default)), TRUE)
   expect_equal(wildlifeSizeTable$Extra, c("auto_increment", ""))
+  expect_equal(wildlifeSizeTable$Null, c("NO", "NO"))
 }
 
 # Function to validate the wildlife.strikes table.
@@ -305,6 +330,8 @@ validateWildlifeStrikesTable <- function(dbCon) {
   expect_equal(all(is.na(wildLifeStrikesTable$Default)), TRUE)
   expect_equal(wildLifeStrikesTable$Extra,
                c("auto_increment", "", "", "", "", ""))
+  expect_equal(wildLifeStrikesTable$Null,
+               c("NO", "NO", "NO", "NO", "NO", "NO"))
 }
 
 
@@ -331,22 +358,27 @@ validateTableCreation(dbCon)
 # Part 5: Loading CSV data into dataframe.
 
 # referredFrom: http://artificium.us/lessons/06.r/l-6-302-bulkload-data-into-db/l-6-302.html#Load_CSV_Data
-bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24 copy.csv",
+bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv",
                     header = TRUE,
                     stringsAsFactors = FALSE)
 ```
 
-```{r insertDataIntoTables, echo=FALSE,warning=FALSE, eval= TRUE}
+## Inserting data into tables
+### Clean Up CSV Data
+```{r cleanUpData, echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 6: Inserting data into the tables
 
 # Function to replace empty values with sentinel values
-# @param: column - column to replace empty values
-# @param: sentinelValues - sentinel values to replace empty values
-replaceEmptyValues <- function(column, sentinelValues) {
-  ifelse(is.na(column) |
-           column == "" | column == "N/A",
-         sentinelValues,
-         column)
+# @param: columnValue - current column value
+# @param: sentinelValue - sentinel value to replace.
+replaceEmptyValues <- function(columnValue, sentinelValue) {
+  # if column value is NA or empty or N/A, replace with sentinel value
+  ifelse(
+    is.na(columnValue) |
+      columnValue == "" | columnValue == "N/A",
+    sentinelValue,
+    columnValue
+  )
 }
 
 # Function to clean up the data frame with sentinel values before inserting
@@ -372,36 +404,46 @@ cleanUpData <- function(dataFrame) {
   # Removing rows with NA in iid
   dataFrame <- dataFrame[!is.na(dataFrame$iid), ]
   
-  # Defining map of sentinel values
+  # Defining sentinel values for each column.
   sentinelValues <- list(
     aircraft = "Unknown Aircraft",
-    # Setting it to minimum value of date in mysql.
-    # referredFrom: https://dev.mysql.com/doc/refman/8.4/en/datetime.html
-    flight_date = "01/01/1000 0:00",
+    flight_date = "Unknown",
     airline = "Unknown Airline",
     dep_airport = "Unknown Airport",
     origin_state = "Unknown State",
     wildlife_size = "Unknown",
     sky_conditions = "Unknown",
     impact = "Unknown",
-    heavy_flag = "No"
+    heavy_flag = "Unknown",
+    
+    # Replacing unknown altitude to 0 since database needs value >=0.
+    altitude_ft = 0
   )
   
   # Replacing empty values with sentinel values
   dataFrame[names(sentinelValues)] <- Map(replaceEmptyValues, dataFrame[names(sentinelValues)], sentinelValues)
   
   # Converting from string to date data type
-  dataFrame$flight_date <- as.Date(dataFrame$flight_date, format = "%m/%d/%y")
+  dataFrame$flight_date <- ifelse(
+    dataFrame$flight_date == "Unknown",
+    dataFrame$flight_date,
+    as.character(as.Date(dataFrame$flight_date, format = "%m/%d/%y"))
+  )
   
   # Removing comma from altitude_ft and converting to numeric
   dataFrame$altitude_ft <- as.numeric(gsub(",", "", dataFrame$altitude_ft))
   dataFrame$altitude_ft[is.na(dataFrame$altitude_ft)] <- 0
   
-  # Converting heavy_flag to boolean
+  # Making TRUE if the aircraft is a "heavy" aircraft, FALSE otherwise
+  # as per the requirement.
   dataFrame$heavy_flag <- ifelse(dataFrame$heavy_flag == "Yes", TRUE, FALSE)
-  
   return(dataFrame)
 }
+```
+
+### Insert Data in Batches
+```{r insertDataInBathches, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
 
 # Insert into database in batches
 # @param: dbCon - database connection to connect to
@@ -418,6 +460,11 @@ insertInBatches <- function(dbCon, batchSize, initialQuery, values) {
     invisible(dbExecute(dbCon, completeQuery))
   }
 }
+```
+
+### Insert Data Into Airports Table
+```{r insertDataIntoAirports, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
 
 # Insert into airports table
 # @param: dbCon - database connection to connect to
@@ -432,6 +479,7 @@ insertIntoAirports <- function(dbCon, dataFrame, batchSize) {
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
     values <- apply(airports, 1, function(row) {
       sprintf("('%s', '%s')",
+              # Replacing single quote with double quote to avoid sql errors.
               gsub("'", "''", row["dep_airport"])
               ,
               gsub("'", "''", row["origin_state"]))
@@ -439,6 +487,12 @@ insertIntoAirports <- function(dbCon, dataFrame, batchSize) {
     insertInBatches(dbCon, batchSize, query, values)
   }
 }
+```
+
+### Insert Data Into Conditions Table
+```{r insertDataIntoConditions, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
+
 
 # Insert into conditions table
 # @param: dbCon - database connection to connect to
@@ -450,12 +504,17 @@ insertIntoConditions <- function(dbCon, dataFrame, batchSize) {
     query <- sprintf("INSERT INTO %s (sky_condition,explanation) VALUES",
                      conditionsTableName)
     values <- apply(conditions, 1, function(row) {
+      # Replacing single quote with double quote to avoid sql errors.
       sprintf("('%s', '')", gsub("'", "''", row["sky_conditions"]))
     })
     insertInBatches(dbCon, batchSize, query, values)
   }
 }
+```
 
+### Insert Data Into Wildlife Size Table
+```{r insertDataIntoWildlifeSize, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
 
 # Insert into wildlife size table
 # @param: dbCon - database connection to connect to
@@ -465,12 +524,17 @@ insertIntoWildLifeSize <- function(dbCon, dataFrame, batchSize) {
   if (nrow(wildlifeSize) > 0) {
     query <- sprintf("INSERT INTO %s (size) VALUES", wildlifeSizeTableName)
     values <- apply(wildlifeSize, 1, function(row) {
+      # Replacing single quote with double quote to avoid sql errors.
       sprintf("('%s')", gsub("'", "''", row["wildlife_size"]))
     })
     insertInBatches(dbCon, batchSize, query, values)
   }
 }
+```
 
+### Insert Data Into Flights Table
+```{r insertDataIntoFlights, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
 
 # Gets the airport id from given airport name and state
 # @param: airportMapping - airport mapping data frame
@@ -479,6 +543,7 @@ insertIntoWildLifeSize <- function(dbCon, dataFrame, batchSize) {
 getAirportId <- function(airportMapping,
                          airportName,
                          airportState) {
+  # Getting mathcing row by equating airportName and airportState.
   matchingRow <- airportMapping[airportMapping$airportName == airportName &
                                   airportMapping$airportState == airportState, ]
   return(matchingRow$aid[1])
@@ -507,10 +572,16 @@ insertIntoFlights <- function(dbCon, dataFrame, batchSize) {
                                ))
   
   values <- apply(flights, 1, function(row) {
+    # If flight date is unknown insert it as NULL.
+    flightDateToCreate <- if (row["flight_date"] == "Unknown")
+      "NULL"
+    else
+      sprintf("'%s'", row["flight_date"])
+    
     sprintf(
-      "('%s', %s, '%s', '%s', %s)"
+      "(%s, %s, '%s', '%s', %s)"
       ,
-      row["flight_date"],
+      flightDateToCreate,
       getAirportId(airportMapping, row["dep_airport"], row["origin_state"])
       ,
       gsub("'", "''", row["airline"])
@@ -523,6 +594,11 @@ insertIntoFlights <- function(dbCon, dataFrame, batchSize) {
   insertInBatches(dbCon, batchSize, query, values)
 }
 
+```
+
+### Insert Data Into Wildlife Strikes Table
+```{r insertDataIntoWildLifeStrikes, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
 
 # Gets flight id from given date, origin airport, airline name, aircraft type and if its heavy
 # @param: flightMapping - flight mapping data frame
@@ -538,14 +614,15 @@ getFlightId <- function(flightMapping,
                         aircraftType,
                         isHeavy) {
   # Converting dates to character to compare
-  searchDate <- as.character(as.Date(date))
+  searchDate <- ifelse(date == "Unknown", NA, as.character(as.Date(date)))
   flightMapping$date <- as.character(flightMapping$date)
   
   # Converting to boolean to compare.
   searchHeavy <- as.logical(isHeavy)
   
-  
-  matchingRow <- flightMapping[flightMapping$date == searchDate &
+  # If flight date is not known ignore and compare with everything else to get the matching row.
+  matchingRow <- flightMapping[(is.na(searchDate) |
+                                  flightMapping$date == searchDate) &
                                  flightMapping$originAirport == originAirport &
                                  flightMapping$airlineName == airlineName &
                                  flightMapping$aircraftType == aircraftType &
@@ -638,7 +715,11 @@ insertIntoWildLifeStrikes <- function(dbCon, dataFrame, batchSize) {
   insertInBatches(dbCon, batchSize, query, values)
 }
 
+```
 
+### Insert Data Into Required Tables
+```{r insertDataIntoTables, echo=TRUE,warning=FALSE, eval= TRUE}
+# Part 6: Inserting data into the tables
 
 # Insert values into the database
 # @param: dbCon - database connection to connect to
@@ -668,6 +749,8 @@ displayTable <- function(dbCon, table, limit) {
   return (dbGetQuery(dbCon, query))
 }
 
+# Prints the first 5 rows of each table to validate the data insertion
+# @param: dbCon - database connection to connect to
 validateDataInsertion <- function(dbCon) {
   tryCatch({
     print("Starting validations of data insertions")
@@ -701,13 +784,14 @@ validateDataInsertion(dbCon)
 # strike incidents
 # @param: dbCon - database connection to connect to
 topStatesWithStrikes <- function(dbCon) {
+  # Query to group by state and count the number of strikes
   query <- sprintf(
-    "SELECT a.airportState, COUNT(*) as incidents
+    "SELECT a.airportState, COUNT(*) as strikes
   FROM %s a
   JOIN %s f ON a.aid = f.originAirport
   JOIN %s ws ON f.fid = ws.fid
   GROUP BY a.airportState
-  ORDER BY incidents DESC
+  ORDER BY strikes DESC
   LIMIT 5",
   airportsTableName,
   flightsTableName,
@@ -719,7 +803,7 @@ topStatesWithStrikes <- function(dbCon) {
   kable(
     resultTable,
     format = "html",
-    col.names = c("State", "Number of Incidents")
+    col.names = c("State", "Number of Strikes")
   ) %>%
     # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
     kable_styling(
@@ -749,6 +833,8 @@ topStatesWithStrikes(dbCon)
 # @param: dbCon - database connection to connect to
 airportsBelowAverageStrikes <- function(dbCon) {
   query <- sprintf(
+    # First gets the strike count for each airport and then gets the average strike count.
+    # Then gets the airports with strike count less than the average strike count.
     "WITH strikeCount AS (
       SELECT
         a.aid,
@@ -810,7 +896,12 @@ airportsBelowAverageStrikes(dbCon)
 # Function to get the number of small, medium and large wildlife strikes per year
 # @param: dbCon - database connection to connect to
 strikesByWildlifeSize <- function(dbCon) {
+  # Here it is assumed that 1000 means it an unknown year since
+  # flight year data cannot be 1000.
+  
   query <- query <- sprintf(
+    # Gets the strike count grouped by year and size.
+    # Then gets the total number of strikes per year.
     "
     WITH yearlyStrikes AS (
       SELECT
@@ -841,9 +932,9 @@ strikesByWildlifeSize <- function(dbCon) {
   return (dbGetQuery(dbCon, query))
 }
 
-resultTable <- strikesByWildlifeSize(dbCon)
+strikesByWildlifeSizeFrame <- strikesByWildlifeSize(dbCon)
 kable(
-  resultTable,
+  strikesByWildlifeSizeFrame,
   format = "html",
   col.names = c("Year", "Small", "Medium", "Large", "Unknown", "Total")
 ) %>%
@@ -862,6 +953,7 @@ kable(
   )
 ```
 
+
 ## Trend by Year
 ```{r visualiseTrendByYear, echo=FALSE,warning=FALSE,eval=TRUE}
 #. Part 11: Visualizing trend per year using plot.
@@ -869,6 +961,7 @@ kable(
 # Function to visualize the trend of wildlife strikes per year
 # @param: dataFrame - data frame with the number of small, medium and large wildlife strikes per year
 visualiseTrendByYear <- function(dataFrame) {
+  # referredFrom: https://www.geeksforgeeks.org/r-line-graphs/
   plot(
     dataFrame$strikeYear,
     dataFrame$total,
@@ -882,7 +975,7 @@ visualiseTrendByYear <- function(dataFrame) {
     xlab = "Year",
     ylab = "Total Number of Strikes",
     main = "Wildlife Strike Incidents by Year",
-    ylim = c(0, max(dataFrame$total) * 1.3)
+    ylim = c(0, max(dataFrame$total) * 1.3),
   )
   
   
@@ -895,7 +988,7 @@ visualiseTrendByYear <- function(dataFrame) {
     # x location
     dataFrame$strikeYear,
     # y location
-    dataFrame$total + 160,
+    dataFrame$total + 350,
     labels = dataFrame$total,
     # size of text
     cex = 0.8,
@@ -917,14 +1010,16 @@ visualiseTrendByYear <- function(dataFrame) {
   )
 }
 
-result <- strikesByWildlifeSize(dbCon)
-visualiseTrendByYear(result)
+
+visualiseTrendByYear(strikesByWildlifeSizeFrame)
 ```
 
 ```{r createUpdateLogTable , echo=FALSE,warning=FALSE, eval= TRUE}
 # Part 12: Creating update log table
 
 # Function to create update log table
+# logs are stored in changes as follows:
+# {<iid>:[{"column":"columnNameThatGotUpdated","oldValue":oldValue,"newValue":newValue}, {<anotherChange>]}
 # @param: dbCon - database connection to connect to
 createUpdateLogTable <- function(dbCon) {
   query <- sprintf(
@@ -951,6 +1046,8 @@ dropProcedureForUpdatingWildLifeStrike <- function(dbCon) {
 }
 
 # Function to create procedure for updating wildlife strikes
+# Procedure updates the wildlife strikes table and logs the changes in the update log table
+# Updates are not done if the values are same as the old values or if the new values are NULL
 # @param: dbCon - database connection to connect to
 createProcedureForUpdatingWildLifeStrike <- function(dbCon) {
   dropProcedureForUpdatingWildLifeStrike(dbCon)
@@ -1066,7 +1163,7 @@ invisible(dbExecute(dbCon, query))
 createProcedureForUpdatingWildLifeStrike(dbCon)
 ```
 
-```{r updateWildLifeStrike, echo=FALSE,warning=FALSE, eval= FALSE}
+```{r validateUpdateWildLifeStrike, echo=FALSE,warning=FALSE, eval= FALSE}
 # Part 12: Validating update wildlife strikes procedure
 
 # Function to validate the update wildlife strikes procedure
@@ -1083,6 +1180,7 @@ validateUpdateWildLifeStrikeProcedure <- function(dbCon) {
   )
   orginalStrike <- dbGetQuery(dbCon, query)
   
+  # increasing altitude by 10.
   newAltitude = orginalStrike$altitude + 10
   
   updateQuery <-  sprintf(
@@ -1133,8 +1231,11 @@ validateUpdateWildLifeStrikeProcedure <- function(dbCon) {
   expect_equal(entry$newValue, newAltitude)
 }
 
+print("Starting validations for Update Procdedure")
 validateUpdateWildLifeStrikeProcedure(dbCon)
+print("Successfully completed validations for Update Procdedure")
 ```
+
 ```{r closeConnection, echo=FALSE, warning=FALSE, eval=TRUE}
 invisible(dbDisconnect(dbCon))
 ```
