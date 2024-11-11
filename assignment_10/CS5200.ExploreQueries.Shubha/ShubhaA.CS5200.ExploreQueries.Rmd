@@ -1,0 +1,218 @@
+---
+title: "Assignment / Explore Query Planning and Indexing"
+author: "Shubha, Adithya"
+date: "2024-11-10"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r cleanEnvironment, echo=FALSE,warning=FALSE, eval= TRUE}
+# Cleans the environment before beginning the execution
+# referredFrom:https://northeastern.instructure.com/courses/192346/assignments/2351524
+rm(list = ls())
+```
+
+
+```{r installAndLoadRequiredPackages, echo=FALSE,warning=FALSE, eval= TRUE}
+# Install program required packages
+# Installs RSQLite, DBI,kableExtra  packages
+# referredFrom: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
+installRequiredPackages <- function() {
+  packages <- c("RSQLite", "DBI", "kableExtra", "testthat")
+  # Install packages that are not installed
+  installed_packages <- packages %in% rownames(installed.packages())
+  if (any(installed_packages == FALSE)) {
+    install.packages(packages[!installed_packages])
+  }
+}
+
+# Loads the required packages to the environment
+# Loads RSQLite, DBI,kableExtra packages
+loadRequiredPackages <- function() {
+  suppressMessages({
+    library(RSQLite)
+    library(DBI)
+    library(kableExtra)
+    library(testthat)
+  })
+}
+installRequiredPackages()
+loadRequiredPackages()
+```
+
+```{r connectToDatabase, echo=FALSE,warning=FALSE, eval= TRUE,include = FALSE}
+# Connects to the database
+connectToDatabase <- function(dbName) {
+  return (dbConnect(RSQLite::SQLite(), dbname = dbName))
+}
+
+ensureDatabaseConnection <- function(dbCon) {
+  result <- dbGetQuery(dbCon, "SELECT * FROM film LIMIT 1")
+  test_that("Result size is 1", {
+    expect_equal(nrow(result), 1)
+  })
+  
+}
+
+dbCon <- connectToDatabase("sakila.db")
+ensureDatabaseConnection(dbCon)
+```
+
+## Question 1
+```{r filmsPerCategory, eval=TRUE, echo=TRUE, warning=FALSE}
+
+queryToRemoveUserDefinedIndexes <- function(indexName) {
+  return (sprintf("DROP INDEX IF EXISTS %s", indexName))
+}
+
+getAllUserDefinedIndexes <- function(dbCon) {
+  return (dbGetQuery(dbCon, "SELECT name FROM sqlite_master WHERE type='index'"))
+}
+
+removeUserDefinedIndexes <- function(dbCon) {
+  indexes <- getAllUserDefinedIndexes(dbCon)
+  for (index in indexes$name) {
+    if (!grepl("sqlite_autoindex", index)) {
+      dbExecute(dbCon, queryToRemoveUserDefinedIndexes(index))
+    }
+  }
+}
+
+queryToGetFilmCountPerCategory <- function() {
+  return (
+    "SELECT C.name as category_name, count(F.film_id) as film_count
+FROM film as F
+         JOIN film_category as FC
+         JOIN category as C
+GROUP BY C.name"
+  )
+}
+
+getFilmCountPerCategory <- function(dbCon) {
+  result <- dbGetQuery(dbCon, queryToGetFilmCountPerCategory())
+  result$film_count <- format(result$film_count,
+                              scientific = FALSE,
+                              big.mark = ",")
+  return (result)
+}
+
+displayFilmCountPerCategory <- function(dbCon) {
+  result <- getFilmCountPerCategory(dbCon)
+  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
+  kable(result,
+        format = "html",
+        col.names = c("Category Name", "Film Count")) %>%
+    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
+    kable_styling(
+      # striped is used to get color contrast between rows.
+      bootstrap_options = c("striped"),
+      full_width = TRUE,
+      position = "center"
+    ) %>%
+    # changing the header row.
+    row_spec(
+      0,
+      bold = TRUE,
+      color = "white",
+      background = "#557A95"
+    )
+}
+
+removeUserDefinedIndexes(dbCon)
+displayFilmCountPerCategory(dbCon)
+```
+
+## Question 2
+```{r queryPlanForFilmsPerCategory, eval=TRUE, echo=TRUE, warning=FALSE}
+getQueryPlan <- function(dbCon,query){
+  return(dbGetQuery(dbCon, sprintf("EXPLAIN QUERY PLAN %s", query)))
+}
+
+displayQueryPlan <- function(dbCon,query){
+  result <- getQueryPlan(dbCon,query)
+  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
+  kable(result$detail,
+        format = "html",
+        col.names = c("Detail")) %>%
+    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
+    kable_styling(
+      # striped is used to get color contrast between rows.
+      bootstrap_options = c("striped"),
+      full_width = TRUE,
+      position = "center"
+    ) %>%
+    # changing the header row.
+    row_spec(
+      0,
+      bold = TRUE,
+      color = "white",
+      background = "#557A95"
+    )
+}
+
+displayQueryPlan(dbCon,queryToGetFilmCountPerCategory())
+```
+
+## Question 3
+```{r informationOnZorroArk, eval=TRUE, echo=TRUE, warning=FALSE}
+queryToGetInformationOnZorroArk <- function() {
+  return (
+    "SELECT  title,length,rental_rate,release_year FROM film
+where title = 'ZORRO ARK'")
+}
+
+displayInformationOnZorroArk <- function(dbCon) {
+  result <- dbGetQuery(dbCon, queryToGetInformationOnZorroArk())
+  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
+  kable(result,
+        format = "html",
+        col.names = c("Title", "Length", "Rental Rate", "Release Year")) %>%
+    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
+    kable_styling(
+      # striped is used to get color contrast between rows.
+      bootstrap_options = c("striped"),
+      full_width = TRUE,
+      position = "center"
+    ) %>%
+    # changing the header row.
+    row_spec(
+      0,
+      bold = TRUE,
+      color = "white",
+      background = "#557A95"
+    )
+}
+displayInformationOnZorroArk(dbCon)
+```
+
+## Question 4
+```{r queryPlanForZorroArk, eval=TRUE, echo=TRUE, warning=FALSE}
+displayQueryPlan(dbCon,queryToGetInformationOnZorroArk())
+```
+
+## Question 5
+```{r indexOnTitle, eval=TRUE, echo=TRUE, warning=FALSE}
+queryToCreateIndexOnTitle <- function() {
+  return ("CREATE INDEX IF NOT EXISTS TitleIndex
+    ON film (title);")
+}
+createIndexOnTitle <- function(dbCon) {
+  invisible(dbExecute(dbCon, queryToCreateIndexOnTitle()))
+}
+
+createIndexOnTitle(dbCon)
+```
+
+## Question 6
+```{r queryPlanForZorroArkAfterIndex, eval=TRUE, echo=TRUE, warning=FALSE}
+displayInformationOnZorroArk(dbCon)
+displayQueryPlan(dbCon,queryToGetInformationOnZorroArk())
+```
+
+## Question 7
+The query plan for question 4 and question 6 are different.
+The difference is that query plan in question 6 uses the index to fetch the data while in 
+question 4 the enitre film table is scanned to fetch the data.
+We know question 6 is using index because the query plan shows the keyword 'USING INDEX' with the
+index name 'TitleIndex' we created earlier.
