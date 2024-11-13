@@ -1499,230 +1499,6 @@ window.onload = function() {
   PagedTableDoc.initAll();
 };
 </script>
-<script>$(document).ready(function(){
-    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-    if ($('[data-toggle="popover"]').popover === 'function') {
-        $('[data-toggle="popover"]').popover();
-    }
-});
-</script>
-<style type="text/css">
-.lightable-minimal {
-border-collapse: separate;
-border-spacing: 16px 1px;
-width: 100%;
-margin-bottom: 10px;
-}
-.lightable-minimal td {
-margin-left: 5px;
-margin-right: 5px;
-}
-.lightable-minimal th {
-margin-left: 5px;
-margin-right: 5px;
-}
-.lightable-minimal thead tr:last-child th {
-border-bottom: 2px solid #00000050;
-empty-cells: hide;
-}
-.lightable-minimal tbody tr:first-child td {
-padding-top: 0.5em;
-}
-.lightable-minimal.lightable-hover tbody tr:hover {
-background-color: #f5f5f5;
-}
-.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-classic {
-border-top: 0.16em solid #111111;
-border-bottom: 0.16em solid #111111;
-width: 100%;
-margin-bottom: 10px;
-margin: 10px 5px;
-}
-.lightable-classic tfoot tr td {
-border: 0;
-}
-.lightable-classic tfoot tr:first-child td {
-border-top: 0.14em solid #111111;
-}
-.lightable-classic caption {
-color: #222222;
-}
-.lightable-classic td {
-padding-left: 5px;
-padding-right: 5px;
-color: #222222;
-}
-.lightable-classic th {
-padding-left: 5px;
-padding-right: 5px;
-font-weight: normal;
-color: #222222;
-}
-.lightable-classic thead tr:last-child th {
-border-bottom: 0.10em solid #111111;
-}
-.lightable-classic.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-classic.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-classic-2 {
-border-top: 3px double #111111;
-border-bottom: 3px double #111111;
-width: 100%;
-margin-bottom: 10px;
-}
-.lightable-classic-2 tfoot tr td {
-border: 0;
-}
-.lightable-classic-2 tfoot tr:first-child td {
-border-top: 3px double #111111;
-}
-.lightable-classic-2 caption {
-color: #222222;
-}
-.lightable-classic-2 td {
-padding-left: 5px;
-padding-right: 5px;
-color: #222222;
-}
-.lightable-classic-2 th {
-padding-left: 5px;
-padding-right: 5px;
-font-weight: normal;
-color: #222222;
-}
-.lightable-classic-2 tbody tr:last-child td {
-border-bottom: 3px double #111111;
-}
-.lightable-classic-2 thead tr:last-child th {
-border-bottom: 1px solid #111111;
-}
-.lightable-classic-2.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-material {
-min-width: 100%;
-white-space: nowrap;
-table-layout: fixed;
-font-family: Roboto, sans-serif;
-border: 1px solid #EEE;
-border-collapse: collapse;
-margin-bottom: 10px;
-}
-.lightable-material tfoot tr td {
-border: 0;
-}
-.lightable-material tfoot tr:first-child td {
-border-top: 1px solid #EEE;
-}
-.lightable-material th {
-height: 56px;
-padding-left: 16px;
-padding-right: 16px;
-}
-.lightable-material td {
-height: 52px;
-padding-left: 16px;
-padding-right: 16px;
-border-top: 1px solid #eeeeee;
-}
-.lightable-material.lightable-hover tbody tr:hover {
-background-color: #f5f5f5;
-}
-.lightable-material.lightable-striped tbody tr:nth-child(even) {
-background-color: #f5f5f5;
-}
-.lightable-material.lightable-striped tbody td {
-border: 0;
-}
-.lightable-material.lightable-striped thead tr:last-child th {
-border-bottom: 1px solid #ddd;
-}
-.lightable-material-dark {
-min-width: 100%;
-white-space: nowrap;
-table-layout: fixed;
-font-family: Roboto, sans-serif;
-border: 1px solid #FFFFFF12;
-border-collapse: collapse;
-margin-bottom: 10px;
-background-color: #363640;
-}
-.lightable-material-dark tfoot tr td {
-border: 0;
-}
-.lightable-material-dark tfoot tr:first-child td {
-border-top: 1px solid #FFFFFF12;
-}
-.lightable-material-dark th {
-height: 56px;
-padding-left: 16px;
-padding-right: 16px;
-color: #FFFFFF60;
-}
-.lightable-material-dark td {
-height: 52px;
-padding-left: 16px;
-padding-right: 16px;
-color: #FFFFFF;
-border-top: 1px solid #FFFFFF12;
-}
-.lightable-material-dark.lightable-hover tbody tr:hover {
-background-color: #FFFFFF12;
-}
-.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
-background-color: #FFFFFF12;
-}
-.lightable-material-dark.lightable-striped tbody td {
-border: 0;
-}
-.lightable-material-dark.lightable-striped thead tr:last-child th {
-border-bottom: 1px solid #FFFFFF12;
-}
-.lightable-paper {
-width: 100%;
-margin-bottom: 10px;
-color: #444;
-}
-.lightable-paper tfoot tr td {
-border: 0;
-}
-.lightable-paper tfoot tr:first-child td {
-border-top: 1px solid #00000020;
-}
-.lightable-paper thead tr:last-child th {
-color: #666;
-vertical-align: bottom;
-border-bottom: 1px solid #00000020;
-line-height: 1.15em;
-padding: 10px 5px;
-}
-.lightable-paper td {
-vertical-align: middle;
-border-bottom: 1px solid #00000010;
-line-height: 1.15em;
-padding: 7px 5px;
-}
-.lightable-paper.lightable-hover tbody tr:hover {
-background-color: #F9EEC1;
-}
-.lightable-paper.lightable-striped tbody tr:nth-child(even) {
-background-color: #00000008;
-}
-.lightable-paper.lightable-striped tbody td {
-border: 0;
-}
-</style>
 
 <style type="text/css">
 code{white-space: pre-wrap;}
@@ -1853,359 +1629,173 @@ Indexing</h1>
 </div>
 
 
+<pre class="r"><code># Cleans the environment before beginning the execution
+# referredFrom:https://northeastern.instructure.com/courses/192346/assignments/2351524
+rm(list = ls())</code></pre>
+<pre class="r"><code># Install program required packages
+# Installs RSQLite, DBI  packages
+# referredFrom: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
+installRequiredPackages &lt;- function() {
+  packages &lt;- c(&quot;RSQLite&quot;, &quot;DBI&quot;, &quot;testthat&quot;)
+  # Install packages that are not installed
+  installed_packages &lt;- packages %in% rownames(installed.packages())
+  if (any(installed_packages == FALSE)) {
+    install.packages(packages[!installed_packages])
+  }
+}
+
+# Loads the required packages to the environment
+# Loads RSQLite, DBI packages
+loadRequiredPackages &lt;- function() {
+  suppressMessages({
+    library(RSQLite)
+    library(DBI)
+    library(testthat)
+  })
+}
+installRequiredPackages()
+loadRequiredPackages()</code></pre>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
-<pre class="r"><code>queryToRemoveUserDefinedIndexes &lt;- function(indexName) {
+<pre class="r"><code># Removes the given user defined index
+# @param indexName: Name of the index to remove
+queryToRemoveUserDefinedIndexes &lt;- function(indexName) {
   return (sprintf(&quot;DROP INDEX IF EXISTS %s&quot;, indexName))
 }
 
+# Gets all user defined indexes
+# @param dbCon: Database connection object
 getAllUserDefinedIndexes &lt;- function(dbCon) {
   return (dbGetQuery(dbCon, &quot;SELECT name FROM sqlite_master WHERE type=&#39;index&#39;&quot;))
 }
 
+# Removes all user defined indexes
+# @param dbCon: Database connection object
 removeUserDefinedIndexes &lt;- function(dbCon) {
   indexes &lt;- getAllUserDefinedIndexes(dbCon)
   for (index in indexes$name) {
+    # Ignoring auto generated indexes
     if (!grepl(&quot;sqlite_autoindex&quot;, index)) {
       dbExecute(dbCon, queryToRemoveUserDefinedIndexes(index))
     }
   }
 }
 
+# Query to get the film count per category
 queryToGetFilmCountPerCategory &lt;- function() {
   return (
-    &quot;SELECT C.name as category_name, count(F.film_id) as film_count
-FROM film as F
-         JOIN film_category as FC
-         JOIN category as C
-GROUP BY C.name&quot;
+    &quot;SELECT C.name as category_name, count(FC.film_id) as film_count
+FROM film_category as FC
+         JOIN category as C ON FC.category_id = C.category_id
+GROUP BY C.name
+&quot;
   )
 }
 
+# Gets the film count per category
+# @param dbCon: Database connection object
 getFilmCountPerCategory &lt;- function(dbCon) {
   result &lt;- dbGetQuery(dbCon, queryToGetFilmCountPerCategory())
+  
+  # Formatting the film count to have a readable format
   result$film_count &lt;- format(result$film_count,
                               scientific = FALSE,
                               big.mark = &quot;,&quot;)
   return (result)
 }
 
+# Displays information on Zorro Ark film
+# @param result: Result of the query
+displayInformationOnFilm &lt;- function(result) {
+  print(result,row.names = FALSE)
+}
+
+# Displays the film count per category
+# @param dbCon: Database connection object
 displayFilmCountPerCategory &lt;- function(dbCon) {
   result &lt;- getFilmCountPerCategory(dbCon)
-  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
-  kable(result,
-        format = &quot;html&quot;,
-        col.names = c(&quot;Category Name&quot;, &quot;Film Count&quot;)) %&gt;%
-    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
-    kable_styling(
-      # striped is used to get color contrast between rows.
-      bootstrap_options = c(&quot;striped&quot;),
-      full_width = TRUE,
-      position = &quot;center&quot;
-    ) %&gt;%
-    # changing the header row.
-    row_spec(
-      0,
-      bold = TRUE,
-      color = &quot;white&quot;,
-      background = &quot;#557A95&quot;
-    )
+  displayInformationOnFilm(result)
 }
 
 removeUserDefinedIndexes(dbCon)
 displayFilmCountPerCategory(dbCon)</code></pre>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Category Name
-</th>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Film Count
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Action
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Animation
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Children
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Classics
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Comedy
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Documentary
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Drama
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Family
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Foreign
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Games
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Horror
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Music
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-New
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Sci-Fi
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Sports
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Travel
-</td>
-<td style="text-align:left;">
-1,000,000
-</td>
-</tr>
-</tbody>
-</table>
+<pre><code>##  category_name film_count
+##         Action         64
+##      Animation         66
+##       Children         60
+##       Classics         57
+##         Comedy         58
+##    Documentary         68
+##          Drama         62
+##         Family         69
+##        Foreign         73
+##          Games         61
+##         Horror         56
+##          Music         51
+##            New         63
+##         Sci-Fi         61
+##         Sports         74
+##         Travel         57</code></pre>
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<pre class="r"><code>getQueryPlan &lt;- function(dbCon,query){
+<pre class="r"><code># Gives the query plan for the given query
+# @param dbCon: Database connection object
+# @param query: Query for which the plan is required
+getQueryPlan &lt;- function(dbCon,query){
   return(dbGetQuery(dbCon, sprintf(&quot;EXPLAIN QUERY PLAN %s&quot;, query)))
 }
 
+# Displays the query plan for the given query
+# Displays only the detail, other information can be added is required
+# @param dbCon: Database connection object
+# @param query: Query for which the plan is required
 displayQueryPlan &lt;- function(dbCon,query){
   result &lt;- getQueryPlan(dbCon,query)
-  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
-  kable(result$detail,
-        format = &quot;html&quot;,
-        col.names = c(&quot;Detail&quot;)) %&gt;%
-    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
-    kable_styling(
-      # striped is used to get color contrast between rows.
-      bootstrap_options = c(&quot;striped&quot;),
-      full_width = TRUE,
-      position = &quot;center&quot;
-    ) %&gt;%
-    # changing the header row.
-    row_spec(
-      0,
-      bold = TRUE,
-      color = &quot;white&quot;,
-      background = &quot;#557A95&quot;
-    )
+  print(result$detail)
 }
 
 displayQueryPlan(dbCon,queryToGetFilmCountPerCategory())</code></pre>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Detail
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-SCAN F
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-SCAN C
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-SCAN FC USING COVERING INDEX sqlite_autoindex_film_category_1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-USE TEMP B-TREE FOR GROUP BY
-</td>
-</tr>
-</tbody>
-</table>
+<pre><code>## [1] &quot;SCAN FC USING COVERING INDEX sqlite_autoindex_film_category_1&quot;
+## [2] &quot;SEARCH C USING INTEGER PRIMARY KEY (rowid=?)&quot;                 
+## [3] &quot;USE TEMP B-TREE FOR GROUP BY&quot;</code></pre>
 </div>
 <div id="question-3" class="section level2">
 <h2>Question 3</h2>
-<pre class="r"><code>queryToGetInformationOnZorroArk &lt;- function() {
+<pre class="r"><code># Query to get title,length, rental_rate, release_year of Zorro Ark film
+queryToGetInformationOnZorroArk &lt;- function() {
   return (
     &quot;SELECT  title,length,rental_rate,release_year FROM film
 where title = &#39;ZORRO ARK&#39;&quot;)
 }
 
-displayInformationOnZorroArk &lt;- function(dbCon) {
-  result &lt;- dbGetQuery(dbCon, queryToGetInformationOnZorroArk())
-  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
-  kable(result,
-        format = &quot;html&quot;,
-        col.names = c(&quot;Title&quot;, &quot;Length&quot;, &quot;Rental Rate&quot;, &quot;Release Year&quot;)) %&gt;%
-    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
-    kable_styling(
-      # striped is used to get color contrast between rows.
-      bootstrap_options = c(&quot;striped&quot;),
-      full_width = TRUE,
-      position = &quot;center&quot;
-    ) %&gt;%
-    # changing the header row.
-    row_spec(
-      0,
-      bold = TRUE,
-      color = &quot;white&quot;,
-      background = &quot;#557A95&quot;
-    )
+getInformationOnZorroArk &lt;- function(dbCon) {
+  return (dbGetQuery(dbCon, queryToGetInformationOnZorroArk()))
 }
-displayInformationOnZorroArk(dbCon)</code></pre>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Title
-</th>
-<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Length
-</th>
-<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Rental Rate
-</th>
-<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Release Year
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-ZORRO ARK
-</td>
-<td style="text-align:right;">
-50
-</td>
-<td style="text-align:right;">
-4.99
-</td>
-<td style="text-align:right;">
-2006
-</td>
-</tr>
-</tbody>
-</table>
+
+clearDatabaseCache(dbCon)</code></pre>
+<pre><code>##           used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)
+## Ncells  960030 51.3    1825401 97.5         NA  1449357 77.5
+## Vcells 1775649 13.6    8388608 64.0      16384  2517466 19.3</code></pre>
+<pre class="r"><code>queryStartTime &lt;- Sys.time()
+informationOnZorroArk &lt;- getInformationOnZorroArk(dbCon)
+queryEndTime &lt;- Sys.time()
+# in milliseconds
+timeToFetchInformationOnZorroArk &lt;- round(((queryEndTime - queryStartTime)*1000),3)
+displayInformationOnFilm(informationOnZorroArk)</code></pre>
+<pre><code>##      title length rental_rate release_year
+##  ZORRO ARK     50        4.99         2006</code></pre>
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
-<pre class="r"><code>displayQueryPlan(dbCon,queryToGetInformationOnZorroArk())</code></pre>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Detail
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-SCAN film
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="r"><code># display query plan on information of Zorro Ark
+displayQueryPlan(dbCon,queryToGetInformationOnZorroArk())</code></pre>
+<pre><code>## [1] &quot;SCAN film&quot;</code></pre>
 </div>
 <div id="question-5" class="section level2">
 <h2>Question 5</h2>
-<pre class="r"><code>queryToCreateIndexOnTitle &lt;- function() {
+<pre class="r"><code># Query to create index on title column
+queryToCreateIndexOnTitle &lt;- function() {
   return (&quot;CREATE INDEX IF NOT EXISTS TitleIndex
     ON film (title);&quot;)
 }
@@ -2217,58 +1807,20 @@ createIndexOnTitle(dbCon)</code></pre>
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
-<pre class="r"><code>displayInformationOnZorroArk(dbCon)</code></pre>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Title
-</th>
-<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Length
-</th>
-<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Rental Rate
-</th>
-<th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Release Year
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-ZORRO ARK
-</td>
-<td style="text-align:right;">
-50
-</td>
-<td style="text-align:right;">
-4.99
-</td>
-<td style="text-align:right;">
-2006
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="r"><code>clearDatabaseCache(dbCon)</code></pre>
+<pre><code>##           used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)
+## Ncells  960677 51.4    1825401 97.5         NA  1449357 77.5
+## Vcells 1778084 13.6    8388608 64.0      16384  2517466 19.3</code></pre>
+<pre class="r"><code>startTime &lt;- Sys.time()
+informationOnZorroArk &lt;- getInformationOnZorroArk(dbCon)
+endTime &lt;- Sys.time()
+# in milliseconds
+timeToFetchInformationOnZorroArkAfterIndex &lt;- round(((endTime - startTime)*1000),3)
+displayInformationOnFilm(informationOnZorroArk)</code></pre>
+<pre><code>##      title length rental_rate release_year
+##  ZORRO ARK     50        4.99         2006</code></pre>
 <pre class="r"><code>displayQueryPlan(dbCon,queryToGetInformationOnZorroArk())</code></pre>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(85, 122, 149, 255) !important;">
-Detail
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-SEARCH film USING INDEX TitleIndex (title=?)
-</td>
-</tr>
-</tbody>
-</table>
+<pre><code>## [1] &quot;SEARCH film USING INDEX TitleIndex (title=?)&quot;</code></pre>
 </div>
 <div id="question-7" class="section level2">
 <h2>Question 7</h2>
@@ -2276,7 +1828,68 @@ SEARCH film USING INDEX TitleIndex (title=?)
 difference is that query plan in question 6 uses the index to fetch the
 data while in question 4 the enitre film table is scanned to fetch the
 data. We know question 6 is using index because the query plan shows the
-keyword ‘USING INDEX’ with the index name we created earlier</p>
+keyword ‘USING INDEX’ with the index name ‘TitleIndex’ we created
+earlier.</p>
+</div>
+<div id="question-8" class="section level2">
+<h2>Question 8</h2>
+<p>The time taken to fetch information on Zorro Ark before creating the
+index is 2.426 ms and after creating the index is 1.558 ms This shows
+that there is difference between both these times. The difference is
+0.868 ms. Ideally it should be the case that the time to fetch the
+information on Zorro Ark is reduced after creating the index on the
+title column since the index helps in fetching the data faster.</p>
+<p>But if the data set is small then the time taken to fetch the data is
+almost the same before and after creating the index(as the difference is
+really low in milliseconds). This is because the time taken to scan the
+entire table is almost the same as the time taken to scan the index and
+fetch the data. Here index might introduce an overhead where it has to
+scan the index and then fetch the data from the table. This overhead
+might be more than the time taken to scan the entire table and fetch the
+data and is not worth if it is a single row lookup in a small table.
+This is the reason why the time taken to fetch the data before and after
+creating the index is almost the same in-case of smaller dataset.</p>
+</div>
+<div id="question-9" class="section level2">
+<h2>Question 9</h2>
+<pre class="r"><code># Query to get information on films having title with gold
+queryToGetInformationWithFilmTitleHavingGold &lt;- function() {
+  return (
+    &quot;SELECT 
+    title,
+    length,
+    rental_rate,
+    release_year
+FROM film
+WHERE LOWER(title) LIKE &#39;%gold%&#39;;&quot;)
+}
+
+# Displays information on films having title with gold
+# @param dbCon: Database connection object
+displayInformationWithFilmTitleHavingGold &lt;- function(dbCon) {
+  result &lt;- dbGetQuery(dbCon, queryToGetInformationWithFilmTitleHavingGold())
+  displayInformationOnFilm(result)
+}
+displayInformationWithFilmTitleHavingGold(dbCon)</code></pre>
+<pre><code>##                   title length rental_rate release_year
+##          ACE GOLDFINGER     48        4.99         2006
+##    BREAKFAST GOLDFINGER    123        4.99         2006
+##              GOLD RIVER    154        4.99         2006
+##  GOLDFINGER SENSIBILITY     93        0.99         2006
+##         GOLDMINE TYCOON    153        0.99         2006
+##              OSCAR GOLD    115        2.99         2006
+##    SILVERADO GOLDFINGER     74        4.99         2006
+##              SWARM GOLD    123        0.99         2006</code></pre>
+</div>
+<div id="question-10" class="section level2">
+<h2>Question 10</h2>
+<pre class="r"><code># Display query plan on information of films having title with gold
+displayQueryPlan(dbCon,queryToGetInformationWithFilmTitleHavingGold())</code></pre>
+<pre><code>## [1] &quot;SCAN film&quot;</code></pre>
+<p>The query plan shows that it is not using index. This happens because
+if an approximate search using LIKE is performed, then an index is not
+useful and the table is scanned row by row. The query plan below shows
+that the table is scanned and the index is ignored.</p>
 </div>
 
 
