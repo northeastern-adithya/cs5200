@@ -515,18 +515,18 @@ bds.raw <- read.csv(file = "BirdStrikesData-V4-SuF24.csv",
 ```{r cleanUpData, echo=TRUE,warning=FALSE, eval= TRUE}
 # Part 6: Inserting data into the tables
 
-# Function to replace empty values with sentinel values
-# @param: columnValue - current column value
-# @param: sentinelValue - sentinel value to replace.
-replaceEmptyValues <- function(columnValue, sentinelValue) {
-  # if column value is NA or empty or N/A, replace with sentinel value
-  ifelse(
-    is.na(columnValue) |
-      columnValue == "" | columnValue == "N/A",
-    sentinelValue,
-    columnValue
-  )
-}
+  # Function to replace empty values with sentinel values
+  # @param: columnValue - current column value
+  # @param: sentinelValue - sentinel value to replace.
+  replaceEmptyValues <- function(columnValue, sentinelValue) {
+    # if column value is NA or empty or N/A, replace with sentinel value
+    ifelse(
+      is.na(columnValue) |
+        columnValue == "" | columnValue == "N/A",
+      sentinelValue,
+      columnValue
+    )
+  }
 
 # Function to clean up the data frame with sentinel values before inserting
 # @param: dataFrame - data frame to clean up
