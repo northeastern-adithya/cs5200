@@ -23,7 +23,7 @@ installRequiredPackages <- function() {
   lapply(packages, library, character.only = TRUE)
 }
 
-# Create a DB Connection ============================
+
 # Creates a DB connection with the given dbName
 # @param: dbName - Name of the db to connect to
 # referredFrom: http://artificium.us/lessons/06.r/l-6-301-sqlite-from-r/l-6-301.html#Connect_to_Database
@@ -37,25 +37,34 @@ repsTableName <- "reps"
 customersTableName <- "customers"
 salesTableName <- "sales"
 
-# SQL query to drop the given table if it exists.
+# drop the given table if it exists.
 # @param: table - table to drop
-dropTableIfExist <- function(table) {
-  return (sprintf("DROP TABLE IF EXISTS %s", table))
+# @param: dbCon - database connection to connect to
+dropTableIfExist <- function(dbCon,table) {
+  dbExecute(dbCon, sprintf("DROP TABLE IF EXISTS %s", table))
+}
+
+# Returns the list of all existing tables in the database
+# @param: dbCon - database connection to connect to
+getAllExistingTables <- function(dbCon) {
+  return(dbListTables(dbCon))
 }
 
 # Drops all the existing tables of program from a given db connection.
 # @param: dbCon - database connection to connect to
 dropAllExistingTable <- function(dbCon) {
-  tables <- c(productsTableName,
-              repsTableName,
-              customersTableName,
-              salesTableName)
+  tables <- getAllExistingTables(dbCon)
   for (table in tables) {
-    dbExecute(dbCon, dropTableIfExist(table))
+    # referredFrom: https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep
+    if (!grepl("^sql", table)) {
+      dropTableIfExist(dbCon,table)
+    }
   }
 }
 
+
 # Creates products table in database
+# Products table has productID as generated key, productName and unitCost
 # @param: dbCon - database connection to connect to
 createProductsTable <- function(dbCon) {
   query <- sprintf(
@@ -70,11 +79,13 @@ createProductsTable <- function(dbCon) {
 }
 
 # Creates reps table in database
+# Reps table has repID as primary key, repFN, repLN, repTR, repPH, repCm, repHireDate.
+# Assumption that repID is always defined and is unique.
 # @param: dbCon - database connection to connect to
 createRepsTable <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
-    repID INTEGER PRIMARY KEY AUTOINCREMENT,
+    repID INTEGER PRIMARY KEY,
     repFN VARCHAR(255) NOT NULL,
     repLN VARCHAR(255) NOT NULL,
     repTR VARCHAR(255) NOT NULL,
@@ -87,7 +98,8 @@ createRepsTable <- function(dbCon) {
   dbExecute(dbCon, query)
 }
 
-# Creates customers table in database
+# Creates customers table in database.
+# Customer table has customerId as generated key, customerName and country
 # @param: dbCon - database connection to connect to
 createCustomersTable <- function(dbCon) {
   query <- sprintf(
@@ -102,8 +114,10 @@ createCustomersTable <- function(dbCon) {
 }
 
 # Creates sales table in database
+# Sales table has salesID as generated key, date, customerID, productID, qty, repID, data_source.
+# data_source is a comibination of txnID and fileName.
 # @param: dbCon - database connection to connect to
-createSalesTable <- function(dbCon) {
+createSalesTable <- function(dbCon, tableName) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     salesID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -112,17 +126,19 @@ createSalesTable <- function(dbCon) {
     productID INTEGER NOT NULL,
     qty INTEGER NOT NULL,
     repID INTEGER NOT NULL,
+    data_source VARCHAR(255),
     FOREIGN KEY (customerID) REFERENCES %s(customerID),
     FOREIGN KEY (productID) REFERENCES %s(productID),
     FOREIGN KEY (repID) REFERENCES %s(repID)
 );",
-    salesTableName,
+    tableName,
     customersTableName,
     productsTableName,
     repsTableName
   )
   dbExecute(dbCon, query)
 }
+
 
 # Creates all the tables required for the program
 # @param: dbCon - database connection to connect to
@@ -131,7 +147,7 @@ createAllTables <- function(dbCon) {
   createProductsTable(dbCon)
   createRepsTable(dbCon)
   createCustomersTable(dbCon)
-  createSalesTable(dbCon)
+  createSalesTable(dbCon, salesTableName)
 }
 
 # Insert into database in batches
@@ -190,9 +206,11 @@ insertDataIntoRepsTable <- function(dbCon, dataFrame, batchSize) {
 # @param: dataFrame - data frame to insert into the database
 # @param: batchSize - batch size to insert into the database
 insertDataIntoProductsTable <- function(dbCon, dataFrame, batchSize) {
+  # Getting combination of unique product and unit cost
   productData <- unique(dataFrame[c("prod", "unitcost")])
   if (nrow(productData) > 0) {
-    query <- sprintf("INSERT INTO %s (productName,unitcost) VALUES", productsTableName)
+    query <- sprintf("INSERT INTO %s (productName,unitcost) VALUES",
+                     productsTableName)
     values <- apply(productData, 1, function(row) {
       sprintf("('%s',%s)", # Replacing single quote with double quote to avoid sql errors.
               gsub("'", "''", row["prod"]), row["unitcost"])
@@ -206,15 +224,16 @@ insertDataIntoProductsTable <- function(dbCon, dataFrame, batchSize) {
 # @param: dataFrame - data frame to insert into the database
 # @param: batchSize - batch size to insert into the database
 insertDataIntoCustomersTable <- function(dbCon, dataFrame, batchSize) {
+  # Getting combination of unique customer and country
   customerData <- unique(dataFrame[c("cust", "country")])
   if (nrow(customerData) > 0) {
-    query <- sprintf("INSERT INTO %s (customerName,country) VALUES", customersTableName)
+    query <- sprintf("INSERT INTO %s (customerName,country) VALUES",
+                     customersTableName)
     values <- apply(customerData, 1, function(row) {
       sprintf("('%s','%s')",
               # Replacing single quote with double quote to avoid sql errors.
               gsub("'", "''", row["cust"]),
-              gsub("'", "''", row["country"])
-      )
+              gsub("'", "''", row["country"]))
     })
     insertInBatches(dbCon, batchSize, query, values)
   }
@@ -238,7 +257,8 @@ getCustomerId <- function(customerMapping, customerName, country) {
 getProductId <- function(productMapping, productName, unitCost) {
   unitCost <- as.numeric(unitCost)
   matchingRow <- productMapping[productMapping$productName == productName
-                                & productMapping$unitCost == unitCost,]
+                                &
+                                  productMapping$unitCost == unitCost, ]
   return(matchingRow$productID[1])
 }
 
@@ -268,17 +288,19 @@ insertDataIntoSalesTable <- function(dbCon, dataFrame, batchSize) {
   
   salesData <- dataFrame
   if (nrow(salesData) > 0) {
-    query <- sprintf("INSERT INTO %s (date,customerID, productID, qty, repID) VALUES",
-                     salesTableName)
+    query <- sprintf(
+      "INSERT INTO %s (date,customerID, productID, qty, repID,data_source) VALUES",
+      salesTableName
+    )
     values <- apply(salesData, 1, function(row) {
-      
       date <- if (row["date"] == "Unknown")
         "NULL"
       else
         sprintf("'%s'", row["date"])
       
+      dataSource <- sprintf("'%s_%s'", row["txnID"], row["fileName"])
       sprintf(
-        "(%s,%s,%s,%s,%s)",
+        "(%s,%s,%s,%s,%s,%s)",
         date,
         getCustomerId(
           customerMapping,
@@ -287,7 +309,8 @@ insertDataIntoSalesTable <- function(dbCon, dataFrame, batchSize) {
         ),
         getProductId(productMapping, gsub("'", "''", row["prod"]), row["unitcost"]),
         row["qty"],
-        row["repID"]
+        row["repID"],
+        dataSource
       )
     })
     insertInBatches(dbCon, batchSize, query, values)
@@ -325,7 +348,8 @@ cleanUpRepsData <- function(dataFrame) {
   # Replacing empty values with sentinel values
   dataFrame[names(sentinelValues)] <- Map(replaceEmptyValues, dataFrame[names(sentinelValues)], sentinelValues)
   
-  # Converting from string to date data type
+  # Converting from string to date data type if not Unknown
+  # date from source is of format "Mon DD YYYY"
   dataFrame$repHireDate <- ifelse(
     dataFrame$repHireDate == "Unknown",
     dataFrame$repHireDate,
@@ -361,13 +385,14 @@ cleanUpSalesData <- function(dataFrame) {
   return(dataFrame)
 }
 
-# Function to extraxt reps data and insert into reps table
+
+# Function to extract reps data and insert into reps table
 # @param: dbCon - database connection to connect to
 # @param: directory - directory to read reps data from
 extractRepsData <- function(dbCon, directory) {
   batchSize <- 100
   repsFile <- list.files(path = directory, pattern = "^pharmaReps.*csv$")
-  repsData <- data.frame() 
+  repsData <- data.frame()
   for (file in repsFile) {
     newRepsData <- read.csv(file.path(directory, file))
     repsData <- rbind(repsData, newRepsData)
@@ -385,12 +410,55 @@ extractSalesData <- function(dbCon, directory) {
   salesData <- data.frame()
   for (file in salesFile) {
     newSalesData <- read.csv(file.path(directory, file))
+    newSalesData$fileName <- file
     salesData <- rbind(salesData, newSalesData)
   }
   salesData <- cleanUpSalesData(salesData)
   insertDataIntoCustomersTable(dbCon, salesData, batchSize)
   insertDataIntoProductsTable(dbCon, salesData, batchSize)
   insertDataIntoSalesTable(dbCon, salesData, batchSize)
+}
+
+insertDataIntoSalesPartition <- function(dbCon, salesData, tableName,batchSize) {
+  if (nrow(salesData) > 0) {
+    query <- sprintf(
+      "INSERT INTO %s (date,customerID, productID, qty, repID,data_source) VALUES",
+      tableName
+    )
+    values <- apply(salesData, 1, function(row) {
+      sprintf("('%s',%s,%s,%s,%s,'%s')", row["date"], row["customerID"], row["productID"], row["qty"], row["repID"], row["data_source"])
+    })
+    insertInBatches(dbCon, batchSize, query, values)
+  }
+  
+}
+
+# Partition sales data by year
+# @param: dbCon - database connection to connect to
+partitionSalesData <- function(dbCon) {
+  minMaxYear <- getMinMaxYear(dbCon)
+  minYear <- minMaxYear$min_year
+  maxYear <- minMaxYear$max_year
+  for (year in minYear:maxYear) {
+    query <- sprintf("SELECT * FROM %s WHERE strftime('%%Y', date) = '%s'",
+                     salesTableName,
+                     year)
+    salesData <- dbGetQuery(dbCon, query)
+    tableName <- sprintf("%s_%s", salesTableName, year)
+    createSalesTable(dbCon, tableName)
+    insertDataIntoSalesPartition(dbCon, salesData, tableName,100)
+  }
+  dropTableIfExist(dbCon,salesTableName)
+}
+
+# Get the min and max year from the sales table
+# @param: dbCon - database connection to connect to
+getMinMaxYear <- function(dbCon) {
+  query <- sprintf(
+    "SELECT MIN(strftime('%%Y', date)) as min_year, MAX(strftime('%%Y', date)) as max_year FROM %s",
+    salesTableName
+  )
+  return(dbGetQuery(dbCon, query))
 }
 
 # Cleans the environment before beginning the execution
@@ -408,6 +476,7 @@ main <- function() {
   createAllTables(dbCon)
   extractRepsData(dbCon, dataLoc)
   extractSalesData(dbCon, dataLoc)
+  partitionSalesData(dbCon)
   dbDisconnect(dbCon)
 }
 
