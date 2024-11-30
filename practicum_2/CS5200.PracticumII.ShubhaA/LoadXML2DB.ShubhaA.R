@@ -1,6 +1,6 @@
 # -------------------------------------------
 # title: "Create Analytics Database"
-# subtitle: CS5200 / Practicum II
+# subtitle: CS5200 / Practicum II Part 1
 # author: "Shubha, Adithya"
 # email: "shubha.a@northeastern.edu"
 # date: "Fall 2024"
