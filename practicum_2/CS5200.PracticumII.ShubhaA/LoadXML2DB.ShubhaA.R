@@ -40,7 +40,7 @@ salesTableName <- "sales"
 # drop the given table if it exists.
 # @param: table - table to drop
 # @param: dbCon - database connection to connect to
-dropTableIfExist <- function(dbCon,table) {
+dropTableIfExist <- function(dbCon, table) {
   dbExecute(dbCon, sprintf("DROP TABLE IF EXISTS %s", table))
 }
 
@@ -57,7 +57,7 @@ dropAllExistingTable <- function(dbCon) {
   for (table in tables) {
     # referredFrom: https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep
     if (!grepl("^sql", table)) {
-      dropTableIfExist(dbCon,table)
+      dropTableIfExist(dbCon, table)
     }
   }
 }
@@ -419,14 +419,20 @@ extractSalesData <- function(dbCon, directory) {
   insertDataIntoSalesTable(dbCon, salesData, batchSize)
 }
 
-insertDataIntoSalesPartition <- function(dbCon, salesData, tableName,batchSize) {
+insertDataIntoSalesPartition <- function(dbCon, salesData, tableName, batchSize) {
   if (nrow(salesData) > 0) {
     query <- sprintf(
       "INSERT INTO %s (date,customerID, productID, qty, repID,data_source) VALUES",
       tableName
     )
     values <- apply(salesData, 1, function(row) {
-      sprintf("('%s',%s,%s,%s,%s,'%s')", row["date"], row["customerID"], row["productID"], row["qty"], row["repID"], row["data_source"])
+      sprintf("('%s',%s,%s,%s,%s,'%s')",
+              row["date"],
+              row["customerID"],
+              row["productID"],
+              row["qty"],
+              row["repID"],
+              row["data_source"])
     })
     insertInBatches(dbCon, batchSize, query, values)
   }
@@ -446,9 +452,9 @@ partitionSalesData <- function(dbCon) {
     salesData <- dbGetQuery(dbCon, query)
     tableName <- sprintf("%s_%s", salesTableName, year)
     createSalesTable(dbCon, tableName)
-    insertDataIntoSalesPartition(dbCon, salesData, tableName,100)
+    insertDataIntoSalesPartition(dbCon, salesData, tableName, 100)
   }
-  dropTableIfExist(dbCon,salesTableName)
+  dropTableIfExist(dbCon, salesTableName)
 }
 
 # Get the min and max year from the sales table
