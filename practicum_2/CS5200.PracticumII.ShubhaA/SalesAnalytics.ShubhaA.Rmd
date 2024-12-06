@@ -1,0 +1,269 @@
+---
+title: "Sales Analysis"
+author: "Shubha, Adithya"
+email: "shubha.a@northeastern.edu"
+date: "2024-12-06"
+output:
+  html_document:
+    df_print: paged
+subtitle: 2020-2023
+---
+
+```{r cleanEnvironment, echo=FALSE,warning=FALSE, eval= TRUE}
+# Cleans the environment before beginning the execution
+# referredFrom:https://northeastern.instructure.com/courses/192346/assignments/2351524
+rm(list = ls())
+```
+
+```{r installAndLoadRequiredPackages, echo=FALSE,warning=FALSE, eval= TRUE}
+# Install program required packages
+# Installs RMysql, DBI and testthat,kableExtra,jsonlite packages
+# referredFrom: http://artificium.us/lessons/06.r/l-6-104-r4progs/l-6-104.html#Install_Packages_on_Demand
+installRequiredPackages <- function() {
+  packages <- c("RMySQL", "DBI","kableExtra")
+  # Install packages that are not installed
+  installed_packages <- packages %in% rownames(installed.packages())
+  if (any(installed_packages == FALSE)) {
+    install.packages(packages[!installed_packages])
+  }
+}
+
+# Loads the required packages to the environment
+# Loads RMysql, DBI,kableExtra and testthat packages
+loadRequiredPackages <- function() {
+  suppressMessages({
+    library(RMySQL)
+    library(DBI)
+    library(kableExtra)
+  })
+}
+installRequiredPackages()
+loadRequiredPackages()
+```
+
+
+```{r connectToDatabase, echo=FALSE,warning=FALSE, eval= TRUE}
+# Part 3: Connecting to the database
+
+# Function to connect to the database
+# @return: database connection
+# referredFrom: http://artificium.us/lessons/06.r/l-6-301-sqlite-from-r/l-6-301.html#Connect_to_Database
+connectToDatabase <- function() {
+  # DB credentials
+  dbName <- "defaultdb"
+  dbUser <- "avnadmin"
+  dbPassword <- "AVNS_LfgR_-4_x2xF-vv7_Bg"
+  dbHost <- "practicum-1-cs-5200.b.aivencloud.com"
+  dbPort <- 22694
+  
+  
+  return (
+    dbConnect(
+      RMySQL::MySQL(),
+      user = dbUser,
+      password = dbPassword,
+      dbname = dbName,
+      host = dbHost,
+      port = dbPort
+    )
+  )
+}
+```
+
+```{r globalVariables, echo=FALSE,warning=FALSE, eval=TRUE}
+# Define all the global variables used in the code
+
+# Global variable to connect to the database
+dbCon <- connectToDatabase()
+```
+
+
+## Sales Analysis
+```{r getSalesData, echo=FALSE,warning=FALSE, eval=TRUE}
+# Function to get the year information from database
+# @param dbCon: database connection
+getYearInformation <- function(dbCon) {
+  # Query to get the minimum and maximum year from the sales table
+  query <- "SELECT  DISTINCT product_facts.year
+FROM product_facts
+ORDER BY year DESC"
+  
+  # Execute the query
+  return (dbGetQuery(dbCon, query))
+}
+
+yearInformation <- getYearInformation(dbCon)
+maxYear <- yearInformation$year[1]
+minYear <- yearInformation$year[length(yearInformation$year)]
+```
+The top five products with the most sales/revenue across all years from `r minYear` to 
+`r maxYear` are shown in the table below.
+
+```{r topFiveProducts, echo=FALSE,warning=FALSE, eval=TRUE}
+displayReport <- function(dataFrame,columns){
+  # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
+  kable(
+    dataFrame,
+    format = "html",
+    col.names = columns
+  ) %>%
+    # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
+    kable_styling(
+      # striped is used to get color contrast between rows.
+      bootstrap_options = c("striped"),
+      full_width = FALSE,
+      position = "center"
+    ) %>%
+    # changing the header row.
+    row_spec(
+      0,
+      bold = TRUE,
+      color = "white",
+      background = "#557A95"
+    ) %>%
+    # referredFrom: https://rdrr.io/cran/kableExtra/man/scroll_box.html
+    scroll_box(
+     extra_css = "border: none; padding: 0; max-height: 400px; overflow-y: auto;"
+  )
+}
+
+# Function to get the top five products with the most sales/revenue across all years
+# @param dbCon: database connection
+getTopFiveProducts <- function(dbCon) {
+  # Query to get the top five products with the most sales/revenue across all years
+  query <- "SELECT pd.productName,ROUND(SUM(pf.totalRevenue),2) AS totalRevenue
+FROM product_facts pf JOIN  product_dimension pd ON pf.productID = pd.productID
+GROUP BY pd.productName
+ORDER BY totalRevenue DESC LIMIT 5"
+ return (dbGetQuery(dbCon, query))
+}
+
+displayReport(getTopFiveProducts(dbCon),c("Product Name", "Total Revenue"))
+```
+
+The total revenue per quarter per product for the most recent year is shown in the table below.
+
+```{r totalRevenuePerQuarter, echo=FALSE,warning=FALSE, eval=TRUE}
+# Function to get the total revenue per quarter per product for the most recent year
+# @param dbCon: database connection
+getTotalRevenuePerQuarter <- function(dbCon,recentYear) {
+  # Query to get the total revenue per quarter per product for the most recent year
+  query <- sprintf("SELECT
+    pd.productName,
+    pf.quarter,
+    ROUND(SUM(pf.totalRevenue), 2) AS quaterlyRevenue
+FROM
+    product_facts pf JOIN product_dimension pd ON pf.productID = pd.productID
+WHERE
+    pf.year = %s
+GROUP BY
+    pd.productName,
+    pf.quarter
+ORDER BY
+    productName,
+    quarter", recentYear)
+  return (dbGetQuery(dbCon, query))
+}
+
+displayReport(getTotalRevenuePerQuarter(dbCon,maxYear),c("Product Name", "Quarter", "Quarterly Revenue"))
+```
+
+The total revenue per product per country for the most recent two years is shown in the table below.
+
+```{r totalRevenuePerProductPerCountry, echo=FALSE,warning=FALSE, eval=TRUE}
+# Function to get the total revenue per product per country for the most recent two years
+# @param dbCon: database connection
+# @param recentYears: most recent two years
+getTotalRevenuePerProductPerCountry <- function(dbCon, recentYears) {
+  # Query to get the total revenue per product per country for the most recent two years
+  query <- sprintf("SELECT pd.productName,
+       cd.country,
+       pf.year,
+       ROUND(SUM(pf.totalRevenue), 2) AS totalRevenue
+FROM product_facts pf
+         JOIN product_dimension pd ON pf.productID = pd.productID
+         JOIN customer_dimension cd ON pf.customerID = cd.customerID
+WHERE pf.year IN (%s, %s)
+GROUP BY pd.productName,
+         cd.country,
+         pf.year
+ORDER BY pd.productName,
+         cd.country,
+         pf.year", recentYears[1], recentYears[2])
+  return (dbGetQuery(dbCon, query))
+}
+
+displayReport(getTotalRevenuePerProductPerCountry(dbCon,c(yearInformation$year[1],yearInformation$year[2])),c("Product Name", "Country", "Year", "Total Revenue"))
+```
+The line graph below shows the sales per year for which we have data.
+
+```{r salesPerYear, echo=FALSE,warning=FALSE, eval=TRUE}
+# Function to visualize the trend of sales per year
+# @param: dataFrame - data frame with data of sales per year
+visualiseSalesByYear <- function(dataFrame) {
+  # referredFrom: https://www.geeksforgeeks.org/r-line-graphs/
+  plot(
+    dataFrame$year,
+    dataFrame$totalUnitsSold,
+    # to plot lines and points
+    type = "o",
+    col = "darkblue",
+    # to set filled circlers
+    pch = 19,
+    # to set line width
+    lwd = 2,
+    xlab = "Year",
+    ylab = "Total Sales",
+    main = "Total Sales by Year",
+    ylim = c(0, max(dataFrame$total) * 1.3)
+  )
+  
+  
+  # to add grid lines
+  # lty = 2 is used to set dashed lines
+  grid(lty = 2, col = "gray80")
+  
+  # to add labels to the points
+  text(
+    # x location
+    dataFrame$year,
+    # y location
+    dataFrame$totalUnitsSold + 500000,
+    labels = dataFrame$totalUnitsSold,
+    # size of text
+    cex = 0.8,
+    col = "darkblue",
+  )
+
+  
+  # Adds a legend to the plot
+  legend(
+    "topleft",
+    legend = "Total Sales",
+    col = "darkblue",
+    # used to denote a solid line
+    lty = 1,
+    # used to denote a filled circle
+    pch = 19,
+    bg = "white",
+    # used to set box width
+    box.lwd = 1
+  )
+}
+
+getSalesByYear <- function(dbCon) {
+  # Query to get the total sales per year
+  query <- "SELECT
+    year,
+    SUM(totalUnitsSold) AS totalUnitsSold
+FROM
+    product_facts
+GROUP BY
+    year
+ORDER BY
+    year;"
+  return (dbGetQuery(dbCon, query))
+}
+
+visualiseSalesByYear(getSalesByYear(dbCon))
+```

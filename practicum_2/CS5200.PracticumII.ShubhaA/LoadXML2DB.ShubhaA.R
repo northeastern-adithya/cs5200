@@ -212,8 +212,10 @@ insertDataIntoProductsTable <- function(dbCon, dataFrame, batchSize) {
     query <- sprintf("INSERT INTO %s (productName,unitcost) VALUES",
                      productsTableName)
     values <- apply(productData, 1, function(row) {
-      sprintf("('%s',%s)", # Replacing single quote with double quote to avoid sql errors.
-              gsub("'", "''", row["prod"]), row["unitcost"])
+      sprintf("('%s',%s)",
+              # Replacing single quote with double quote to avoid sql errors.
+              gsub("'", "''", row["prod"]), 
+              row["unitcost"])
     })
     insertInBatches(dbCon, batchSize, query, values)
   }

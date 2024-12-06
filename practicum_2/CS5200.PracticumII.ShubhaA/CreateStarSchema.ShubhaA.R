@@ -49,6 +49,8 @@ connectToMySqlDatabase <- function() {
 
 # All the global variables defined here
 productsFactsTable <- "product_facts"
+productsDimensionTable <- "product_dimension"
+customersDimensionTable <- "customer_dimension"
 repsFactsTable <- "reps_facts"
 repsDimensionTable <- "reps_dimension"
 
@@ -70,7 +72,7 @@ dropTableIfExist <- function(dbCon, table) {
 # Returns the list of all existing tables in the database
 # @param: dbCon - database connection to connect to
 getAllExistingTables <- function(dbCon) {
-  return (c(repsFactsTable, repsDimensionTable, productsFactsTable))
+  return (c(repsFactsTable, repsDimensionTable, productsFactsTable, productsDimensionTable, customersDimensionTable))
 }
 
 # Drops all the existing tables of program from a given db connection.
@@ -83,25 +85,52 @@ dropAllExistingTable <- function(dbCon) {
 }
 
 # Create the product facts table
-# Products fact table is created with the one big table approach since it contains
-# only product name, unitcost as additional dimensions in the source product table.
-# In order to prevent joins and make the queries faster,
-# we are creating a single table with all the required columns.
+# Products fact table is created with the star schema approach with productID and customerID as the foreign keys. 
+# This is done to reduce data redundancy and make the addition of new dimensions easier for future.
 # @param: dbCon - database connection to connect to
 createProductFactsTable <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     productID INT NOT NULL,
-    productName VARCHAR(255) NOT NULL,
-    country VARCHAR(255) NOT NULL,
+    customerID INT NOT NULL,
     year INT NOT NULL,
     month INT NOT NULL,
     quarter INT NOT NULL,
     totalRevenue DECIMAL(10,2) NOT NULL,
     totalUnitsSold INT NOT NULL,
-    PRIMARY KEY (productID, country, year, month)
+    PRIMARY KEY (productID, customerID, year, month),
+    FOREIGN KEY (productID) REFERENCES %s(productID),
+    FOREIGN KEY (customerID) REFERENCES %s(customerID)
 );",
-    productsFactsTable
+    productsFactsTable,
+    productsDimensionTable,
+    customersDimensionTable
+  )
+  dbExecute(dbCon, query)
+}
+
+# Create products dimension table with product details
+# @param: dbCon - database connection to connect to
+createProductsDimensionTable <- function(dbCon) {
+  query <- sprintf(
+    "CREATE TABLE IF NOT EXISTS %s (
+    productID INTEGER PRIMARY KEY,
+    productName VARCHAR(255) NOT NULL
+);",
+    productsDimensionTable
+  )
+  dbExecute(dbCon, query)
+}
+
+# Create customers dimension table with customer details
+# @param: dbCon - database connection to connect to
+createCustomersDimensionTable <- function(dbCon) {
+  query <- sprintf(
+    "CREATE TABLE IF NOT EXISTS %s (
+    customerID INTEGER PRIMARY KEY,
+    country VARCHAR(255) NOT NULL
+);",
+    customersDimensionTable
   )
   dbExecute(dbCon, query)
 }
@@ -176,16 +205,15 @@ insertInBatches <- function(dbCon, batchSize, initialQuery, values) {
 insertIntoProductFactsTable <- function(dbCon, data) {
   if (nrow(data) > 0) {
     query <- sprintf(
-      "INSERT INTO %s (productID,productName, country, year, month, quarter, totalRevenue,totalUnitsSold) VALUES",
+      "INSERT INTO %s (productID, customerID, year, month, quarter, totalRevenue,totalUnitsSold) VALUES",
       productsFactsTable
     )
     
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
     values <- apply(data, 1, function(row) {
-      sprintf("(%s, '%s', '%s', %s, %s, %s, %s,%s)",
+      sprintf("(%s, %s, %s, %s, %s, %s,%s)",
               row["productID"],
-              row["productName"],
-              row["country"],
+              row["customerID"],
               row["year"],
               row["month"],
               row["quarter"],
@@ -203,8 +231,7 @@ readFromLocalDBToPopulateProductFactsTable <- function(dbCon, tableName) {
   query <- sprintf(
     "SELECT
     s.productID,
-    p.productName,
-    c.country,
+    s.customerID,
     strftime('%%Y', s.date) AS year,
     strftime('%%m', s.date) AS month,
     CEIL(strftime('%%m', s.date) / 3.0) AS quarter,
@@ -214,11 +241,9 @@ FROM
     %s s
 JOIN
     products p ON s.productID = p.productID
-JOIN
-    customers c ON s.customerID = c.customerID
 GROUP BY
-    s.productId,
-    c.country,
+    s.productID,
+    s.customerID,
     year,
     month,
     quarter",
@@ -241,6 +266,81 @@ readAndInsertForProductFactsTable <- function(mySqlCon, sqliteCon) {
     insertIntoProductFactsTable(mySqlCon, data)
   }
 }
+
+
+# Inserts the data into the products dimension table
+# @param: dbCon - database connection to connect to
+# @param: data - data to insert into the database
+insertIntoProductsDimensionTable <- function(dbCon, data) {
+  if (nrow(data) > 0) {
+    query <- sprintf(
+      "INSERT INTO %s (productID, productName) VALUES",
+      productsDimensionTable
+    )
+    # referredFrom: https://ademos.people.uic.edu/Chapter4.html
+    values <- apply(data, 1, function(row) {
+      sprintf("(%s, '%s')", row["productID"], row["productName"])
+    })
+    insertInBatches(dbCon, 100, query, values)
+  }
+}
+
+# Reads the data from the local database to populate the products dimension table
+# @param: dbCon - database connection to connect to
+# @param: tableName - table name to read from
+readFromLocalDBToPopulateProductsDimensionTable <- function(dbCon, tableName) {
+  query <- sprintf("SELECT productID, productName FROM %s;", tableName)
+  return(dbGetQuery(dbCon, query))
+}
+
+
+# Reads and inserts data into the products dimension table
+# @param: mySqlCon - database connection to connect to mysql
+# @param: sqliteCon - database connection to connect to sqlite
+readAndInsertForProductsDimensionTable <- function(mySqlCon, sqliteCon) {
+  createProductsDimensionTable(mySqlCon)
+  data <- readFromLocalDBToPopulateProductsDimensionTable(sqliteCon, "products")
+  insertIntoProductsDimensionTable(mySqlCon, data)
+}
+
+
+# Inserts the data into the customers dimension table
+# @param: dbCon - database connection to connect to
+# @param: data - data to insert into the database
+insertIntoCustomersDimensionTable <- function(dbCon, data) {
+  if (nrow(data) > 0) {
+    query <- sprintf(
+      "INSERT INTO %s (customerID, country) VALUES",
+      customersDimensionTable
+    )
+    # referredFrom: https://ademos.people.uic.edu/Chapter4.html
+    values <- apply(data, 1, function(row) {
+      sprintf("(%s, '%s')", row["customerID"], row["country"])
+    })
+    insertInBatches(dbCon, 100, query, values)
+  }
+}
+
+
+# Reads the data from the local database to populate the customers dimension table
+# @param: dbCon - database connection to connect to
+# @param: tableName - table name to read from
+readFromLocalDBToPopulateCustomersDimensionTable <- function(dbCon, tableName) {
+  query <- sprintf("SELECT customerID, country FROM %s;", tableName)
+  return(dbGetQuery(dbCon, query))
+}
+
+# Reads and inserts data into the customers dimension table
+# @param: mySqlCon - database connection to connect to mysql
+# @param: sqliteCon - database connection to connect to sqlite
+readAndInsertForCustomersDimensionTable <- function(mySqlCon, sqliteCon) {
+  createCustomersDimensionTable(mySqlCon)
+  data <- readFromLocalDBToPopulateCustomersDimensionTable(sqliteCon, "customers")
+  insertIntoCustomersDimensionTable(mySqlCon, data)
+}
+
+
+
 
 # Reads the data from the local database to populate the reps facts table
 # @param: dbCon - database connection to connect to
@@ -355,6 +455,8 @@ main <- function() {
   mySqlCon <- connectToMySqlDatabase()
   sqliteCon <- createSQLLiteDBConnection("pharmacy.db")
   dropAllExistingTable(mySqlCon)
+  readAndInsertForProductsDimensionTable(mySqlCon, sqliteCon)
+  readAndInsertForCustomersDimensionTable(mySqlCon, sqliteCon)
   readAndInsertForProductFactsTable(mySqlCon, sqliteCon)
   readAndInsertForRepsDimensionTable(mySqlCon, sqliteCon)
   readAndInsertForRepsFactsTable(mySqlCon, sqliteCon)
