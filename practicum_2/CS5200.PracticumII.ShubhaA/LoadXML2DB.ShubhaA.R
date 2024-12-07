@@ -36,6 +36,7 @@ productsTableName <- "products"
 repsTableName <- "reps"
 customersTableName <- "customers"
 salesTableName <- "sales"
+territoryTableName <- "territory"
 
 # drop the given table if it exists.
 # @param: table - table to drop
@@ -78,6 +79,19 @@ createProductsTable <- function(dbCon) {
   dbExecute(dbCon, query)
 }
 
+# Look up table for territory
+# @param: dbCon - database connection to connect to
+createTerritoryTable <- function(dbCon) {
+  query <- sprintf(
+    "CREATE TABLE IF NOT EXISTS %s (
+    territoryID INTEGER PRIMARY KEY AUTOINCREMENT,
+    territoryName VARCHAR(255) NOT NULL
+);",
+    territoryTableName
+  )
+  dbExecute(dbCon, query)
+}
+
 # Creates reps table in database
 # Reps table has repID as primary key, repFN, repLN, repTR, repPH, repCm, repHireDate.
 # Assumption that repID is always defined and is unique.
@@ -88,12 +102,14 @@ createRepsTable <- function(dbCon) {
     repID INTEGER PRIMARY KEY,
     repFN VARCHAR(255) NOT NULL,
     repLN VARCHAR(255) NOT NULL,
-    repTR VARCHAR(255) NOT NULL,
+    territoryID INTEGER NOT NULL,
     repPH VARCHAR(255) NOT NULL,
     repCm DECIMAL(10,2) NOT NULL,
-    repHireDate DATE
+    repHireDate DATE,
+    FOREIGN KEY (territoryID) REFERENCES %s(territoryID)
 );",
-    repsTableName
+    repsTableName,
+    territoryTableName
   )
   dbExecute(dbCon, query)
 }
@@ -144,6 +160,7 @@ createSalesTable <- function(dbCon, tableName) {
 # @param: dbCon - database connection to connect to
 createAllTables <- function(dbCon) {
   createProductsTable(dbCon)
+  createTerritoryTable(dbCon)
   createRepsTable(dbCon)
   createCustomersTable(dbCon)
   createSalesTable(dbCon, salesTableName)
@@ -166,6 +183,31 @@ insertInBatches <- function(dbCon, batchSize, initialQuery, values) {
 }
 
 
+# Insert into look up territory table
+# @param: dbCon - database connection to connect to
+# @param: dataFrame - data frame to insert into the database
+# @param: batchSize - batch size to insert into the database
+insertTerritoryData <- function(dbCon, dataFrame, batchSize) {
+  territoryData <- unique(dataFrame[c("repTR")])
+  if (nrow(territoryData) > 0) {
+    query <- sprintf("INSERT INTO %s (territoryName) VALUES", territoryTableName)
+    values <- apply(territoryData, 1, function(row) {
+      sprintf("('%s')", # Replacing single quote with double quote to avoid sql errors.
+              gsub("'", "''", row["repTR"]))
+    })
+    insertInBatches(dbCon, batchSize, query, values)
+  }
+}
+
+# Get the territory id from given territory name
+# @param: territoryMapping - territory mapping data frame
+# @param: territoryName - territory name
+getTerritoryID <- function(territoryMapping, territoryName) {
+  matchingRow <- territoryMapping[territoryMapping$territoryName == territoryName, ]
+  return(matchingRow$territoryID[1])
+}
+
+
 # Insert into reps table
 # @param: dbCon - database connection to connect to
 # @param: dataFrame - data frame to insert into the database
@@ -173,8 +215,14 @@ insertInBatches <- function(dbCon, batchSize, initialQuery, values) {
 insertDataIntoRepsTable <- function(dbCon, dataFrame, batchSize) {
   repData <- dataFrame
   if (nrow(repData) > 0) {
+    territoryMapping <-
+      dbGetQuery(dbCon,
+                 sprintf(
+                   "SELECT territoryID,territoryName  FROM %s",
+                   territoryTableName
+                 ))
     query <- sprintf(
-      "INSERT INTO %s (repID,repFN, repLN, repTR, repPH, repCm, repHireDate) VALUES",
+      "INSERT INTO %s (repID,repFN, repLN, territoryID, repPH, repCm, repHireDate) VALUES",
       repsTableName
     )
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
@@ -189,7 +237,7 @@ insertDataIntoRepsTable <- function(dbCon, dataFrame, batchSize) {
         # Replacing single quote with double quote to avoid sql errors.
         gsub("'", "''", row["repFN"]),
         gsub("'", "''", row["repLN"]),
-        gsub("'", "''", row["repTR"]),
+        getTerritoryID(territoryMapping, gsub("'", "''", row["repTR"])),
         gsub("'", "''", row["repPh"]),
         row["repCm"],
         repHireDate
@@ -211,10 +259,8 @@ insertDataIntoProductsTable <- function(dbCon, dataFrame, batchSize) {
     query <- sprintf("INSERT INTO %s (productName,unitcost) VALUES",
                      productsTableName)
     values <- apply(productData, 1, function(row) {
-      sprintf("('%s',%s)",
-              # Replacing single quote with double quote to avoid sql errors.
-              gsub("'", "''", row["prod"]), 
-              row["unitcost"])
+      sprintf("('%s',%s)", # Replacing single quote with double quote to avoid sql errors.
+              gsub("'", "''", row["prod"]), row["unitcost"])
     })
     insertInBatches(dbCon, batchSize, query, values)
   }
@@ -399,6 +445,7 @@ extractRepsData <- function(dbCon, directory) {
     repsData <- rbind(repsData, newRepsData)
   }
   repsData <- cleanUpRepsData(repsData)
+  insertTerritoryData(dbCon, repsData, batchSize)
   insertDataIntoRepsTable(dbCon, repsData, batchSize)
 }
 
@@ -480,7 +527,7 @@ main <- function() {
   installRequiredPackages()
   dbCon <- createDBConnection("pharmacy.db")
   dropAllExistingTable(dbCon)
-  dbExecute(dbCon,"PRAGMA foreign_keys = ON")
+  dbExecute(dbCon, "PRAGMA foreign_keys = ON")
   createAllTables(dbCon)
   dataLoc <- "csv-data"
   extractRepsData(dbCon, dataLoc)

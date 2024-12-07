@@ -72,7 +72,15 @@ dropTableIfExist <- function(dbCon, table) {
 # Returns the list of all existing tables in the database
 # @param: dbCon - database connection to connect to
 getAllExistingTables <- function(dbCon) {
-  return (c(repsFactsTable, repsDimensionTable, productsFactsTable, productsDimensionTable, customersDimensionTable))
+  return (
+    c(
+      repsFactsTable,
+      repsDimensionTable,
+      productsFactsTable,
+      productsDimensionTable,
+      customersDimensionTable
+    )
+  )
 }
 
 # Drops all the existing tables of program from a given db connection.
@@ -85,7 +93,7 @@ dropAllExistingTable <- function(dbCon) {
 }
 
 # Create the product facts table
-# Products fact table is created with the star schema approach with productID and customerID as the foreign keys. 
+# Products fact table is created with the star schema approach with productID and customerID as the foreign keys.
 # This is done to reduce data redundancy and make the addition of new dimensions easier for future.
 # @param: dbCon - database connection to connect to
 createProductFactsTable <- function(dbCon) {
@@ -109,7 +117,7 @@ createProductFactsTable <- function(dbCon) {
   dbExecute(dbCon, query)
 }
 
-# Create products dimension table with product name 
+# Create products dimension table with product name
 # @param: dbCon - database connection to connect to
 createProductsDimensionTable <- function(dbCon) {
   query <- sprintf(
@@ -122,7 +130,8 @@ createProductsDimensionTable <- function(dbCon) {
   dbExecute(dbCon, query)
 }
 
-# Create customers dimension table with customer name and country which they come from
+# Create customers dimension table with customer name and country which they come from.
+# Adding country allows us to roll up the data based on the country/region/territory.
 # @param: dbCon - database connection to connect to
 createCustomersDimensionTable <- function(dbCon) {
   query <- sprintf(
@@ -165,11 +174,7 @@ createRepsDimensionTable <- function(dbCon) {
     "CREATE TABLE IF NOT EXISTS %s (
     repID INTEGER PRIMARY KEY,
     repFN VARCHAR(255) NOT NULL,
-    repLN VARCHAR(255) NOT NULL,
-    repTR VARCHAR(255) NOT NULL,
-    repPH VARCHAR(255) NOT NULL,
-    repCm DECIMAL(10,2) NOT NULL,
-    repHireDate DATE
+    repLN VARCHAR(255) NOT NULL
 );",
     repsDimensionTable
   )
@@ -274,10 +279,8 @@ readAndInsertForProductFactsTable <- function(mySqlCon, sqliteCon) {
 # @param: data - data to insert into the database
 insertIntoProductsDimensionTable <- function(dbCon, data) {
   if (nrow(data) > 0) {
-    query <- sprintf(
-      "INSERT INTO %s (productID, productName) VALUES",
-      productsDimensionTable
-    )
+    query <- sprintf("INSERT INTO %s (productID, productName) VALUES",
+                     productsDimensionTable)
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
     values <- apply(data, 1, function(row) {
       sprintf("(%s, '%s')", row["productID"], row["productName"])
@@ -316,7 +319,7 @@ insertIntoCustomersDimensionTable <- function(dbCon, data) {
     )
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
     values <- apply(data, 1, function(row) {
-      sprintf("(%s,'%s' ,'%s')", row["customerID"], row["customerName"],row["country"])
+      sprintf("(%s,'%s' ,'%s')", row["customerID"], row["customerName"], row["country"])
     })
     insertInBatches(dbCon, 100, query, values)
   }
@@ -405,9 +408,8 @@ readAndInsertForRepsFactsTable <- function(mySqlCon, sqliteCon) {
 # @param: dbCon - database connection to connect to
 # @param: tableName - table name to read from
 readFromLocalDBToPopulateRepsDimensionTable <- function(dbCon, tableName) {
-  query <- sprintf("SELECT repID, repFN, repLN, repTR, repPH, repCm, repHireDate
-FROM %s;",
-                   tableName)
+  query <- sprintf("SELECT repID, repFN, repLN
+FROM %s;", tableName)
   return(dbGetQuery(dbCon, query))
 }
 
@@ -415,20 +417,11 @@ FROM %s;",
 # @param: dbCon - database connection to connect to
 insertIntoRepsDimensionTable <- function(dbCon, data) {
   if (nrow(data) > 0) {
-    query <- sprintf(
-      "INSERT INTO %s (repID, repFN, repLN, repTR, repPH, repCm, repHireDate) VALUES",
-      repsDimensionTable
-    )
+    query <- sprintf("INSERT INTO %s (repID, repFN, repLN) VALUES",
+                     repsDimensionTable)
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
     values <- apply(data, 1, function(row) {
-      sprintf("(%s, '%s', '%s', '%s', '%s', %s, '%s')",
-              row["repID"],
-              row["repFN"],
-              row["repLN"],
-              row["repTR"],
-              row["repPH"],
-              row["repCm"],
-              row["repHireDate"])
+      sprintf("(%s, '%s', '%s')", row["repID"], row["repFN"], row["repLN"])
     })
     insertInBatches(dbCon, 100, query, values)
   }

@@ -102,7 +102,6 @@ displayReport <- function(dataFrame,columns){
   # referredFrom: https://www.rdocumentation.org/packages/knitr/versions/1.48/topics/kable
   kable(
     dataFrame,
-    format = "html",
     col.names = columns
   ) %>%
     # referredFrom: https://www.rdocumentation.org/packages/kableExtra/versions/1.4.0/topics/kable_styling
