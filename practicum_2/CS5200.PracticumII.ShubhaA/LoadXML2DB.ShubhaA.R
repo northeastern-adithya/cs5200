@@ -143,7 +143,6 @@ createSalesTable <- function(dbCon, tableName) {
 # Creates all the tables required for the program
 # @param: dbCon - database connection to connect to
 createAllTables <- function(dbCon) {
-  dropAllExistingTable(dbCon)
   createProductsTable(dbCon)
   createRepsTable(dbCon)
   createCustomersTable(dbCon)
@@ -191,7 +190,7 @@ insertDataIntoRepsTable <- function(dbCon, dataFrame, batchSize) {
         gsub("'", "''", row["repFN"]),
         gsub("'", "''", row["repLN"]),
         gsub("'", "''", row["repTR"]),
-        gsub("'", "''", row["repPH"]),
+        gsub("'", "''", row["repPh"]),
         row["repCm"],
         repHireDate
       )
@@ -445,8 +444,8 @@ insertDataIntoSalesPartition <- function(dbCon, salesData, tableName, batchSize)
 # @param: dbCon - database connection to connect to
 partitionSalesData <- function(dbCon) {
   minMaxYear <- getMinMaxYear(dbCon)
-  minYear <- minMaxYear$min_year
-  maxYear <- minMaxYear$max_year
+  minYear <- minMaxYear$minYear
+  maxYear <- minMaxYear$maxYear
   for (year in minYear:maxYear) {
     query <- sprintf("SELECT * FROM %s WHERE strftime('%%Y', date) = '%s'",
                      salesTableName,
@@ -463,7 +462,7 @@ partitionSalesData <- function(dbCon) {
 # @param: dbCon - database connection to connect to
 getMinMaxYear <- function(dbCon) {
   query <- sprintf(
-    "SELECT MIN(strftime('%%Y', date)) as min_year, MAX(strftime('%%Y', date)) as max_year FROM %s",
+    "SELECT MIN(strftime('%%Y', date)) as minYear, MAX(strftime('%%Y', date)) as maxYear FROM %s",
     salesTableName
   )
   return(dbGetQuery(dbCon, query))
@@ -479,13 +478,16 @@ cleanEnv <- function() {
 main <- function() {
   cleanEnv()
   installRequiredPackages()
-  dataLoc <- "csv-data"
   dbCon <- createDBConnection("pharmacy.db")
+  dropAllExistingTable(dbCon)
+  dbExecute(dbCon,"PRAGMA foreign_keys = ON")
   createAllTables(dbCon)
+  dataLoc <- "csv-data"
   extractRepsData(dbCon, dataLoc)
   extractSalesData(dbCon, dataLoc)
   partitionSalesData(dbCon)
   dbDisconnect(dbCon)
 }
 
+# Run the main function
 main()

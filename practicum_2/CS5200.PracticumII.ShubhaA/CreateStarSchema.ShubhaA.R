@@ -109,7 +109,7 @@ createProductFactsTable <- function(dbCon) {
   dbExecute(dbCon, query)
 }
 
-# Create products dimension table with product details
+# Create products dimension table with product name 
 # @param: dbCon - database connection to connect to
 createProductsDimensionTable <- function(dbCon) {
   query <- sprintf(
@@ -122,12 +122,13 @@ createProductsDimensionTable <- function(dbCon) {
   dbExecute(dbCon, query)
 }
 
-# Create customers dimension table with customer details
+# Create customers dimension table with customer name and country which they come from
 # @param: dbCon - database connection to connect to
 createCustomersDimensionTable <- function(dbCon) {
   query <- sprintf(
     "CREATE TABLE IF NOT EXISTS %s (
     customerID INTEGER PRIMARY KEY,
+    customerName VARCHAR(255) NOT NULL,
     country VARCHAR(255) NOT NULL
 );",
     customersDimensionTable
@@ -310,12 +311,12 @@ readAndInsertForProductsDimensionTable <- function(mySqlCon, sqliteCon) {
 insertIntoCustomersDimensionTable <- function(dbCon, data) {
   if (nrow(data) > 0) {
     query <- sprintf(
-      "INSERT INTO %s (customerID, country) VALUES",
+      "INSERT INTO %s (customerID,customerName ,country) VALUES",
       customersDimensionTable
     )
     # referredFrom: https://ademos.people.uic.edu/Chapter4.html
     values <- apply(data, 1, function(row) {
-      sprintf("(%s, '%s')", row["customerID"], row["country"])
+      sprintf("(%s,'%s' ,'%s')", row["customerID"], row["customerName"],row["country"])
     })
     insertInBatches(dbCon, 100, query, values)
   }
@@ -326,7 +327,7 @@ insertIntoCustomersDimensionTable <- function(dbCon, data) {
 # @param: dbCon - database connection to connect to
 # @param: tableName - table name to read from
 readFromLocalDBToPopulateCustomersDimensionTable <- function(dbCon, tableName) {
-  query <- sprintf("SELECT customerID, country FROM %s;", tableName)
+  query <- sprintf("SELECT customerID, customerName,country FROM %s;", tableName)
   return(dbGetQuery(dbCon, query))
 }
 
@@ -464,4 +465,5 @@ main <- function() {
   dbDisconnect(sqliteCon)
 }
 
+# Run the main function
 main()

@@ -43,8 +43,6 @@ loadRequiredPackages()
 
 
 ```{r connectToDatabase, echo=FALSE,warning=FALSE, eval= TRUE}
-# Part 3: Connecting to the database
-
 # Function to connect to the database
 # @return: database connection
 # referredFrom: http://artificium.us/lessons/06.r/l-6-301-sqlite-from-r/l-6-301.html#Connect_to_Database
@@ -96,8 +94,8 @@ yearInformation <- getYearInformation(dbCon)
 maxYear <- yearInformation$year[1]
 minYear <- yearInformation$year[length(yearInformation$year)]
 ```
-The top five products with the most sales/revenue across all years from `r minYear` to 
-`r maxYear` are shown in the table below.
+The top five products with the most sales/revenue across all years from **`r minYear`** to 
+**`r maxYear`** are shown in the table below.
 
 ```{r topFiveProducts, echo=FALSE,warning=FALSE, eval=TRUE}
 displayReport <- function(dataFrame,columns){
@@ -141,7 +139,7 @@ ORDER BY totalRevenue DESC LIMIT 5"
 displayReport(getTopFiveProducts(dbCon),c("Product Name", "Total Revenue"))
 ```
 
-The total revenue per quarter per product for the most recent year is shown in the table below.
+The total revenue per quarter per product for the most recent year: **`r maxYear`** is shown in the table below.
 
 ```{r totalRevenuePerQuarter, echo=FALSE,warning=FALSE, eval=TRUE}
 # Function to get the total revenue per quarter per product for the most recent year
@@ -168,7 +166,7 @@ ORDER BY
 displayReport(getTotalRevenuePerQuarter(dbCon,maxYear),c("Product Name", "Quarter", "Quarterly Revenue"))
 ```
 
-The total revenue per product per country for the most recent two years is shown in the table below.
+The total revenue per product per country for the most recent two years: **`r yearInformation$year[1]`** and **`r yearInformation$year[2]`** is shown in the table below.
 
 ```{r totalRevenuePerProductPerCountry, echo=FALSE,warning=FALSE, eval=TRUE}
 # Function to get the total revenue per product per country for the most recent two years
@@ -201,10 +199,12 @@ The line graph below shows the sales per year for which we have data.
 # Function to visualize the trend of sales per year
 # @param: dataFrame - data frame with data of sales per year
 visualiseSalesByYear <- function(dataFrame) {
+  dataFrame$totalRevenue <- dataFrame$totalRevenue/1000000
+  dataFrame$year <- as.factor(dataFrame$year)
   # referredFrom: https://www.geeksforgeeks.org/r-line-graphs/
   plot(
-    dataFrame$year,
-    dataFrame$totalUnitsSold,
+    as.numeric(dataFrame$year),
+    dataFrame$totalRevenue,
     # to plot lines and points
     type = "o",
     col = "darkblue",
@@ -213,10 +213,13 @@ visualiseSalesByYear <- function(dataFrame) {
     # to set line width
     lwd = 2,
     xlab = "Year",
-    ylab = "Total Sales",
+    ylab = "Total Sales (in million)",
     main = "Total Sales by Year",
-    ylim = c(0, max(dataFrame$total) * 1.3)
+    ylim = c(0, max(dataFrame$totalRevenue) * 1.3),
+    xaxt = "n"
   )
+  
+  axis(1, at = as.numeric(dataFrame$year), labels = levels(dataFrame$year))
   
   
   # to add grid lines
@@ -226,10 +229,10 @@ visualiseSalesByYear <- function(dataFrame) {
   # to add labels to the points
   text(
     # x location
-    dataFrame$year,
+    as.numeric(dataFrame$year),
     # y location
-    dataFrame$totalUnitsSold + 500000,
-    labels = dataFrame$totalUnitsSold,
+    dataFrame$totalRevenue + 3,
+    labels = round(dataFrame$totalRevenue,2),
     # size of text
     cex = 0.8,
     col = "darkblue",
@@ -251,11 +254,13 @@ visualiseSalesByYear <- function(dataFrame) {
   )
 }
 
+# Function to get the total sales per year
+# @param dbCon: database connection
 getSalesByYear <- function(dbCon) {
   # Query to get the total sales per year
   query <- "SELECT
     year,
-    SUM(totalUnitsSold) AS totalUnitsSold
+    ROUND(SUM(totalRevenue),2) AS totalRevenue
 FROM
     product_facts
 GROUP BY
